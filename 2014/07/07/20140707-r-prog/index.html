@@ -1,0 +1,905 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>R Programming Tips | The Eye of Data (@Buttonwood)</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="1 Data Types and Basic Operations
+R has five basic or “atomic” classes of objects:
+
+character
+numeric (real numbers)
+integer
+complex
+logical (True/False)
+
+Vector and Matrix
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12">
+<meta property="og:type" content="article">
+<meta property="og:title" content="R Programming Tips">
+<meta property="og:url" content="http://buttonwood.bitbucket.org//2014/07/07/20140707-r-prog/">
+<meta property="og:site_name" content="The Eye of Data (@Buttonwood)">
+<meta property="og:description" content="1 Data Types and Basic Operations
+R has five basic or “atomic” classes of objects:
+
+character
+numeric (real numbers)
+integer
+complex
+logical (True/False)
+
+Vector and Matrix
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="R Programming Tips">
+<meta name="twitter:description" content="1 Data Types and Basic Operations
+R has five basic or “atomic” classes of objects:
+
+character
+numeric (real numbers)
+integer
+complex
+logical (True/False)
+
+Vector and Matrix
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12">
+  
+    <link rel="alternative" href="/atom.xml" title="The Eye of Data (@Buttonwood)" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  <link href="http://fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+  
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+</head>
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">The Eye of Data (@Buttonwood)</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/" id="subtitle">Float like a butterfly! Stand like a buttonwood!</a>
+        </h2>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/about">About</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><input type="submit" value="&#xF002;" class="search-form-submit"><input type="hidden" name="q" value="site:http://buttonwood.bitbucket.org/"></form>
+      </div>
+    </div>
+  </div>
+</header>
+
+      <div class="outer">
+        <section id="main"><article id="post-20140707-r-prog" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2014/07/07/20140707-r-prog/" class="article-date">
+  <time datetime="2014-07-07T03:51:00.000Z" itemprop="datePublished">Jul 7 2014</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/R/">R</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      R Programming Tips
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="1_Data_Types_and_Basic_Operations">1 Data Types and Basic Operations</h3>
+<p>R has five basic or “atomic” classes of objects:</p>
+<ul>
+<li>character</li>
+<li>numeric (real numbers)</li>
+<li>integer</li>
+<li>complex</li>
+<li>logical (True/False)</li>
+</ul>
+<h4 id="Vector_and_Matrix">Vector and Matrix</h4>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+</pre></td><td class="code"><pre><span class="function">vector()</span>
+x &lt;- <span class="function">vector(<span class="string">"numeric"</span>, length = <span class="number">10</span>)</span>
+
+<span class="function">c()</span>
+x &lt;- <span class="function">c(<span class="string">"a"</span>, <span class="string">"b"</span>, <span class="string">"c"</span>)</span>
+x &lt;- <span class="function">c(TRUE, FALSE)</span>
+as<span class="class">.numeric</span>(x)
+as<span class="class">.logical</span>(x)
+as<span class="class">.character</span>(x)
+
+<span class="function">attributes()</span> 
+<span class="function">print()</span>
+
+m &lt;- <span class="function">matrix(nrow = <span class="number">2</span>, ncol = <span class="number">3</span>)</span>
+m &lt;- <span class="function">matrix(<span class="number">1</span>:<span class="number">6</span>, nrow = <span class="number">2</span>, ncol = <span class="number">3</span>)</span>
+
+m&lt;-1<span class="value">:<span class="number">10</span>
+dim(m) &lt;- c(<span class="number">2</span>, <span class="number">5</span>)
+
+cbind(x, y)
+rbind(x, y)</span>
+</pre></td></tr></table></figure>
+
+<h4 id="list">list</h4>
+<p>Lists are a special type of vector that can contain elements of different classes. </p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+</pre></td><td class="code"><pre>x &lt;- <span class="keyword">list</span>(<span class="number">1</span>, <span class="string">"a"</span>, <span class="keyword">TRUE</span>, <span class="number">1</span> + <span class="number">4</span>i)
+</pre></td></tr></table></figure>
+
+<h4 id="Factor">Factor</h4>
+<p>Factors are used to represent categorical data. Factors can be unordered or ordered. One can think of a factor as an integer vector where each integer has a label.</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+</pre></td><td class="code"><pre><span class="function">lm()</span>
+<span class="function">glm()</span>
+
+x &lt;- <span class="function">factor(<span class="function">c(<span class="string">"yes"</span>, <span class="string">"yes"</span>, <span class="string">"no"</span>, <span class="string">"yes"</span>, <span class="string">"no"</span>)</span>)</span>
+<span class="function">table(x)</span>
+
+x &lt;- <span class="function">factor(<span class="function">c(<span class="string">"yes"</span>, <span class="string">"yes"</span>, <span class="string">"no"</span>, <span class="string">"yes"</span>, <span class="string">"no"</span>)</span>, levels = <span class="function">c(<span class="string">"yes"</span>, <span class="string">"no"</span>)</span>)</span>
+</pre></td></tr></table></figure>
+
+<h4 id="Missing_Values">Missing Values</h4>
+<p>Missing values are denoted by <code>NA</code> or <code>NaN</code> for undefined mathematical operations.</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+</pre></td><td class="code"><pre>x &lt;- <span class="function">c(<span class="number">1</span>,<span class="number">2</span>,NaN,NA,<span class="number">4</span>)</span>
+is<span class="class">.na</span>(x)
+is<span class="class">.nan</span>(x)
+
+x&lt;<span class="function">-c(<span class="number">1</span>,<span class="number">2</span>,NA,<span class="number">4</span>,NA,<span class="number">5</span>)</span>
+bad &lt;- is<span class="class">.na</span>(x)
+x<span class="attr_selector">[!bad]</span>
+
+#### What if there are multiple things and you want to take the subset with no missing values?
+x&lt;<span class="function">-c(<span class="number">1</span>,<span class="number">2</span>,NA,<span class="number">4</span>,NA,<span class="number">5</span>)</span>
+y &lt;- <span class="function">c(<span class="string">"a"</span>, <span class="string">"b"</span>, NA, <span class="string">"d"</span>, NA, <span class="string">"f"</span>)</span>
+good &lt;- complete<span class="class">.cases</span>(x, y)
+x<span class="attr_selector">[good]</span>
+y<span class="attr_selector">[good]</span>
+
+df<span class="attr_selector">[1:6,]</span>
+good &lt;- complete<span class="class">.cases</span>(df)
+df<span class="attr_selector">[good,]</span><span class="attr_selector">[1:6,]</span>
+
+x &lt;- df<span class="attr_selector">[df$Month==5,]</span>
+<span class="function">summary(x$Ozone)</span>
+</pre></td></tr></table></figure>
+
+<h4 id="Data_frames_are_used_to_store_tabular_data">Data frames are used to store tabular data</h4>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+</pre></td><td class="code"><pre><span class="title">row</span>.names
+<span class="title">read</span>.table()
+<span class="title">read</span>.csv()
+<span class="typedef"><span class="keyword">data</span>.matrix<span class="container">()</span></span>
+
+<span class="title">x</span> &lt;- <span class="typedef"><span class="keyword">data</span>.frame<span class="container">(<span class="title">foo</span> = 1:4, <span class="title">bar</span> = <span class="title">c</span>(<span class="type">T</span>, <span class="type">T</span>, <span class="type">F</span>, <span class="type">F</span>)</span>)</span>
+</pre></td></tr></table></figure>
+
+<h4 id="Names">Names</h4>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+</pre></td><td class="code"><pre>x&lt;-<span class="number">1</span>:<span class="number">3</span>
+<span class="function"><span class="title">names</span><span class="params">(x)</span>
+<span class="title">names</span><span class="params">(x)</span> &lt;- <span class="title">c</span><span class="params">(<span class="string">"foo"</span>, <span class="string">"bar"</span>, <span class="string">"norf"</span>)</span>
+<span class="title">x</span>
+
+<span class="title">x</span>&lt;-<span class="title">list</span><span class="params">(a=<span class="number">1</span>,b=<span class="number">2</span>,c=<span class="number">3</span>)</span>
+
+<span class="title">m</span> &lt;- <span class="title">matrix</span><span class="params">(<span class="number">1</span>:<span class="number">4</span>, nrow = <span class="number">2</span>, ncol = <span class="number">2</span>)</span>
+<span class="title">dimnames</span><span class="params">(m)</span> &lt;- <span class="title">list</span><span class="params">(<span class="function_name">c</span>(<span class="string">"a"</span>, <span class="string">"b"</span>), <span class="function_name">c</span>(<span class="string">"c"</span>, <span class="string">"d"</span>))</span></span>
+</pre></td></tr></table></figure>
+
+
+<h3 id="2_Deal_with_data">2 Deal with data</h3>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+</pre></td><td class="code"><pre>read.table()    #<span class="keyword">for</span> reading tabular data
+read.csv()
+write.table()
+
+readLines()     #<span class="keyword">for</span> reading lines of a <span class="keyword">text</span> <span class="keyword">file</span>
+writeLines()
+
+<span class="keyword">source</span>()        #<span class="keyword">for</span> reading <span class="keyword">in</span> R code files
+dump()
+
+dump(c(<span class="string">"x"</span>, <span class="string">"y"</span>), <span class="keyword">file</span> = <span class="string">"data.R"</span>)
+rm(x, y)
+<span class="keyword">source</span>(<span class="string">"data.R"</span>)
+
+dget()          #<span class="keyword">for</span> reading <span class="keyword">in</span> R code files 
+dput()
+
+load()          #<span class="keyword">for</span> reading <span class="keyword">in</span> saved workspaces
+save()
+
+unserialize()   #<span class="keyword">for</span> reading single R objects <span class="keyword">in</span> binary form
+serialize()
+</pre></td></tr></table></figure>
+
+<h4 id="Data_are_read_in_using_connection_interfaces-">Data are read in using connection interfaces.</h4>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+</pre></td><td class="code"><pre>file     <span class="comment">#opens a connection to a file</span>
+gzfile   <span class="comment">#opens a connection to a file compressed with gzip</span>
+bzfile   <span class="comment">#opens a connection to a file compressed with bzip2</span>
+url      <span class="comment">#opens a connection to a webpage</span>
+
+str(file)
+con &lt;- file(<span class="string">"foo.txt"</span>, <span class="string">"r"</span>)
+data &lt;- read.csv(con)
+close(con)
+
+con &lt;- gzfile(<span class="string">"words.gz"</span>)
+x &lt;- readLines(con, <span class="number">10</span>)
+
+con &lt;- url(<span class="string">"http://www.jhsph.edu"</span>, <span class="string">"r"</span>)
+x &lt;- readLines(con)
+
+args(paste)
+<span class="keyword">function</span> (<span class="keyword">...</span>, sep = <span class="string">" "</span>, collapse = <span class="literal">NULL</span>)
+</pre></td></tr></table></figure>
+
+<p>I have a data frame with 1,500,000 rows and 120 columns, all of which are numeric data. Roughly, how much memory is required to store this data frame?</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+</pre></td><td class="code"><pre><span class="number">1</span>,<span class="number">500</span>,<span class="number">000</span> × <span class="number">120</span> × <span class="number">8</span> <span class="keyword">bytes</span>/<span class="keyword">numeric</span> = <span class="number">1.34</span> GB
+</pre></td></tr></table></figure>
+
+<h3 id="3_Control_structures">3 Control structures</h3>
+<ul>
+<li><code>if</code>, <code>else</code>: testing a condition</li>
+<li><code>for</code>: execute a loop a fixed number of times</li>
+<li><code>while</code>: execute a loop while a condition is true · repeat: execute an infinite loop</li>
+<li><code>break</code>: break the execution of a loop</li>
+<li><code>next</code>: skip an interation of a loop</li>
+<li><code>return</code>: exit a function</li>
+</ul>
+<h3 id="4_Looping_on_the_Command_Line">4 Looping on the Command Line</h3>
+<ul>
+<li><code>lapply</code>: Loop over a list and evaluate a function on each element · </li>
+<li><code>sapply</code>: Same as lapply but try to simplify the result</li>
+<li><code>apply</code>:  Apply a function over the margins of an array</li>
+<li><code>tapply</code>: Apply a function over subsets of a vector</li>
+<li><code>mapply</code>: Multivariate version of lapply</li>
+</ul>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+</pre></td><td class="code"><pre>x &lt;- list(a = <span class="number">1</span>:<span class="number">5</span>, b = rnorm(<span class="number">10</span>))
+lapply(x, mean)  #
+
+x&lt;-<span class="number">1</span>:<span class="number">4</span>
+lapply(x, runif, min = <span class="number">0</span>, max = <span class="number">10</span>)
+
+##### lapply <span class="keyword">and</span> friends make heavy <span class="keyword">use</span> <span class="keyword">of</span> anonymous functions.
+x &lt;- list(a = matrix(<span class="number">1</span>:<span class="number">4</span>, <span class="number">2</span>, <span class="number">2</span>), b = matrix(<span class="number">1</span>:<span class="number">6</span>, <span class="number">3</span>, <span class="number">2</span>))
+lapply(x, <span class="keyword">function</span>(elt) elt[,<span class="number">1</span>])
+
+##### sapply will try <span class="keyword">to</span> simplify the result <span class="keyword">of</span> lapply <span class="keyword">if</span> possible.
+##### <span class="keyword">If</span> the result <span class="keyword">is</span> a list where every element <span class="keyword">is</span> length <span class="number">1</span>, <span class="keyword">then</span> a vector <span class="keyword">is</span> returned
+##### <span class="keyword">If</span> the result <span class="keyword">is</span> a list where every element <span class="keyword">is</span> a vector <span class="keyword">of</span> the same length (&gt; <span class="number">1</span>), a matrix <span class="keyword">is</span> returned.
+##### <span class="keyword">If</span> it can’t figure things <span class="keyword">out</span>, a list <span class="keyword">is</span> returned.
+x &lt;- list(a = <span class="number">1</span>:<span class="number">4</span>, b = rnorm(<span class="number">10</span>), c = rnorm(<span class="number">20</span>, <span class="number">1</span>), d = rnorm(<span class="number">100</span>, <span class="number">5</span>))
+lapply(x, mean)
+sapply(x, mean)
+</pre></td></tr></table></figure>
+
+<h4 id="applay">applay</h4>
+<p><code>apply</code> is used to a evaluate a function (often an anonymous one) over the margins of an array.</p>
+<ul>
+<li>It is most often used to apply a function to the rows or columns of a matrix.</li>
+<li>It can be used with general arrays, e.g. taking the average of an array of matrices</li>
+<li>It is not really faster than writing a loop, but it works in one line!</li>
+</ul>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+</pre></td><td class="code"><pre><span class="function"><span class="title">str</span><span class="params">(apply)</span>
+<span class="title">x</span> &lt;- <span class="title">matrix</span><span class="params">(<span class="function_name">rnorm</span>(<span class="number">200</span>), <span class="number">20</span>, <span class="number">10</span>)</span>
+<span class="title">apply</span><span class="params">(x, <span class="number">2</span>, mean)</span>
+<span class="title">apply</span><span class="params">(x, <span class="number">1</span>, sum)</span>
+
+<span class="title">rowSums</span> = <span class="title">apply</span><span class="params">(x, <span class="number">1</span>, sum)</span>
+<span class="title">rowMeans</span> = <span class="title">apply</span><span class="params">(x, <span class="number">1</span>, mean)</span>
+<span class="title">colSums</span> = <span class="title">apply</span><span class="params">(x, <span class="number">2</span>, sum)</span>
+<span class="title">colMeans</span> = <span class="title">apply</span><span class="params">(x, <span class="number">2</span>, mean)</span>
+
+<span class="title">x</span> &lt;- <span class="title">matrix</span><span class="params">(<span class="function_name">rnorm</span>(<span class="number">200</span>), <span class="number">20</span>, <span class="number">10</span>)</span>
+<span class="title">apply</span><span class="params">(x, <span class="number">1</span>, quantile, probs = <span class="function_name">c</span>(<span class="number">0.25</span>, <span class="number">0.75</span>))</span>
+
+<span class="title">a</span> &lt;- <span class="title">array</span><span class="params">(<span class="function_name">rnorm</span>(<span class="number">2</span> * <span class="number">2</span> * <span class="number">10</span>), <span class="function_name">c</span>(<span class="number">2</span>, <span class="number">2</span>, <span class="number">10</span>))</span>
+<span class="title">apply</span><span class="params">(a, <span class="function_name">c</span>(<span class="number">1</span>, <span class="number">2</span>), mean)</span>
+<span class="title">rowMeans</span><span class="params">(a, dims = <span class="number">2</span>)</span></span>
+</pre></td></tr></table></figure>
+
+<h4 id="tapply">tapply</h4>
+<p><code>tpply</code> is used to apply a function over subsets of a vector. </p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+</pre></td><td class="code"><pre><span class="function">str(tapply)</span>
+
+x &lt;- <span class="function">c(<span class="function">rnorm(<span class="number">10</span>)</span>, <span class="function">runif(<span class="number">10</span>)</span>, <span class="function">rnorm(<span class="number">10</span>, <span class="number">1</span>)</span>)</span>
+f&lt;<span class="function">-gl(<span class="number">3</span>,<span class="number">10</span>)</span>
+<span class="function">tapply(x, f, mean)</span>
+
+
+<span class="function">with(mtcars, <span class="function">tapply(hp, cyl, mean)</span>)</span>
+<span class="function">sapply(<span class="function">split(mtcars$hp, mtcars$cyl)</span>, mean)</span>
+</pre></td></tr></table></figure>
+
+<h4 id="split">split</h4>
+<p><code>split</code> takes a vector or other objects and splits it into groups determined by a factor or list of factors.</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+</pre></td><td class="code"><pre><span class="function">str(split)</span>
+x &lt;- <span class="function">c(<span class="function">rnorm(<span class="number">10</span>)</span>, <span class="function">runif(<span class="number">10</span>)</span>, <span class="function">rnorm(<span class="number">10</span>, <span class="number">1</span>)</span>)</span>
+f&lt;<span class="function">-gl(<span class="number">3</span>,<span class="number">10</span>)</span>
+<span class="function">split(x, f)</span>
+<span class="function">lapply(<span class="function">split(x, f)</span>, mean)</span>
+
+##### splitting <span class="tag">a</span> Data <span class="tag">Frame</span>
+<span class="function">library(datasets)</span>
+<span class="function">head(airquality)</span>
+s &lt;- <span class="function">split(airquality, airquality$Month)</span>
+<span class="function">lapply(s, <span class="function">function(x)</span> <span class="function">colMeans(x[, <span class="function">c(<span class="string">"Ozone"</span>, <span class="string">"Solar.R"</span>, <span class="string">"Wind"</span>)</span>])</span>)</span>
+<span class="function">sapply(s, <span class="function">function(x)</span> <span class="function">colMeans(x[, <span class="function">c(<span class="string">"Ozone"</span>, <span class="string">"Solar.R"</span>, <span class="string">"Wind"</span>)</span>])</span>)</span>
+<span class="function">sapply(s, <span class="function">function(x)</span> <span class="function">colMeans(x[, <span class="function">c(<span class="string">"Ozone"</span>, <span class="string">"Solar.R"</span>, <span class="string">"Wind"</span>)</span>], na.rm = TRUE)</span>)</span>
+
+##### split more than one level
+x &lt;- <span class="function">rnorm(<span class="number">10</span>)</span>
+f1&lt;<span class="function">-gl(<span class="number">2</span>,<span class="number">5</span>)</span>
+f2&lt;<span class="function">-gl(<span class="number">5</span>,<span class="number">2</span>)</span>
+<span class="function">interaction(f1, f2)</span>
+<span class="function">str(<span class="function">split(x, <span class="function">list(f1, f2)</span>)</span>)</span>
+<span class="function">str(<span class="function">split(x, <span class="function">list(f1, f2)</span>, drop = TRUE)</span>)</span>
+</pre></td></tr></table></figure>
+
+<h4 id="maaply">maaply</h4>
+<p><code>mapply</code> is a multivariate apply of sorts which applies a function in parallel over a set of arguments.</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+</pre></td><td class="code"><pre><span class="function">str(mapply)</span>
+
+<span class="function">list(<span class="function">rep(<span class="number">1</span>, <span class="number">4</span>)</span>, <span class="function">rep(<span class="number">2</span>, <span class="number">3</span>)</span>, <span class="function">rep(<span class="number">3</span>, <span class="number">2</span>)</span>, <span class="function">rep(<span class="number">4</span>, <span class="number">1</span>)</span>)</span>
+<span class="function">mapply(rep, <span class="number">1</span>:<span class="number">4</span>, <span class="number">4</span>:<span class="number">1</span>)</span>
+</pre></td></tr></table></figure>
+
+<h4 id="reshape">reshape</h4>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+</pre></td><td class="code"><pre><span class="function">library(<span class="string">"reshape2"</span>)</span>
+
+##### metlting data frames
+<span class="function">melt(mtcars, id=<span class="function">c(<span class="string">"carname"</span>,<span class="string">"gear"</span>,<span class="string">"cyl"</span>)</span>, measure.vars=<span class="function">c(<span class="string">"mpg"</span>,<span class="string">"hp"</span>)</span>)</span>
+
+##### casting data frames
+<span class="function">dcast(carMelt, cyl ~ variable, mean)</span>
+</pre></td></tr></table></figure>
+
+<h4 id="plyr">plyr</h4>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+</pre></td><td class="code"><pre><span class="function"><span class="title">ddply</span><span class="params">()</span></span>
+</pre></td></tr></table></figure>
+
+
+<h4 id="str">str</h4>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+</pre></td><td class="code"><pre>str(str)
+str(lm)
+str(ls)
+
+args(paste)
+<span class="function"><span class="keyword">function</span> <span class="params">(..., sep = <span class="string">" "</span>, collapse = NULL)</span>
+
+<span class="title">x</span> &lt;- <span class="title">rnrom</span><span class="params">(<span class="number">100</span>,<span class="number">2</span>,<span class="number">4</span>)</span>
+<span class="title">summary</span><span class="params">(x)</span>
+<span class="title">str</span><span class="params">(x)</span>
+
+<span class="title">f</span> &lt;- <span class="title">gl</span><span class="params">(<span class="number">40</span>,<span class="number">10</span>)</span>
+<span class="title">str</span><span class="params">(f)</span>
+<span class="title">summary</span><span class="params">(f)</span>
+
+### <span class="title">split</span><span class="params">()</span>
+### <span class="title">split</span> <span class="title">takes</span> <span class="title">a</span> <span class="title">vector</span> <span class="title">or</span> <span class="title">other</span> <span class="title">objects</span> <span class="title">and</span> <span class="title">splits</span> <span class="title">it</span> <span class="title">into</span> <span class="title">groups</span> <span class="title">determined</span> <span class="title">by</span> <span class="title">a</span> <span class="title">factor</span> <span class="title">or</span> <span class="title">list</span> <span class="title">of</span> <span class="title">factors</span>.
+<span class="title">str</span><span class="params">(split)</span>
+<span class="title">x</span> &lt;- <span class="title">c</span><span class="params">(rnorm<span class="params">(<span class="number">10</span>)</span>, runif<span class="params">(<span class="number">10</span>)</span>, rnorm<span class="params">(<span class="number">10</span>, <span class="number">1</span>)</span>)</span>
+<span class="title">f</span>&lt;-<span class="title">gl</span><span class="params">(<span class="number">3</span>,<span class="number">10</span>)</span>
+<span class="title">split</span><span class="params">(x, f)</span>
+
+### <span class="title">A</span> <span class="title">common</span> <span class="title">idiom</span> <span class="title">is</span> <span class="title">split</span> <span class="title">followed</span> <span class="title">by</span> <span class="title">an</span> <span class="title">lapply</span>
+<span class="title">lapply</span><span class="params">(split<span class="params">(x, f)</span>, mean)</span></span>
+</pre></td></tr></table></figure>
+
+<h3 id="5_Generating_random_Numbers">5 Generating random Numbers</h3>
+<ul>
+<li><code>d</code> for density                 -&gt;pdf</li>
+<li><code>r</code> for random number generation</li>
+<li><code>p</code> for cumulative distribution -&gt; cdf</li>
+<li><code>q</code> for quantile function       </li>
+</ul>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+</pre></td><td class="code"><pre>dnorm(x, mean = <span class="number">0</span>, sd = <span class="number">1</span>, <span class="built_in">log</span> = <span class="constant">FALSE</span>)
+<span class="comment">##### pnorm(q) = fi(q); qnorm(p) = fi(q)反函数</span>
+pnorm(q, mean = <span class="number">0</span>, sd = <span class="number">1</span>, <span class="built_in">lower</span>.tail = <span class="constant">TRUE</span>, <span class="built_in">log</span>.p = <span class="constant">FALSE</span>)
+qnorm(p, mean = <span class="number">0</span>, sd = <span class="number">1</span>, <span class="built_in">lower</span>.tail = <span class="constant">TRUE</span>, <span class="built_in">log</span>.p = <span class="constant">FALSE</span>)
+rnorm(n, mean = <span class="number">0</span>, sd = <span class="number">1</span>)
+
+x &lt;- rnorm(<span class="number">10</span>,<span class="number">20</span>,<span class="number">10</span>)
+summary(x)
+
+<span class="comment">### Setting the random number seed with set.seed ensures reproducibility</span>
+<span class="comment">### Always set the random number seed when conducting a simulation!</span>
+<span class="built_in">set</span>.seed(<span class="number">1</span>)
+</pre></td></tr></table></figure>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://buttonwood.bitbucket.org/2014/07/07/20140707-r-prog/" data-id="imn73dc5hcg5205b" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/R/">R</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Tips/">Tips</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Tools/">Tools</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2014/07/09/20140709-tools/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          Data Sicence ToolBox
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2014/06/23/python-in-a-nutshell-io/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">Python in a Nutshell (IO Tips)</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+<!-- DISQUS
+
+-->
+
+
+  <section id="comments">
+  <!-- Duoshuo Comment BEGIN -->
+  <div class="ds-thread"></div>
+  <script type="text/javascript">
+  var duoshuoQuery = {short_name:"buttonwood"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0]
+     || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+  </script>
+  <!-- Duoshuo Comment END -->
+</section>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    <div class="widget-wrap">
+    <h3 class="widget-title">About</h3>
+    <div class="widget">
+    <img src="http://ww1.sinaimg.cn/mw690/6fbc15dcjw1do9bywpfjjj.jpg" style="margin: auto; width: 100%;"/>
+        <h4 style="text-align: center"><strong>Buttonwood(th)</strong></h4>
+        <div style="margin: auto; text-align: center;">
+            <a href="http://weibo.com/buttonwood" target="_blank"><img src="http://www.sinaimg.cn/blog/developer/wiki/LOGO_64x64.png" style="border:0;width:32px;height:32px;"/></a>
+            <a href="https://github.com/Buttonwood" target="_blank"><img src="https://assets-cdn.github.com/images/modules/logos_page/Octocat.png" style="border:0;width:32px;height:32px;"/></a>
+            <a class="fancybox" href="mailto:tanhao2013@gmail.com"><img src="http://icons.iconarchive.com/icons/mcdo-design/letter/64/Letter-GMail-pen-icon.png" style="border:0;width:32px;height:32px;"/></a>
+            <a href="http://www.douban.com/people/buttonwood/" target="_blank"><img src="http://img3.douban.com/pics/douban-icons/favicon_32x32.png" style="border:0;width:32px;height:32px;"/></a>
+        </div>
+    </div>
+</div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Data-Mining/">Data Mining</a><span class="category-list-count">7</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Data-Visualization/">Data Visualization</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/MySQL/">MySQL</a><span class="category-list-count">4</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Python/">Python</a><span class="category-list-count">6</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/R/">R</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Tools/">Tools</a><span class="category-list-count">2</span></li></ul>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/CART/">CART</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Circos/">Circos</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/DV/">DV</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/EM/">EM</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Git/">Git</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ML/">ML</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MySQL/">MySQL</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Mysql/">Mysql</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/PageRank/">PageRank</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Python/">Python</a><span class="tag-list-count">8</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/R/">R</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SVM/">SVM</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Thread/">Thread</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Tips/">Tips</a><span class="tag-list-count">7</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Tools/">Tools</a><span class="tag-list-count">10</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/books/">books</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/classification/">classification</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/clustering/">clustering</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/k-means/">k-means</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/kNN/">kNN</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/sysbench/">sysbench</a><span class="tag-list-count">3</span></li></ul>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/CART/" style="font-size: 10.00px;">CART</a><a href="/tags/Circos/" style="font-size: 10.00px;">Circos</a><a href="/tags/DV/" style="font-size: 10.00px;">DV</a><a href="/tags/EM/" style="font-size: 10.00px;">EM</a><a href="/tags/Git/" style="font-size: 10.00px;">Git</a><a href="/tags/ML/" style="font-size: 11.67px;">ML</a><a href="/tags/MySQL/" style="font-size: 15.00px;">MySQL</a><a href="/tags/Mysql/" style="font-size: 10.00px;">Mysql</a><a href="/tags/PageRank/" style="font-size: 10.00px;">PageRank</a><a href="/tags/Python/" style="font-size: 18.33px;">Python</a><a href="/tags/R/" style="font-size: 11.67px;">R</a><a href="/tags/SVM/" style="font-size: 10.00px;">SVM</a><a href="/tags/Thread/" style="font-size: 10.00px;">Thread</a><a href="/tags/Tips/" style="font-size: 16.67px;">Tips</a><a href="/tags/Tools/" style="font-size: 20.00px;">Tools</a><a href="/tags/books/" style="font-size: 10.00px;">books</a><a href="/tags/classification/" style="font-size: 10.00px;">classification</a><a href="/tags/clustering/" style="font-size: 10.00px;">clustering</a><a href="/tags/k-means/" style="font-size: 10.00px;">k-means</a><a href="/tags/kNN/" style="font-size: 10.00px;">kNN</a><a href="/tags/sysbench/" style="font-size: 13.33px;">sysbench</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/07">July 2014</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/06">June 2014</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/05">May 2014</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/04">April 2014</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/02">February 2014</a><span class="archive-list-count">1</span></li></ul>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recents</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2014/07/25/20140725-sysbench-mysql/">Sysbench for MySQL Testing</a>
+          </li>
+        
+          <li>
+            <a href="/2014/07/24/20140724-sysbench-testing/">sysbench testing</a>
+          </li>
+        
+          <li>
+            <a href="/2014/07/22/20140722-sysbench-install/">sysbench libtool error and mysql testing</a>
+          </li>
+        
+          <li>
+            <a href="/2014/07/22/20140722-mysql-install/">A First Glance at MySQL</a>
+          </li>
+        
+          <li>
+            <a href="/2014/07/09/20140709-tools/">Data Sicence ToolBox</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+    <iframe width="100%" height="550" class="share_self"  frameborder="0" scrolling="no" src="http://widget.weibo.com/weiboshow/index.php?language=&width=0&height=550&fansRow=2&ptype=1&speed=0&skin=1&isTitle=1&noborder=1&isWeibo=1&isFans=1&uid=1874597340&verifier=b3593ceb&dpc=1"></iframe>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2014 The Eye of Data ( <a href="http://buttonwood.github.io" target="_blank">@Buttonwood )</a><br>
+      Powered by <a href="http://zespia.tw/hexo/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/about" class="mobile-nav-link">About</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+
+
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js" type="text/javascript"></script>
+
+  </div>
+</body>
+</html>
