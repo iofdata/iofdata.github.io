@@ -2,6 +2,31 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://buttonwood.bitbucket.org/2015/01/14/Writing-idiomatic-python/</loc>
+    <lastmod>2015-01-14T11:43:00.000Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://buttonwood.bitbucket.org/2014/10/10/python_pocker_reference/</loc>
+    <lastmod>2014-10-10T07:43:00.000Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://buttonwood.bitbucket.org/fish/graph1.html</loc>
+    <lastmod>2014-12-30T12:03:07.000Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://buttonwood.bitbucket.org/2014/12/15/20141215-rChart/</loc>
+    <lastmod>2014-12-15T03:51:00.000Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://buttonwood.bitbucket.org/2014/06/23/python-in-a-nutshell-test-debug/</loc>
+    <lastmod>2014-06-23T03:51:00.000Z</lastmod>
+  </url>
+  
+  <url>
     <loc>http://buttonwood.bitbucket.org/2014/07/22/20140722-sysbench-install/</loc>
     <lastmod>2014-07-22T13:51:00.000Z</lastmod>
   </url>
@@ -29,11 +54,6 @@
   <url>
     <loc>http://buttonwood.bitbucket.org/2014/07/09/20140709-tools/</loc>
     <lastmod>2014-07-09T03:51:00.000Z</lastmod>
-  </url>
-  
-  <url>
-    <loc>http://buttonwood.bitbucket.org/2014/06/23/python-in-a-nutshell-test-debug/</loc>
-    <lastmod>2014-06-23T03:51:00.000Z</lastmod>
   </url>
   
   <url>
@@ -72,18 +92,13 @@
   </url>
   
   <url>
-    <loc>http://buttonwood.bitbucket.org/2014/05/17/circos/</loc>
-    <lastmod>2014-05-17T00:00:00.000Z</lastmod>
+    <loc>http://buttonwood.bitbucket.org/2014/04/24/20140424-10-algorithms-dm/</loc>
+    <lastmod>2014-04-24T00:00:00.000Z</lastmod>
   </url>
   
   <url>
     <loc>http://buttonwood.bitbucket.org/2014/02/13/hello-world/</loc>
     <lastmod>2014-02-13T15:05:33.000Z</lastmod>
-  </url>
-  
-  <url>
-    <loc>http://buttonwood.bitbucket.org/2014/05/12/machine_learning_an_algorithmic_perspective(2009)/</loc>
-    <lastmod>2014-05-12T03:51:00.000Z</lastmod>
   </url>
   
   <url>
@@ -97,23 +112,23 @@
   </url>
   
   <url>
-    <loc>http://buttonwood.bitbucket.org/2014/04/24/20140424-10-algorithms-dm/</loc>
-    <lastmod>2014-04-24T00:00:00.000Z</lastmod>
-  </url>
-  
-  <url>
-    <loc>http://buttonwood.bitbucket.org/2014/04/20/python-sci/</loc>
-    <lastmod>2014-04-20T03:51:00.000Z</lastmod>
-  </url>
-  
-  <url>
     <loc>http://buttonwood.bitbucket.org/2014/05/03/about/</loc>
     <lastmod>2014-05-03T07:08:44.000Z</lastmod>
   </url>
   
   <url>
+    <loc>http://buttonwood.bitbucket.org/2014/05/17/circos/</loc>
+    <lastmod>2014-05-17T00:00:00.000Z</lastmod>
+  </url>
+  
+  <url>
     <loc>http://buttonwood.bitbucket.org/2014/05/12/20140424-ml-0/</loc>
     <lastmod>2014-05-12T03:51:00.000Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://buttonwood.bitbucket.org/2014/04/20/python-sci/</loc>
+    <lastmod>2014-04-20T03:51:00.000Z</lastmod>
   </url>
   
   <url>
@@ -124,6 +139,11 @@
   <url>
     <loc>http://buttonwood.bitbucket.org/about/index.html</loc>
     <lastmod>2014-05-03T07:08:44.000Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://buttonwood.bitbucket.org/2014/05/12/machine_learning_an_algorithmic_perspective(2009)/</loc>
+    <lastmod>2014-05-12T03:51:00.000Z</lastmod>
   </url>
   
   <url>

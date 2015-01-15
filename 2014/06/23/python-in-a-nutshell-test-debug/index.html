@@ -278,11 +278,109 @@ t<span class="preprocessor">.tearDown</span>( )
 <p><code>O(1)</code>:    <code>len(L)</code>, <code>len(T)</code>, <code>len(D)</code>, <code>len(S)</code>, <code>L[i]</code>, <code>T[i]</code>, <code>D[i]</code>, <code>del D[i]</code>, <code>if x in D</code>, <code>if x in S</code>, <code>S.add(x)</code>, <code>S.remove(x)</code>, additions or removals to/from the right end of <code>L</code></p>
 <p><code>O(N)</code>:    Loops on <code>L</code>, <code>T</code>, <code>D</code>, <code>S</code>, general additions or removals to/from <code>L</code> (not at the right end), all methods on <code>T</code>, <code>if x in L</code>, <code>if x in T</code>, most methods on <code>L</code>, all shallow copies</p>
 <p><code>O(N log N)</code>:    <code>L.sort</code> in general (but <code>O(N)</code> if <code>L</code> is already nearly sorted or reverse-sorted</p>
+<h4 id="use_poc_simpletest">use <code>poc_simpletest</code></h4>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+</pre></td><td class="code"><pre><span class="comment">#!/usr/bin/env python</span>
+<span class="comment"># -*- coding: UTF-8 -*-</span>
+
+<span class="keyword">import</span> poc_format_testsuite
+
+<span class="function"><span class="keyword">def</span> <span class="title">myFunc</span><span class="params">(paras)</span>:</span>
+    <span class="keyword">pass</span>
+
+poc_format_testsuite.run_test(myFunc(paras))
+</pre></td></tr></table></figure>
+
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+</pre></td><td class="code"><pre>imoport poc_simpletest
+
+<span class="function"><span class="keyword">def</span> <span class="title">run_test</span><span class="params">()</span>:</span>
+    suite = poc_simpletest.TestSuite()
+    suite.run_test(formate_function(<span class="number">0</span>),<span class="string">"0:00.0"</span> <span class="string">"Test #1"</span>)
+    suite.run_test(formate_function(<span class="number">7</span>),<span class="string">"0:00.7"</span> <span class="string">"Test #2"</span>)
+    suite.run_test(formate_function(<span class="number">17</span>),<span class="string">"0:01.7"</span> <span class="string">"Test #3"</span>)
+    suite.run_test(formate_function(<span class="number">60</span>),<span class="string">"0:06.0"</span> <span class="string">"Test #4"</span>)
+    suite.run_test(formate_function(<span class="number">63</span>),<span class="string">"0:06.3"</span> <span class="string">"Test #5"</span>)
+    suite.run_test(formate_function(<span class="number">5999</span>),<span class="string">"9:59.9"</span> <span class="string">"Test #6"</span>)
+    suite.report_results()
+</pre></td></tr></table></figure>
+
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+</pre></td><td class="code"><pre>wget https://d396qusza40orc<span class="preprocessor">.cloudfront</span><span class="preprocessor">.net</span>/datasci/lecture_slides/week4/<span class="number">026</span>_nosql_intro<span class="preprocessor">.pdf</span>
+wget https://d396qusza40orc<span class="preprocessor">.cloudfront</span><span class="preprocessor">.net</span>/datasci/lecture_slides/week4/<span class="number">027</span>_eventual_consistency<span class="preprocessor">.pdf</span>
+wget https://d396qusza40orc<span class="preprocessor">.cloudfront</span><span class="preprocessor">.net</span>/datasci/lecture_slides/week4/<span class="number">028</span>_memcached<span class="preprocessor">.pdf</span>
+wget https://d396qusza40orc<span class="preprocessor">.cloudfront</span><span class="preprocessor">.net</span>/datasci/lecture_slides/week4/<span class="number">029</span>_dynamo<span class="preprocessor">.pdf</span>
+wget https://d396qusza40orc<span class="preprocessor">.cloudfront</span><span class="preprocessor">.net</span>/datasci/lecture_slides/week4/<span class="number">030</span>_couchdb<span class="preprocessor">.pdf</span>
+wget https://d396qusza40orc<span class="preprocessor">.cloudfront</span><span class="preprocessor">.net</span>/datasci/lecture_slides/week4/<span class="number">031</span>_bigtable<span class="preprocessor">.pdf</span>
+wget https://d396qusza40orc<span class="preprocessor">.cloudfront</span><span class="preprocessor">.net</span>/datasci/lecture_slides/week4/<span class="number">032</span>_other_google_systems<span class="preprocessor">.pdf</span>
+wget https://d396qusza40orc<span class="preprocessor">.cloudfront</span><span class="preprocessor">.net</span>/datasci/lecture_slides/week4/<span class="number">033</span>_nosql_response<span class="preprocessor">.pdf</span>
+wget https://d396qusza40orc<span class="preprocessor">.cloudfront</span><span class="preprocessor">.net</span>/datasci/lecture_slides/week4/<span class="number">034</span>_pig_intro<span class="preprocessor">.pdf</span>
+wget https://d396qusza40orc<span class="preprocessor">.cloudfront</span><span class="preprocessor">.net</span>/datasci/lecture_slides/week4/<span class="number">035</span>_pig_load_filter_group_foreach<span class="preprocessor">.pdf</span>
+wget https://d396qusza40orc<span class="preprocessor">.cloudfront</span><span class="preprocessor">.net</span>/datasci/lecture_slides/week4/<span class="number">036</span>_cogroup_join<span class="preprocessor">.pdf</span>
+wget https://d396qusza40orc<span class="preprocessor">.cloudfront</span><span class="preprocessor">.net</span>/datasci/lecture_slides/week4/<span class="number">037</span>_pig_evaluation<span class="preprocessor">.pdf</span>
+
+wget https://d396qusza40orc<span class="preprocessor">.cloudfront</span><span class="preprocessor">.net</span>/datasci/lecture_slides/week5/<span class="number">038</span>_stats_intro<span class="preprocessor">.pdf</span> https://d396qusza40orc<span class="preprocessor">.cloudfront</span><span class="preprocessor">.net</span>/datasci/lecture_slides/week5/<span class="number">039</span>_publication_bias<span class="preprocessor">.pdf</span> https://d396qusza40orc<span class="preprocessor">.cloudfront</span><span class="preprocessor">.net</span>/datasci/lecture_slides/week5/<span class="number">040</span>_effect_size_meta_analysis_heteroskedasticity<span class="preprocessor">.pdf</span> https://d396qusza40orc<span class="preprocessor">.cloudfront</span><span class="preprocessor">.net</span>/datasci/lecture_slides/week5/<span class="number">041</span>_fraud_benfords_law<span class="preprocessor">.pdf</span> https://d396qusza40orc<span class="preprocessor">.cloudfront</span><span class="preprocessor">.net</span>/datasci/lecture_slides/week5/<span class="number">042</span>_multiple_hypothesis_testing_CORRECTED<span class="preprocessor">.pdf</span> https://d396qusza40orc<span class="preprocessor">.cloudfront</span><span class="preprocessor">.net</span>/datasci/lecture_slides/week5/<span class="number">043</span>_recap_and_big_data<span class="preprocessor">.pdf</span> https://d396qusza40orc<span class="preprocessor">.cloudfront</span><span class="preprocessor">.net</span>/datasci/lecture_slides/week5/<span class="number">044</span>_intro_bayesian<span class="preprocessor">.pdf</span> https://d396qusza40orc<span class="preprocessor">.cloudfront</span><span class="preprocessor">.net</span>/datasci/lecture_slides/week5/<span class="number">045</span>_bayes_rule<span class="preprocessor">.pdf</span>
+
+wget https://d396qusza40orc<span class="preprocessor">.cloudfront</span><span class="preprocessor">.net</span>/datasci/lecture_slides/week6/<span class="number">047</span>_overview_machine_learning<span class="preprocessor">.pdf</span> https://d396qusza40orc<span class="preprocessor">.cloudfront</span><span class="preprocessor">.net</span>/datasci/lecture_slides/week6/<span class="number">048</span>_intro_machine_learning_2<span class="preprocessor">.pdf</span> https://d396qusza40orc<span class="preprocessor">.cloudfront</span><span class="preprocessor">.net</span>/datasci/lecture_slides/week6/<span class="number">049</span>_rules_1<span class="preprocessor">.pdf</span> https://d396qusza40orc<span class="preprocessor">.cloudfront</span><span class="preprocessor">.net</span>/datasci/lecture_slides/week6/<span class="number">050</span>_rules_2<span class="preprocessor">.pdf</span> https://d396qusza40orc<span class="preprocessor">.cloudfront</span><span class="preprocessor">.net</span>/datasci/lecture_slides/week6/<span class="number">051</span>_intro_trees<span class="preprocessor">.pdf</span> https://d396qusza40orc<span class="preprocessor">.cloudfront</span><span class="preprocessor">.net</span>/datasci/lecture_slides/week6/<span class="number">052</span>_information_gain<span class="preprocessor">.pdf</span> https://d396qusza40orc<span class="preprocessor">.cloudfront</span><span class="preprocessor">.net</span>/datasci/lecture_slides/week6/<span class="number">053</span>_overfitting<span class="preprocessor">.pdf</span> https://d396qusza40orc<span class="preprocessor">.cloudfront</span><span class="preprocessor">.net</span>/datasci/lecture_slides/week6/<span class="number">054</span>_evaluation_thresholds<span class="preprocessor">.pdf</span> https://d396qusza40orc<span class="preprocessor">.cloudfront</span><span class="preprocessor">.net</span>/datasci/lecture_slides/week6/<span class="number">055</span>_bootstrap<span class="preprocessor">.pdf</span> https://d396qusza40orc<span class="preprocessor">.cloudfront</span><span class="preprocessor">.net</span>/datasci/lecture_slides/week6/<span class="number">056</span>_ensembles_and_boosting<span class="preprocessor">.pdf</span> https://d396qusza40orc<span class="preprocessor">.cloudfront</span><span class="preprocessor">.net</span>/datasci/lecture_slides/week6/<span class="number">057</span>_random_forests<span class="preprocessor">.pdf</span> https://d396qusza40orc<span class="preprocessor">.cloudfront</span><span class="preprocessor">.net</span>/datasci/lecture_slides/week6/<span class="number">058</span>_nearest_neighbor<span class="preprocessor">.pdf</span>
+
+wget https://d396qusza40orc<span class="preprocessor">.cloudfront</span><span class="preprocessor">.net</span>/datasci/lecture_slides/week6/<span class="number">060</span>_gradient_descent_part_2<span class="preprocessor">.pdf</span> https://d396qusza40orc<span class="preprocessor">.cloudfront</span><span class="preprocessor">.net</span>/datasci/lecture_slides/week6/<span class="number">061</span>_intuition_logistic_regression_svms<span class="preprocessor">.pdf</span> https://d396qusza40orc<span class="preprocessor">.cloudfront</span><span class="preprocessor">.net</span>/datasci/lecture_slides/week6/<span class="number">062</span>_intuition_regularization<span class="preprocessor">.pdf</span> https://d396qusza40orc<span class="preprocessor">.cloudfront</span><span class="preprocessor">.net</span>/datasci/lecture_slides/week6/<span class="number">063</span>_stochastic_gradient_descent<span class="preprocessor">.pdf</span> https://d396qusza40orc<span class="preprocessor">.cloudfront</span><span class="preprocessor">.net</span>/datasci/lecture_slides/week6/<span class="number">064</span>_unsupervised_learning_copy<span class="preprocessor">.pdf</span> https://d396qusza40orc<span class="preprocessor">.cloudfront</span><span class="preprocessor">.net</span>/datasci/lecture_slides/week6/<span class="number">065</span>_kmeans<span class="preprocessor">.pdf</span> https://d396qusza40orc<span class="preprocessor">.cloudfront</span><span class="preprocessor">.net</span>/datasci/lecture_slides/week6/<span class="number">066</span>_dbscan<span class="preprocessor">.pdf</span>
+
+wget https://d396qusza40orc<span class="preprocessor">.cloudfront</span><span class="preprocessor">.net</span>/datasci/lecture_slides/week8/<span class="number">083</span>_prism_example<span class="preprocessor">.pdf</span>
+wget https://d396qusza40orc<span class="preprocessor">.cloudfront</span><span class="preprocessor">.net</span>/datasci/lecture_slides/week8/<span class="number">084</span>_evaluating_recursive_programs<span class="preprocessor">.pdf</span>
+wget https://d396qusza40orc<span class="preprocessor">.cloudfront</span><span class="preprocessor">.net</span>/datasci/lecture_slides/week8/<span class="number">085</span>_optimizing_recursive_programs_in_mr<span class="preprocessor">.pdf</span>
+wget https://d396qusza40orc<span class="preprocessor">.cloudfront</span><span class="preprocessor">.net</span>/datasci/lecture_slides/week8/<span class="number">086</span>_graph_representations<span class="preprocessor">.pdf</span>
+
+wget https://class<span class="preprocessor">.coursera</span><span class="preprocessor">.org</span>/datasci-<span class="number">002</span>/lecture/download<span class="preprocessor">.mp</span>4?lecture_id=<span class="number">217</span>
+wget https://class<span class="preprocessor">.coursera</span><span class="preprocessor">.org</span>/datasci-<span class="number">002</span>/lecture/download<span class="preprocessor">.mp</span>4?lecture_id=<span class="number">219</span>
+</pre></td></tr></table></figure>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://buttonwood.bitbucket.org/2014/06/23/python-in-a-nutshell-test-debug/" data-id="4p6sou0bd9fw6ny1" class="article-share-link">Share</a>
+      <a data-url="http://buttonwood.bitbucket.org/2014/06/23/python-in-a-nutshell-test-debug/" data-id="dggo4rpzbde3zj97" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Python/">Python</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Tips/">Tips</a></li></ul>
@@ -293,19 +391,19 @@ t<span class="preprocessor">.tearDown</span>( )
     
 <nav id="article-nav">
   
-    <a href="/2014/06/23/python-in-a-nutshell-io/" id="article-nav-newer" class="article-nav-link-wrap">
+    <a href="/2014/06/23/python-in-a-nutshell-network/" id="article-nav-newer" class="article-nav-link-wrap">
       <strong class="article-nav-caption">Newer</strong>
       <div class="article-nav-title">
         
-          Python in a Nutshell (IO Tips)
+          Python in a Nutshell (Network Tips)
         
       </div>
     </a>
   
   
-    <a href="/2014/06/23/python-in-a-nutshell-tips/" id="article-nav-older" class="article-nav-link-wrap">
+    <a href="/2014/06/20/data_analysis_python/" id="article-nav-older" class="article-nav-link-wrap">
       <strong class="article-nav-caption">Older</strong>
-      <div class="article-nav-title">Python in a Nutshell (Useful Tips)</div>
+      <div class="article-nav-title">Data Analysis with Python (Useful Tips)</div>
     </a>
   
 </nav>
@@ -358,7 +456,7 @@ t<span class="preprocessor">.tearDown</span>( )
   <div class="widget-wrap">
     <h3 class="widget-title">Categories</h3>
     <div class="widget">
-      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Data-Mining/">Data Mining</a><span class="category-list-count">7</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Data-Visualization/">Data Visualization</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/MySQL/">MySQL</a><span class="category-list-count">4</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Python/">Python</a><span class="category-list-count">6</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/R/">R</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Tools/">Tools</a><span class="category-list-count">2</span></li></ul>
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Data-Mining/">Data Mining</a><span class="category-list-count">7</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Data-Visualization/">Data Visualization</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/MySQL/">MySQL</a><span class="category-list-count">4</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Python/">Python</a><span class="category-list-count">8</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/R/">R</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Tools/">Tools</a><span class="category-list-count">3</span></li></ul>
     </div>
   </div>
 
@@ -367,7 +465,7 @@ t<span class="preprocessor">.tearDown</span>( )
   <div class="widget-wrap">
     <h3 class="widget-title">Tags</h3>
     <div class="widget">
-      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/CART/">CART</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Circos/">Circos</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/DV/">DV</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/EM/">EM</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Git/">Git</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ML/">ML</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MySQL/">MySQL</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Mysql/">Mysql</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/PageRank/">PageRank</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Python/">Python</a><span class="tag-list-count">8</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/R/">R</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SVM/">SVM</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Thread/">Thread</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Tips/">Tips</a><span class="tag-list-count">7</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Tools/">Tools</a><span class="tag-list-count">10</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/books/">books</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/classification/">classification</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/clustering/">clustering</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/k-means/">k-means</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/kNN/">kNN</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/sysbench/">sysbench</a><span class="tag-list-count">3</span></li></ul>
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/CART/">CART</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Circos/">Circos</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/DV/">DV</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/EM/">EM</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Git/">Git</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ML/">ML</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MySQL/">MySQL</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Mysql/">Mysql</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/PageRank/">PageRank</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Python/">Python</a><span class="tag-list-count">10</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/R/">R</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SVM/">SVM</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Thread/">Thread</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Tips/">Tips</a><span class="tag-list-count">9</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Tools/">Tools</a><span class="tag-list-count">10</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/books/">books</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/classification/">classification</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/clustering/">clustering</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/k-means/">k-means</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/kNN/">kNN</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/sysbench/">sysbench</a><span class="tag-list-count">3</span></li></ul>
     </div>
   </div>
 
@@ -376,7 +474,7 @@ t<span class="preprocessor">.tearDown</span>( )
   <div class="widget-wrap">
     <h3 class="widget-title">Tag Cloud</h3>
     <div class="widget tagcloud">
-      <a href="/tags/CART/" style="font-size: 10.00px;">CART</a><a href="/tags/Circos/" style="font-size: 10.00px;">Circos</a><a href="/tags/DV/" style="font-size: 10.00px;">DV</a><a href="/tags/EM/" style="font-size: 10.00px;">EM</a><a href="/tags/Git/" style="font-size: 10.00px;">Git</a><a href="/tags/ML/" style="font-size: 11.67px;">ML</a><a href="/tags/MySQL/" style="font-size: 15.00px;">MySQL</a><a href="/tags/Mysql/" style="font-size: 10.00px;">Mysql</a><a href="/tags/PageRank/" style="font-size: 10.00px;">PageRank</a><a href="/tags/Python/" style="font-size: 18.33px;">Python</a><a href="/tags/R/" style="font-size: 11.67px;">R</a><a href="/tags/SVM/" style="font-size: 10.00px;">SVM</a><a href="/tags/Thread/" style="font-size: 10.00px;">Thread</a><a href="/tags/Tips/" style="font-size: 16.67px;">Tips</a><a href="/tags/Tools/" style="font-size: 20.00px;">Tools</a><a href="/tags/books/" style="font-size: 10.00px;">books</a><a href="/tags/classification/" style="font-size: 10.00px;">classification</a><a href="/tags/clustering/" style="font-size: 10.00px;">clustering</a><a href="/tags/k-means/" style="font-size: 10.00px;">k-means</a><a href="/tags/kNN/" style="font-size: 10.00px;">kNN</a><a href="/tags/sysbench/" style="font-size: 13.33px;">sysbench</a>
+      <a href="/tags/CART/" style="font-size: 10.00px;">CART</a><a href="/tags/Circos/" style="font-size: 10.00px;">Circos</a><a href="/tags/DV/" style="font-size: 10.00px;">DV</a><a href="/tags/EM/" style="font-size: 10.00px;">EM</a><a href="/tags/Git/" style="font-size: 10.00px;">Git</a><a href="/tags/ML/" style="font-size: 12.00px;">ML</a><a href="/tags/MySQL/" style="font-size: 16.00px;">MySQL</a><a href="/tags/Mysql/" style="font-size: 10.00px;">Mysql</a><a href="/tags/PageRank/" style="font-size: 10.00px;">PageRank</a><a href="/tags/Python/" style="font-size: 20.00px;">Python</a><a href="/tags/R/" style="font-size: 14.00px;">R</a><a href="/tags/SVM/" style="font-size: 10.00px;">SVM</a><a href="/tags/Thread/" style="font-size: 10.00px;">Thread</a><a href="/tags/Tips/" style="font-size: 18.00px;">Tips</a><a href="/tags/Tools/" style="font-size: 20.00px;">Tools</a><a href="/tags/books/" style="font-size: 10.00px;">books</a><a href="/tags/classification/" style="font-size: 10.00px;">classification</a><a href="/tags/clustering/" style="font-size: 10.00px;">clustering</a><a href="/tags/k-means/" style="font-size: 10.00px;">k-means</a><a href="/tags/kNN/" style="font-size: 10.00px;">kNN</a><a href="/tags/sysbench/" style="font-size: 14.00px;">sysbench</a>
     </div>
   </div>
 
@@ -385,7 +483,7 @@ t<span class="preprocessor">.tearDown</span>( )
   <div class="widget-wrap">
     <h3 class="widget-title">Archives</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/07">July 2014</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/06">June 2014</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/05">May 2014</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/04">April 2014</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/02">February 2014</a><span class="archive-list-count">1</span></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/01">January 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/12">December 2014</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/10">October 2014</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/07">July 2014</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/06">June 2014</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/05">May 2014</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/04">April 2014</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/02">February 2014</a><span class="archive-list-count">1</span></li></ul>
     </div>
   </div>
 
@@ -397,23 +495,23 @@ t<span class="preprocessor">.tearDown</span>( )
       <ul>
         
           <li>
+            <a href="/2015/01/14/Writing-idiomatic-python/">Writing idiomatic python</a>
+          </li>
+        
+          <li>
+            <a href="/2014/12/15/20141215-rChart/">rChart and morris.js</a>
+          </li>
+        
+          <li>
+            <a href="/2014/10/10/python_pocker_reference/">Python Pocket Reference</a>
+          </li>
+        
+          <li>
             <a href="/2014/07/25/20140725-sysbench-mysql/">Sysbench for MySQL Testing</a>
           </li>
         
           <li>
             <a href="/2014/07/24/20140724-sysbench-testing/">sysbench testing</a>
-          </li>
-        
-          <li>
-            <a href="/2014/07/22/20140722-sysbench-install/">sysbench libtool error and mysql testing</a>
-          </li>
-        
-          <li>
-            <a href="/2014/07/22/20140722-mysql-install/">A First Glance at MySQL</a>
-          </li>
-        
-          <li>
-            <a href="/2014/07/09/20140709-tools/">Data Sicence ToolBox</a>
           </li>
         
       </ul>
@@ -431,7 +529,7 @@ t<span class="preprocessor">.tearDown</span>( )
   
   <div class="outer">
     <div id="footer-info" class="inner">
-      &copy; 2014 The Eye of Data ( <a href="http://buttonwood.github.io" target="_blank">@Buttonwood )</a><br>
+      &copy; 2015 The Eye of Data ( <a href="http://buttonwood.github.io" target="_blank">@Buttonwood )</a><br>
       Powered by <a href="http://zespia.tw/hexo/" target="_blank">Hexo</a>
     </div>
   </div>

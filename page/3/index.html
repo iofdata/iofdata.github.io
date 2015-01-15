@@ -98,6 +98,303 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-20140424-ml-0" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2014/05/12/20140424-ml-0/" class="article-date">
+  <time datetime="2014-05-12T03:51:00.000Z" itemprop="datePublished">May 12 2014</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/Data-Mining/">Data Mining</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2014/05/12/20140424-ml-0/">Short Introduction to Machine learning</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="Learning">Learning</h3>
+<p>When come to learning, what do we talk about it?</p>
+<p>For machines, they are learning from data, since data is what they have.<br>For our human beings, especially  behavioural  terms, we are talking about learning from experience.</p>
+<p><strong><em>Machine Learning</em></strong>, is about computers modify or adapt their actions(whether these actions are making predictions or controlling a robot), so that these actions get more accurate, where accuracy is measured by how well the chosen actions reflect the correct ones.</p>
+<h3 id="Types_of_Machine_Learning">Types of Machine Learning</h3>
+<ol>
+<li>Supervised learning.<br>A training set of examples with the correct responses (targets) are provided and, based on this training set, the algorithm <strong><em>generalizes</em></strong> to respond correctly to all possible inputs. This is called learning from examples. </li>
+<li>Unsupervised learning.<br>Correct responses (targets) are not provided, instead the algorithm tries to identify similarities between the inputs so that inputs that have something in common are <strong><em>categorized</em></strong> together. The statistical approach to unsupervised learning is known as density estimation.</li>
+<li>Reinforcement learning.<br>Somewhere between supervised learning and unsupervised learning. The algorithm gets told when the answer is wrong but does not get told how to correct it. It has to explore and try different possibilities until it works out how to get the answer right. It ‘s sometime called learning withe a <strong><em>critic</em></strong> because of this monitor that scores the answer, but does not suggest improvements.</li>
+<li>Evolutionary learning.<br>Biological evolution can be seen as a learning process: biological organisms adapt to improve their survival rates and chances of having offspring in their environment. We’ll look at how we can model this in a computer by using an idea of <strong><em>fitness</em></strong>, which corresponds to a score for how good the current solutions is.</li>
+</ol>
+<p>By the way, from <strong>ISL</strong>(An Introduction to Statistical Learning) by Trevor Hastie and Robert Tibshirani:</p>
+<blockquote>
+<p><strong><em>Supervised statistical learning</em></strong> involves building a statistical model for predicting, or estimating, an output based on one or more inputs.<br>With <strong><em>unsupervised statistical learning</em></strong>, there are inputs but no supervising output; nevertheless we can learn relationships and structure from such data.     </p>
+</blockquote>
+<p>The most common type of learning is supervised learning.</p>
+<h3 id="Supervised"><strong><em>Supervised</em></strong></h3>
+<p>We wish to fit a model that relates the response to the predictors, with the aim of accurately predicting the response for future observations (prediction) or better understanding the relationship between the response and the predictors (inference).         </p>
+<ol>
+<li>Regression</li>
+<li>Classification</li>
+<li>GAM</li>
+<li>boosting</li>
+<li>support vector machines</li>
+</ol>
+<h3 id="Unsupervised"><strong><em>Unsupervised</em></strong></h3>
+<p>There is no response variable to predict, we observe a vector of measurements $x_i$ but no associated response $y_i$.  </p>
+<ol>
+<li>clustering</li>
+<li></li>
+</ol>
+<p>Reference:<br><a href="https://en.wikipedia.org/wiki/Book:Machine_Learning_-_The_Complete_Guide" target="_blank" rel="external">[1]: Machine Learning: The Complete Guide</a></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://buttonwood.bitbucket.org/2014/05/12/20140424-ml-0/" data-id="oeuaedm0412gxel5" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/ML/">ML</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+<!-- DISQUS
+
+-->
+
+
+
+  
+    <article id="post-20140511-python-tips-map" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2014/05/11/20140511-python-tips-map/" class="article-date">
+  <time datetime="2014-05-11T00:00:00.000Z" itemprop="datePublished">May 11 2014</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/Python/">Python</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2014/05/11/20140511-python-tips-map/">Python中4个强大的内置函数</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="python_四大利器">python 四大利器</h3>
+<p><code>filter()</code> and <code>map()</code> and <code>reduce()</code> and <code>lambda()</code></p>
+<h3 id="filter(function,_iterable)¶"><code>filter(function, iterable)¶</code></h3>
+<p><code>filter(function, iterable)</code> is equivalent to <code>[item for item in iterable if function(item)]</code> if function is not <code>None</code> and <code>[item for item in iterable if item]</code> if function is <code>None</code>.</p>
+<p>see <a href="https://docs.python.org/2/library/functions.html?highlight=filter#filter" target="_blank" rel="external">https://docs.python.org/2/library/functions.html?highlight=filter#filter</a></p>
+<p>对迭代器中<code>function(iter)</code>为<code>True</code>的组成一个新的迭代器(<code>list/string/tuple</code>等，取决于迭代器的类型)。</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+</pre></td><td class="code"><pre><span class="prompt">&gt;&gt;&gt; </span><span class="function"><span class="keyword">def</span> <span class="title">f</span><span class="params">(x)</span>:</span> <span class="keyword">return</span> x % <span class="number">2</span> != <span class="number">0</span> <span class="keyword">and</span> x % <span class="number">3</span> !=<span class="number">0</span>
+<span class="prompt">&gt;&gt;&gt; </span>filter(f,xrange(<span class="number">1</span>,<span class="number">100</span>)) 
+[<span class="number">1</span>, <span class="number">5</span>, <span class="number">7</span>, <span class="number">11</span>, <span class="number">13</span>, <span class="number">17</span>, <span class="number">19</span>, <span class="number">23</span>, <span class="number">25</span>, <span class="number">29</span>, <span class="number">31</span>, <span class="number">35</span>, <span class="number">37</span>, <span class="number">41</span>, <span class="number">43</span>, <span class="number">47</span>, <span class="number">49</span>, <span class="number">53</span>, <span class="number">55</span>, <span class="number">59</span>, <span class="number">61</span>, <span class="number">65</span>, <span class="number">67</span>, <span class="number">71</span>, <span class="number">73</span>, <span class="number">77</span>, <span class="number">79</span>, <span class="number">83</span>, <span class="number">85</span>, <span class="number">89</span>, <span class="number">91</span>, <span class="number">95</span>, <span class="number">97</span>]
+<span class="comment"># or</span>
+<span class="prompt">&gt;&gt;&gt; </span>filter(<span class="keyword">lambda</span> x: x % <span class="number">2</span> != <span class="number">0</span> <span class="keyword">and</span> x % <span class="number">3</span> !=<span class="number">0</span>, xrange(<span class="number">1</span>,<span class="number">100</span>))
+[<span class="number">1</span>, <span class="number">5</span>, <span class="number">7</span>, <span class="number">11</span>, <span class="number">13</span>, <span class="number">17</span>, <span class="number">19</span>, <span class="number">23</span>, <span class="number">25</span>, <span class="number">29</span>, <span class="number">31</span>, <span class="number">35</span>, <span class="number">37</span>, <span class="number">41</span>, <span class="number">43</span>, <span class="number">47</span>, <span class="number">49</span>, <span class="number">53</span>, <span class="number">55</span>, <span class="number">59</span>, <span class="number">61</span>, <span class="number">65</span>, <span class="number">67</span>, <span class="number">71</span>, <span class="number">73</span>, <span class="number">77</span>, <span class="number">79</span>, <span class="number">83</span>, <span class="number">85</span>, <span class="number">89</span>, <span class="number">91</span>, <span class="number">95</span>, <span class="number">97</span>]
+<span class="comment"># or</span>
+<span class="prompt">&gt;&gt;&gt; </span>[ x <span class="keyword">for</span> x <span class="keyword">in</span> xrange(<span class="number">1</span>,<span class="number">100</span>) <span class="keyword">if</span> x % <span class="number">2</span> != <span class="number">0</span> <span class="keyword">and</span> x % <span class="number">3</span> !=<span class="number">0</span>]
+[<span class="number">1</span>, <span class="number">5</span>, <span class="number">7</span>, <span class="number">11</span>, <span class="number">13</span>, <span class="number">17</span>, <span class="number">19</span>, <span class="number">23</span>, <span class="number">25</span>, <span class="number">29</span>, <span class="number">31</span>, <span class="number">35</span>, <span class="number">37</span>, <span class="number">41</span>, <span class="number">43</span>, <span class="number">47</span>, <span class="number">49</span>, <span class="number">53</span>, <span class="number">55</span>, <span class="number">59</span>, <span class="number">61</span>, <span class="number">65</span>, <span class="number">67</span>, <span class="number">71</span>, <span class="number">73</span>, <span class="number">77</span>, <span class="number">79</span>, <span class="number">83</span>, <span class="number">85</span>, <span class="number">89</span>, <span class="number">91</span>, <span class="number">95</span>, <span class="number">97</span>]
+</pre></td></tr></table></figure>
+
+<h3 id="map(function,_iterable,_-)¶"><code>map(function, iterable, ...)¶</code></h3>
+<p>Apply function to every item of iterable and return a list of the results.</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+</pre></td><td class="code"><pre><span class="prompt">&gt;&gt;&gt; </span><span class="function"><span class="keyword">def</span> <span class="title">cube</span><span class="params">(x)</span>:</span> <span class="keyword">return</span> x*x*x 
+<span class="prompt">&gt;&gt;&gt; </span>map(cube, xrange(<span class="number">0</span>, <span class="number">10</span>))
+[<span class="number">0</span>, <span class="number">1</span>, <span class="number">8</span>, <span class="number">27</span>, <span class="number">64</span>, <span class="number">125</span>, <span class="number">216</span>, <span class="number">343</span>, <span class="number">512</span>, <span class="number">729</span>]
+<span class="comment"># or</span>
+<span class="prompt">&gt;&gt;&gt; </span>map(<span class="keyword">lambda</span> x: x*x*x, xrange(<span class="number">0</span>, <span class="number">10</span>))
+<span class="comment"># or</span>
+<span class="prompt">&gt;&gt;&gt; </span>[x*x*x <span class="keyword">for</span> x <span class="keyword">in</span> xrange(<span class="number">0</span>, <span class="number">10</span>)]
+<span class="comment"># for multiple iterable</span>
+<span class="prompt">&gt;&gt;&gt; </span>map(<span class="keyword">lambda</span> x,y: x+ y, xrange(<span class="number">0</span>, <span class="number">10</span>), xrange(<span class="number">10</span>, <span class="number">20</span>))
+[<span class="number">10</span>, <span class="number">12</span>, <span class="number">14</span>, <span class="number">16</span>, <span class="number">18</span>, <span class="number">20</span>, <span class="number">22</span>, <span class="number">24</span>, <span class="number">26</span>, <span class="number">28</span>]
+</pre></td></tr></table></figure>
+
+<h3 id="reduce(function,_iterable[,_initializer])¶"><code>reduce(function, iterable[, initializer])¶</code></h3>
+<p>Apply function of two arguments cumulatively to the items of iterable, from left to right, so as to reduce the iterable to a single value.<br>For example, <code>reduce(lambda x, y: x+y, [1,2, 3, 4, 5])</code> calculates <code>((((1+2)+3)+4)+5)</code>. </p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+</pre></td><td class="code"><pre><span class="prompt">&gt;&gt;&gt; </span><span class="function"><span class="keyword">def</span> <span class="title">add</span><span class="params">(x,y)</span>:</span> <span class="keyword">return</span> x + y
+<span class="prompt">&gt;&gt;&gt; </span>reduce(add, xrange(<span class="number">1</span>, <span class="number">11</span>))
+<span class="number">55</span>
+<span class="prompt">&gt;&gt;&gt; </span>reduce(add, xrange(<span class="number">1</span>, <span class="number">11</span>),<span class="number">20</span>)
+<span class="number">75</span>
+</pre></td></tr></table></figure>
+
+<h3 id="lambda¶"><code>lambda¶</code></h3>
+<p><code>lambda</code>是Python中一种非常有趣的语法，它允许你快速定义单行的最小函数，类似与C语言中的宏，这些叫做<code>lambda</code>的函数，是从<code>LISP</code>借用来的，可以用在任何需要函数的地方,函数式编程的典范。<br>其实上面已经不自觉地在使用了，懒人必备。</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+</pre></td><td class="code"><pre><span class="prompt">&gt;&gt;&gt; </span>g = <span class="keyword">lambda</span> x: x*x*x
+<span class="prompt">&gt;&gt;&gt; </span>g(<span class="number">3</span>)
+<span class="number">27</span>
+<span class="prompt">&gt;&gt;&gt; </span>(<span class="keyword">lambda</span> x: x*x*x)(<span class="number">3</span>)
+</pre></td></tr></table></figure>
+
+<h3 id="综合运用¶"><code>综合运用¶</code></h3>
+<p>我们也可以把<code>filter</code> <code>map</code> <code>reduce</code> <code>lambda</code>结合起来用，函数就可以简单的写成一行。</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+</pre></td><td class="code"><pre><span class="prompt">&gt;&gt;&gt; </span>filter(<span class="keyword">lambda</span> x: x % <span class="number">3</span> != <span class="number">0</span> <span class="keyword">and</span> x % <span class="number">4</span> !=<span class="number">0</span>, map(<span class="keyword">lambda</span> x,y: x+ y, xrange(<span class="number">0</span>, <span class="number">100</span>), xrange(<span class="number">100</span>, <span class="number">200</span>)))
+[<span class="number">106</span>, <span class="number">110</span>, <span class="number">118</span>, <span class="number">122</span>, <span class="number">130</span>, <span class="number">134</span>, <span class="number">142</span>, <span class="number">146</span>, <span class="number">154</span>, <span class="number">158</span>, <span class="number">166</span>, <span class="number">170</span>, <span class="number">178</span>, <span class="number">182</span>, <span class="number">190</span>, <span class="number">194</span>, <span class="number">202</span>, <span class="number">206</span>, <span class="number">214</span>, <span class="number">218</span>, <span class="number">226</span>, <span class="number">230</span>, <span class="number">238</span>, <span class="number">242</span>, <span class="number">250</span>, <span class="number">254</span>, <span class="number">262</span>, <span class="number">266</span>, <span class="number">274</span>, <span class="number">278</span>, <span class="number">286</span>, <span class="number">290</span>, <span class="number">298</span>]
+<span class="comment"># 再求和试试</span>
+<span class="prompt">&gt;&gt;&gt; </span>reduce(<span class="keyword">lambda</span> a,b:a+b, filter(<span class="keyword">lambda</span> x: x % <span class="number">3</span> != <span class="number">0</span> <span class="keyword">and</span> x % <span class="number">4</span> !=<span class="number">0</span>, map(<span class="keyword">lambda</span> x,y: x+ y, xrange(<span class="number">0</span>, <span class="number">100</span>), xrange(<span class="number">100</span>,<span class="number">200</span>))))
+<span class="number">6634</span>
+</pre></td></tr></table></figure>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://buttonwood.bitbucket.org/2014/05/11/20140511-python-tips-map/" data-id="pydvulvyo3wcp0ej" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Python/">Python</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Tools/">Tools</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+<!-- DISQUS
+
+-->
+
+
+
+  
+    <article id="post-about" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2014/05/03/about/" class="article-date">
+  <time datetime="2014-05-03T07:08:44.000Z" itemprop="datePublished">May 3 2014</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2014/05/03/about/">About Me</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="About_Me_!">About Me !</h3>
+<p>I’m a bioinformatic engineer and amateur programmer, and here is a short introduction about me and this blog, thanks for your reading!</p>
+<p>I’m engaged in <strong>genomics research</strong>, including <strong><em>genome assembly/annotation/evolution</em></strong> and <strong><em>comparative genomics</em></strong>.</p>
+<p>As a mathematics graduate, I’m also interested in interdisciplinary work, specifically <strong>data mining</strong> and <strong>visualization</strong>. And I hope we can exchange our ideas and experiences about  <strong>Data Mining</strong> through this blog.</p>
+<p>I mostly work in <strong>python/perl/R</strong> on OSX and Linux for most of my work,  I also dabble in <strong>C/C++/Shell</strong>. And I am trying to learn <a href="http://d3js.org/" target="_blank" rel="external">D3.js</a> and <a href="http://www.processing.org/" target="_blank" rel="external">processing</a> for my hobby of <strong>Data Visualization</strong> now.</p>
+<p>Thanks for following me: <a href="http://buttonwood.github.io" target="_blank" rel="external">@Github</a> and <a href="http://weibo.com/buttonwood" target="_blank" rel="external">@Weibo</a>.</p>
+<p>I’m living in Wuhan, a city near the Yangtze River in China. It’s beautiful besides it’s bad weather(long hot summer and cold winter), I spent my college life there and I love my friends there forever.</p>
+<p>Besides programming, I exercise and read books regularly. To be a stronger and better version of myself!</p>
+<h3 id="About_this_blog_!">About this blog !</h3>
+<p>This blog is proudly powered by <a href="http://hexo.io/" target="_blank" rel="external">Hexo</a>, which takes great advantage of <a href="http://nodejs.org/" target="_blank" rel="external">Node.js</a>.</p>
+
+<p>And it is only for my scattered ideas of reading and programming, there are no business attempts.</p>
+<p>Any suggestions about this blog and topics talked there are welcome.</p>
+<p>Like the TED said: <strong><em>Ideas are worth spreading and sharing!</em></strong> Many THX!</p>
+<h3 id="Time_axis_!">Time axis !</h3>
+<table>
+<thead>
+<tr>
+<th>Time</th>
+<th>Department/Works</th>
+<th>Company/University</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong><em>2012-Now</em></strong></td>
+<td>You Guess！</td>
+<td>You Guess！</td>
+</tr>
+<tr>
+<td><strong><em>2010-2012</em></strong></td>
+<td>Bioinformatics Engineer/Analyst</td>
+<td><strong><em><a href="http://www.genomics.cn/index" target="_blank" rel="external">BGI</a></em></strong></td>
+</tr>
+<tr>
+<td><strong><em>2006-2010</em></strong></td>
+<td>Student in College of Mathematics And Statistics</td>
+<td><strong><em><a href="http://maths.hust.edu.cn/new/index.asp" target="_blank" rel="external">HUST</a></em></strong></td>
+</tr>
+</tbody>
+</table>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://buttonwood.bitbucket.org/2014/05/03/about/" data-id="2fccvrf3o72267ny" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+<!-- DISQUS
+
+-->
+
+
+
+  
     <article id="post-20140501-PREA" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2014/05/01/20140501-PREA/" class="article-date">
@@ -142,7 +439,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://buttonwood.bitbucket.org/2014/05/01/20140501-PREA/" data-id="0v8zslwy4sfhy7bu" class="article-share-link">Share</a>
+      <a data-url="http://buttonwood.bitbucket.org/2014/05/01/20140501-PREA/" data-id="z9x9ai0z0wlfh90k" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Tools/">Tools</a></li></ul>
@@ -195,7 +492,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://buttonwood.bitbucket.org/2014/04/24/20140424-10-algorithms-dm/" data-id="rxn1ovj92slcqbuj" class="article-share-link">Share</a>
+      <a data-url="http://buttonwood.bitbucket.org/2014/04/24/20140424-10-algorithms-dm/" data-id="ovfnhjcw86c8j8to" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/CART/">CART</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/EM/">EM</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/PageRank/">PageRank</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/SVM/">SVM</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/classification/">classification</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/clustering/">clustering</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/k-means/">k-means</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/kNN/">kNN</a></li></ul>
@@ -304,7 +601,7 @@ pip install pandas
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://buttonwood.bitbucket.org/2014/04/20/python-sci/" data-id="k7cjy33zh8wcpv21" class="article-share-link">Share</a>
+      <a data-url="http://buttonwood.bitbucket.org/2014/04/20/python-sci/" data-id="u05nnlwq4t1vs3ut" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Python/">Python</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Tools/">Tools</a></li></ul>
@@ -348,7 +645,7 @@ pip install pandas
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://buttonwood.bitbucket.org/2014/02/13/hello-world/" data-id="7ag8cuxab9wc3dxr" class="article-share-link">Share</a>
+      <a data-url="http://buttonwood.bitbucket.org/2014/02/13/hello-world/" data-id="feeani9zxia632cn" class="article-share-link">Share</a>
       
       
     </footer>
@@ -391,7 +688,7 @@ pip install pandas
   <div class="widget-wrap">
     <h3 class="widget-title">Categories</h3>
     <div class="widget">
-      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Data-Mining/">Data Mining</a><span class="category-list-count">7</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Data-Visualization/">Data Visualization</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/MySQL/">MySQL</a><span class="category-list-count">4</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Python/">Python</a><span class="category-list-count">6</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/R/">R</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Tools/">Tools</a><span class="category-list-count">2</span></li></ul>
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Data-Mining/">Data Mining</a><span class="category-list-count">7</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Data-Visualization/">Data Visualization</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/MySQL/">MySQL</a><span class="category-list-count">4</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Python/">Python</a><span class="category-list-count">8</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/R/">R</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Tools/">Tools</a><span class="category-list-count">3</span></li></ul>
     </div>
   </div>
 
@@ -400,7 +697,7 @@ pip install pandas
   <div class="widget-wrap">
     <h3 class="widget-title">Tags</h3>
     <div class="widget">
-      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/CART/">CART</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Circos/">Circos</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/DV/">DV</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/EM/">EM</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Git/">Git</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ML/">ML</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MySQL/">MySQL</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Mysql/">Mysql</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/PageRank/">PageRank</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Python/">Python</a><span class="tag-list-count">8</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/R/">R</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SVM/">SVM</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Thread/">Thread</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Tips/">Tips</a><span class="tag-list-count">7</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Tools/">Tools</a><span class="tag-list-count">10</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/books/">books</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/classification/">classification</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/clustering/">clustering</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/k-means/">k-means</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/kNN/">kNN</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/sysbench/">sysbench</a><span class="tag-list-count">3</span></li></ul>
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/CART/">CART</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Circos/">Circos</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/DV/">DV</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/EM/">EM</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Git/">Git</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ML/">ML</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MySQL/">MySQL</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Mysql/">Mysql</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/PageRank/">PageRank</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Python/">Python</a><span class="tag-list-count">10</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/R/">R</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SVM/">SVM</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Thread/">Thread</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Tips/">Tips</a><span class="tag-list-count">9</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Tools/">Tools</a><span class="tag-list-count">10</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/books/">books</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/classification/">classification</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/clustering/">clustering</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/k-means/">k-means</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/kNN/">kNN</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/sysbench/">sysbench</a><span class="tag-list-count">3</span></li></ul>
     </div>
   </div>
 
@@ -409,7 +706,7 @@ pip install pandas
   <div class="widget-wrap">
     <h3 class="widget-title">Tag Cloud</h3>
     <div class="widget tagcloud">
-      <a href="/tags/CART/" style="font-size: 10.00px;">CART</a><a href="/tags/Circos/" style="font-size: 10.00px;">Circos</a><a href="/tags/DV/" style="font-size: 10.00px;">DV</a><a href="/tags/EM/" style="font-size: 10.00px;">EM</a><a href="/tags/Git/" style="font-size: 10.00px;">Git</a><a href="/tags/ML/" style="font-size: 11.67px;">ML</a><a href="/tags/MySQL/" style="font-size: 15.00px;">MySQL</a><a href="/tags/Mysql/" style="font-size: 10.00px;">Mysql</a><a href="/tags/PageRank/" style="font-size: 10.00px;">PageRank</a><a href="/tags/Python/" style="font-size: 18.33px;">Python</a><a href="/tags/R/" style="font-size: 11.67px;">R</a><a href="/tags/SVM/" style="font-size: 10.00px;">SVM</a><a href="/tags/Thread/" style="font-size: 10.00px;">Thread</a><a href="/tags/Tips/" style="font-size: 16.67px;">Tips</a><a href="/tags/Tools/" style="font-size: 20.00px;">Tools</a><a href="/tags/books/" style="font-size: 10.00px;">books</a><a href="/tags/classification/" style="font-size: 10.00px;">classification</a><a href="/tags/clustering/" style="font-size: 10.00px;">clustering</a><a href="/tags/k-means/" style="font-size: 10.00px;">k-means</a><a href="/tags/kNN/" style="font-size: 10.00px;">kNN</a><a href="/tags/sysbench/" style="font-size: 13.33px;">sysbench</a>
+      <a href="/tags/CART/" style="font-size: 10.00px;">CART</a><a href="/tags/Circos/" style="font-size: 10.00px;">Circos</a><a href="/tags/DV/" style="font-size: 10.00px;">DV</a><a href="/tags/EM/" style="font-size: 10.00px;">EM</a><a href="/tags/Git/" style="font-size: 10.00px;">Git</a><a href="/tags/ML/" style="font-size: 12.00px;">ML</a><a href="/tags/MySQL/" style="font-size: 16.00px;">MySQL</a><a href="/tags/Mysql/" style="font-size: 10.00px;">Mysql</a><a href="/tags/PageRank/" style="font-size: 10.00px;">PageRank</a><a href="/tags/Python/" style="font-size: 20.00px;">Python</a><a href="/tags/R/" style="font-size: 14.00px;">R</a><a href="/tags/SVM/" style="font-size: 10.00px;">SVM</a><a href="/tags/Thread/" style="font-size: 10.00px;">Thread</a><a href="/tags/Tips/" style="font-size: 18.00px;">Tips</a><a href="/tags/Tools/" style="font-size: 20.00px;">Tools</a><a href="/tags/books/" style="font-size: 10.00px;">books</a><a href="/tags/classification/" style="font-size: 10.00px;">classification</a><a href="/tags/clustering/" style="font-size: 10.00px;">clustering</a><a href="/tags/k-means/" style="font-size: 10.00px;">k-means</a><a href="/tags/kNN/" style="font-size: 10.00px;">kNN</a><a href="/tags/sysbench/" style="font-size: 14.00px;">sysbench</a>
     </div>
   </div>
 
@@ -418,7 +715,7 @@ pip install pandas
   <div class="widget-wrap">
     <h3 class="widget-title">Archives</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/07">July 2014</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/06">June 2014</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/05">May 2014</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/04">April 2014</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/02">February 2014</a><span class="archive-list-count">1</span></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/01">January 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/12">December 2014</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/10">October 2014</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/07">July 2014</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/06">June 2014</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/05">May 2014</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/04">April 2014</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/02">February 2014</a><span class="archive-list-count">1</span></li></ul>
     </div>
   </div>
 
@@ -430,23 +727,23 @@ pip install pandas
       <ul>
         
           <li>
+            <a href="/2015/01/14/Writing-idiomatic-python/">Writing idiomatic python</a>
+          </li>
+        
+          <li>
+            <a href="/2014/12/15/20141215-rChart/">rChart and morris.js</a>
+          </li>
+        
+          <li>
+            <a href="/2014/10/10/python_pocker_reference/">Python Pocket Reference</a>
+          </li>
+        
+          <li>
             <a href="/2014/07/25/20140725-sysbench-mysql/">Sysbench for MySQL Testing</a>
           </li>
         
           <li>
             <a href="/2014/07/24/20140724-sysbench-testing/">sysbench testing</a>
-          </li>
-        
-          <li>
-            <a href="/2014/07/22/20140722-sysbench-install/">sysbench libtool error and mysql testing</a>
-          </li>
-        
-          <li>
-            <a href="/2014/07/22/20140722-mysql-install/">A First Glance at MySQL</a>
-          </li>
-        
-          <li>
-            <a href="/2014/07/09/20140709-tools/">Data Sicence ToolBox</a>
           </li>
         
       </ul>
@@ -464,7 +761,7 @@ pip install pandas
   
   <div class="outer">
     <div id="footer-info" class="inner">
-      &copy; 2014 The Eye of Data ( <a href="http://buttonwood.github.io" target="_blank">@Buttonwood )</a><br>
+      &copy; 2015 The Eye of Data ( <a href="http://buttonwood.github.io" target="_blank">@Buttonwood )</a><br>
       Powered by <a href="http://zespia.tw/hexo/" target="_blank">Hexo</a>
     </div>
   </div>

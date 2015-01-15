@@ -1,0 +1,1514 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>Writing idiomatic python | The Eye of Data (@Buttonwood)</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="1.  if Statements
+1.1. Chain comparisons to make if statements more concise
+Don’t:
+1
+2
+if x &lt;= y and y &lt;= z:
+    return Ture
+
+
+Do:
+1
+2
+if 1 &lt; x &lt; 6:
+    print 'python'
+
+
+1.2. Avoid placing">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Writing idiomatic python">
+<meta property="og:url" content="http://buttonwood.bitbucket.org//2015/01/14/Writing-idiomatic-python/">
+<meta property="og:site_name" content="The Eye of Data (@Buttonwood)">
+<meta property="og:description" content="1.  if Statements
+1.1. Chain comparisons to make if statements more concise
+Don’t:
+1
+2
+if x &lt;= y and y &lt;= z:
+    return Ture
+
+
+Do:
+1
+2
+if 1 &lt; x &lt; 6:
+    print 'python'
+
+
+1.2. Avoid placing">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Writing idiomatic python">
+<meta name="twitter:description" content="1.  if Statements
+1.1. Chain comparisons to make if statements more concise
+Don’t:
+1
+2
+if x &lt;= y and y &lt;= z:
+    return Ture
+
+
+Do:
+1
+2
+if 1 &lt; x &lt; 6:
+    print 'python'
+
+
+1.2. Avoid placing">
+  
+    <link rel="alternative" href="/atom.xml" title="The Eye of Data (@Buttonwood)" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  <link href="http://fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+  
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+</head>
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">The Eye of Data (@Buttonwood)</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/" id="subtitle">Float like a butterfly! Stand like a buttonwood!</a>
+        </h2>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/about">About</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><input type="submit" value="&#xF002;" class="search-form-submit"><input type="hidden" name="q" value="site:http://buttonwood.bitbucket.org/"></form>
+      </div>
+    </div>
+  </div>
+</header>
+
+      <div class="outer">
+        <section id="main"><article id="post-Writing-idiomatic-python" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2015/01/14/Writing-idiomatic-python/" class="article-date">
+  <time datetime="2015-01-14T11:43:00.000Z" itemprop="datePublished">Jan 14 2015</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/Python/">Python</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Writing idiomatic python
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="1-_if_Statements">1.  <code>if</code> Statements</h3>
+<h4 id="1-1-_Chain_comparisons_to_make_if_statements_more_concise">1.1. Chain comparisons to make <code>if</code> statements more concise</h4>
+<p>Don’t:</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+</pre></td><td class="code"><pre><span class="keyword">if</span> x &lt;= y <span class="keyword">and</span> y &lt;= <span class="symbol">z:</span>
+    <span class="keyword">return</span> <span class="constant">Ture</span>
+</pre></td></tr></table></figure>
+
+<p>Do:</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+</pre></td><td class="code"><pre><span class="keyword">if</span> <span class="number">1</span> &lt; x &lt; <span class="number">6</span>:
+    <span class="built_in">print</span> <span class="string">'python'</span>
+</pre></td></tr></table></figure>
+
+<h4 id="1-2-_Avoid_placing_conditional_branch_code_on_the_same_line_as_the_colon">1.2. Avoid placing conditional branch code on the same line as the colon</h4>
+<p>Don’t:</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+</pre></td><td class="code"><pre>name = <span class="string">'Tom'</span>
+address = <span class="string">"NY"</span>
+<span class="keyword">if</span> name: <span class="built_in">print</span>(name)
+<span class="built_in">print</span>(address)
+</pre></td></tr></table></figure>
+
+<p>Do:</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+</pre></td><td class="code"><pre>name = <span class="string">'Tom'</span>
+address = <span class="string">"NY"</span>
+<span class="keyword">if</span> name:
+    <span class="built_in">print</span>(name)
+<span class="built_in">print</span>(address)
+</pre></td></tr></table></figure>
+
+<h4 id="1-3-_Avoid_repeating_variable_name_in_compound_if_statement">1.3. Avoid repeating variable name in compound <code>if</code> statement</h4>
+<p>Don’t:</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+</pre></td><td class="code"><pre>is_generic_name=<span class="keyword">False</span>
+name=<span class="string">'Tom'</span>
+<span class="keyword">if</span> name==<span class="string">'Tom'</span> <span class="keyword">or</span> name==<span class="string">'Dick'</span> <span class="keyword">or</span> name==<span class="string">'Harry'</span>:
+    is_generic_name=<span class="keyword">True</span>
+</pre></td></tr></table></figure>
+
+<p>Do:</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+</pre></td><td class="code"><pre>name=<span class="string">'Tom'</span>
+is_generic_name = name <span class="keyword">in</span> (<span class="string">'Tom'</span>,<span class="string">'Dick'</span>,<span class="string">'Harry'</span>)
+</pre></td></tr></table></figure>
+
+<h4 id="1-4-_Avoid_comparing_directly_to_True,False,or_None">1.4. Avoid comparing directly to <code>True</code>,<code>False</code>,or <code>None</code></h4>
+<p>All of the following are considered <code>False</code><br>•<code>None</code><br>•<code>False</code><br>•zero for numeric types<br>•empty sequences<br>•empty dictionaries<br>•a value of <code>0</code> or <code>False</code> returned when either <code>__len__</code> or <code>__nonzero__</code> is called</p>
+<p>Don’t</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+</pre></td><td class="code"><pre><span class="keyword">if</span> foo == <span class="keyword">True</span>:
+    <span class="keyword">pass</span>
+</pre></td></tr></table></figure>
+
+<p>Do:</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+</pre></td><td class="code"><pre><span class="keyword">if</span> foo:
+    <span class="keyword">pass</span>
+
+<span class="function"><span class="keyword">def</span> <span class="title">insert_value</span><span class="params">(value,position=None)</span>:</span>
+    <span class="keyword">if</span> position <span class="keyword">is</span> <span class="keyword">not</span> <span class="keyword">None</span>:
+        <span class="keyword">pass</span>
+</pre></td></tr></table></figure>
+
+<h4 id="1-5-_Use_if_and_else_as_a_short_ternary_operator_replacement(三元运算符_?_:)">1.5. Use if and else as a short ternary operator replacement(三元运算符 <code>? :</code>)</h4>
+<p>Don’t:</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+</pre></td><td class="code"><pre>foo = True
+<span class="keyword">value</span> = <span class="number">0</span>
+<span class="keyword">if</span> foo:
+    <span class="keyword">value</span> = <span class="number">1</span>
+print(<span class="keyword">value</span>)
+</pre></td></tr></table></figure>
+
+<p>Do:</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+</pre></td><td class="code"><pre>foo = True
+<span class="keyword">value</span> = <span class="number">1</span> <span class="keyword">if</span> foo <span class="keyword">else</span> <span class="number">0</span>
+print(<span class="keyword">value</span>)
+</pre></td></tr></table></figure>
+
+<a id="more"></a>
+
+<h3 id="2-_for_Loops">2.  <code>for</code> Loops</h3>
+<h4 id="2-1-_enumerate_function_in_loops_instead_of_creating_an_index_variable">2.1.  <code>enumerate</code> function in loops instead of creating an index variable</h4>
+<p>Don’t:</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+</pre></td><td class="code"><pre>my_container = [<span class="string">'Larry'</span>, <span class="string">'Moe'</span>, <span class="string">'Curly'</span>]
+<span class="keyword">index</span> = <span class="number">0</span>
+<span class="keyword">for</span> element in my_container:
+    <span class="keyword">print</span> (<span class="string">'{} {}'</span>.<span class="keyword">format</span>(<span class="keyword">index</span>, element))
+    <span class="keyword">index</span> += <span class="number">1</span>
+</pre></td></tr></table></figure>
+
+<p>Do:</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+</pre></td><td class="code"><pre>my_container = [<span class="string">'Larry'</span>, <span class="string">'Moe'</span>, <span class="string">'Curly'</span>]
+<span class="keyword">for</span> index, <span class="keyword">element</span> <span class="operator">in</span> enumerate(my_container):
+    print (<span class="string">'{} {}'</span>.<span class="built_in">format</span>(index, <span class="keyword">element</span>))
+</pre></td></tr></table></figure>
+
+<h4 id="2-2-_Use_the_in_keywords_to_iterate_over_an_iterable">2.2. Use the <code>in</code> keywords to iterate over an iterable</h4>
+<p>Don’t:</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+</pre></td><td class="code"><pre>my_container = [<span class="string">'Larry'</span>, <span class="string">'Moe'</span>, <span class="string">'Curly'</span>]
+<span class="keyword">index</span> = <span class="number">0</span>
+<span class="keyword">while</span> <span class="keyword">index</span> &lt; len(my_container):
+    <span class="keyword">print</span> (my_container[<span class="keyword">index</span>])
+    <span class="keyword">index</span> += <span class="number">1</span>
+</pre></td></tr></table></figure>
+
+<p>Do:</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+</pre></td><td class="code"><pre>my_container = [<span class="string">'Larry'</span>, <span class="string">'Moe'</span>, <span class="string">'Curly'</span>]
+<span class="keyword">for</span> ele <span class="keyword">in</span> my_container:
+    <span class="built_in">print</span>(ele)
+</pre></td></tr></table></figure>
+
+<h4 id="2-3-_Use_else_to_execute_code_after_a_for_loop_concludes">2.3. Use <code>else</code> to  execute code after a for loop concludes</h4>
+<p>Don’t:</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+</pre></td><td class="code"><pre><span class="keyword">for</span> user <span class="keyword">in</span> get_all_users():
+    has_malformed_email_address=<span class="keyword">False</span>
+    print(<span class="string">'Checking{}'</span>.format(user))
+    <span class="keyword">for</span> email_address <span class="keyword">in</span> user.get_all_email_addresses():
+        <span class="keyword">if</span> email_is_malformed(email_address):
+            has_malformed_email_address=<span class="keyword">True</span>
+            print(<span class="string">'Has a malformede mail address!'</span>)
+            <span class="keyword">break</span>
+    <span class="keyword">if</span> <span class="keyword">not</span> has_malformed_email_address:
+        print(<span class="string">'All email addresses are valid!'</span>)
+</pre></td></tr></table></figure>
+
+<p>Do:</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+</pre></td><td class="code"><pre><span class="keyword">for</span> user <span class="keyword">in</span> get_all_users():
+    <span class="keyword">print</span>(<span class="string">'Checking{}'</span>.<span class="keyword">format</span>(user))
+    <span class="keyword">for</span> email_address <span class="keyword">in</span> user.get_all_email_addresses():
+        <span class="keyword">if</span> email_is_malformed(email_address):
+            <span class="keyword">print</span>(<span class="string">'Has a malformede mail address!'</span>)
+            <span class="keyword">break</span>
+    <span class="keyword">else</span>:
+        <span class="keyword">print</span>(<span class="string">'All email addresses are valid!'</span>)
+</pre></td></tr></table></figure>
+
+<h3 id="3-_Functions">3. Functions</h3>
+<h4 id="3-1-_Avoid_using_a_mutable_object_as_the_default_value_for_a_function_argument">3.1. Avoid using a mutable object as the default value for a function argument</h4>
+<p><code>list</code>,<code>dict</code>,<code>set</code> and most <code>class</code> instances are mutable.<br><code>string</code>,<code>int</code>,<code>tuple</code> objects are all immutabled.      </p>
+<p>Don’t:</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+</pre></td><td class="code"><pre><span class="function"><span class="keyword">def</span> <span class="title">test</span><span class="params">(a,L=[])</span>:</span>
+    L.append(a)
+    <span class="keyword">return</span> L
+</pre></td></tr></table></figure>
+
+<p>Do:</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+</pre></td><td class="code"><pre><span class="function"><span class="keyword">def</span> <span class="title">test</span><span class="params">(a,L=None)</span>:</span>
+    <span class="keyword">if</span> L <span class="keyword">is</span> <span class="keyword">None</span>:
+        L = []
+    L.append(a)
+    <span class="keyword">return</span> L
+</pre></td></tr></table></figure>
+
+<h4 id="3-2-_Use_return_to_evaluate_expressions_in_addition_to_return_values">3.2. Use <code>return</code> to evaluate expressions in addition to return values</h4>
+<p>Don’t:</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+</pre></td><td class="code"><pre><span class="function"><span class="keyword">def</span> <span class="title">all_equal</span><span class="params">(a,b,c)</span>:</span>
+    result=<span class="keyword">False</span>
+    <span class="keyword">if</span> a==b==c:
+        result=<span class="keyword">True</span>
+    <span class="keyword">return</span> result
+</pre></td></tr></table></figure>
+
+<p>Do:</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+</pre></td><td class="code"><pre><span class="function"><span class="keyword">def</span> <span class="title">all_equal</span><span class="params">(a,b,c)</span>:</span>
+    <span class="keyword">return</span> a==b==c
+</pre></td></tr></table></figure>
+
+<h4 id="3-3-_Learn_to_use_keyword_arguments_properly">3.3. Learn to use keyword arguments properly</h4>
+<p>Don’t:</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+</pre></td><td class="code"><pre><span class="function"><span class="keyword">def</span> <span class="title">print_list</span><span class="params">(list_value,sep)</span>:</span>
+    print(<span class="string">'{}'</span>.format(sep).join(list_value))
+
+the_list=[<span class="string">'a'</span>,<span class="string">'b'</span>,<span class="string">'c'</span>]
+the_other_list=[<span class="string">'Jeff'</span>,<span class="string">'hates'</span>,<span class="string">'Java'</span>]
+print_list(the_list,<span class="string">''</span>)
+print_list(the_other_list,<span class="string">''</span>)
+print_list(the_other_list,<span class="string">','</span>)
+</pre></td></tr></table></figure>
+
+<p>Do:</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+</pre></td><td class="code"><pre><span class="function"><span class="keyword">def</span> <span class="title">print_list</span><span class="params">(list_value,sep=<span class="string">' '</span>)</span>:</span>
+    print(<span class="string">'{}'</span>.format(sep).join(list_value))
+
+the_list=[<span class="string">'a'</span>,<span class="string">'b'</span>,<span class="string">'c'</span>]
+the_other_list=[<span class="string">'Jeff'</span>,<span class="string">'hates'</span>,<span class="string">'Java'</span>]
+print_list(the_list)
+print_list(the_other_list)
+print_list(the_other_list,<span class="string">','</span>)
+</pre></td></tr></table></figure>
+
+<h4 id="3-4-_Use_*args_and_**kwargs_to_accept_arbitrary_arguments">3.4. Use <code>*args</code> and <code>**kwargs</code> to accept arbitrary arguments</h4>
+<p>Do:</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+</pre></td><td class="code"><pre><span class="function"><span class="keyword">def</span> <span class="title">call</span><span class="params">(foo,bar,baz,*args,**kwargs)</span>:</span>
+    baz_coefficient = kwargs[<span class="string">'the_baz'</span>]
+    <span class="keyword">return</span> baz_coefficient <span class="keyword">in</span> some_function(args)
+</pre></td></tr></table></figure>
+
+<h4 id="3-5-_Learn_to_treat_functions_as_values">3.5. Learn to treat functions as values</h4>
+<p>Don’t:</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+</pre></td><td class="code"><pre><span class="function"><span class="keyword">def</span> <span class="title">print_addition_table</span><span class="params">()</span>:</span>
+    <span class="keyword">for</span> x <span class="keyword">in</span> xrange(<span class="number">1</span>,<span class="number">4</span>):
+        <span class="keyword">for</span> y <span class="keyword">in</span> xrange(<span class="number">1</span>,<span class="number">4</span>):
+            print(str(x+y)+<span class="string">'\n'</span>)
+
+<span class="function"><span class="keyword">def</span> <span class="title">print_subtraction_table</span><span class="params">()</span>:</span>
+    <span class="keyword">for</span> x <span class="keyword">in</span> xrange(<span class="number">1</span>,<span class="number">4</span>):
+        <span class="keyword">for</span> y <span class="keyword">in</span> xrange(<span class="number">1</span>,<span class="number">4</span>):
+            print(str(x-y)+<span class="string">'\n'</span>)
+
+<span class="function"><span class="keyword">def</span> <span class="title">print_multiplication_table</span><span class="params">()</span>:</span>
+    <span class="keyword">for</span> x <span class="keyword">in</span> xrange(<span class="number">1</span>,<span class="number">4</span>):
+        <span class="keyword">for</span> y <span class="keyword">in</span> xrange(<span class="number">0</span>,<span class="number">4</span>):
+            print(str(x*y)+<span class="string">'\n'</span>)
+
+<span class="function"><span class="keyword">def</span> <span class="title">print_division_table</span><span class="params">()</span>:</span>
+    <span class="keyword">for</span> x <span class="keyword">in</span> xrange(<span class="number">1</span>,<span class="number">4</span>):
+        <span class="keyword">for</span> y <span class="keyword">in</span> xrange(<span class="number">1</span>,<span class="number">4</span>):
+            print(str(x/y)+<span class="string">'\n'</span>)
+
+print_addition_table()
+print_subtraction_table()
+print_multiplication_table()
+print_division_table()
+</pre></td></tr></table></figure>
+
+<p>Do:</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+</pre></td><td class="code"><pre><span class="keyword">import</span> operator <span class="keyword">as</span> op
+<span class="function"><span class="keyword">def</span> <span class="title">print_table</span><span class="params">(operator)</span>:</span>
+    <span class="keyword">for</span> x <span class="keyword">in</span> xrange(<span class="number">1</span>,<span class="number">4</span>):
+        <span class="keyword">for</span> y <span class="keyword">in</span> xrange(<span class="number">0</span>,<span class="number">4</span>):
+            print(operator(x,y)+<span class="string">'\n'</span>)
+
+<span class="keyword">for</span> operator <span class="keyword">in</span> (op.add,op.sub,op.mul,op.div):
+    print_table(operator)
+</pre></td></tr></table></figure>
+
+<h4 id="3-6-_Use_the_function-based_version_of_print">3.6. Use the function-based version of <code>print</code></h4>
+<p>Don’t:</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+</pre></td><td class="code"><pre><span class="built_in">print</span> <span class="number">1</span>,<span class="string">'foo'</span>,__name__
+</pre></td></tr></table></figure>
+
+<p>Do:</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+</pre></td><td class="code"><pre><span class="keyword">from</span> __future__ <span class="keyword">import</span> print_function
+print(<span class="number">1</span>,<span class="string">'foo'</span>,__name__)
+</pre></td></tr></table></figure>
+
+<h3 id="4-_Exceptions">4. <code>Exceptions</code></h3>
+<h4 id="4-1-_Don’t_be_Afraid_to_Use_Exceptions">4.1. Don’t be Afraid to Use <code>Exceptions</code></h4>
+<h4 id="4-2-_Use_Exceptions_to_Write_Code_in_an_“EAFP”_Style">4.2. Use <code>Exceptions</code> to Write Code in an “EAFP” Style</h4>
+<p>Code that doesn’t use <code>exceptions</code> is always checking if it’s OK to do something.</p>
+<p>Don’t:</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+</pre></td><td class="code"><pre><span class="function"><span class="keyword">def</span> <span class="title">get_log_level</span><span class="params">(config_dict)</span>:</span>
+    <span class="keyword">if</span><span class="string">'ENABLE_LOGGING'</span> <span class="keyword">in</span> config_dict:
+        <span class="keyword">if</span> config_dict[<span class="string">'ENABLE_LOGGING'</span>] !=<span class="keyword">True</span>:
+            <span class="keyword">return</span> <span class="keyword">None</span>
+        <span class="keyword">elif</span> <span class="keyword">not</span> <span class="string">'DEFAULT_LOG_LEVEL'</span> <span class="keyword">in</span> config_dict:
+            <span class="keyword">return</span> <span class="keyword">None</span>
+        <span class="keyword">else</span>:
+            <span class="keyword">return</span> config_dict[<span class="string">'DEFAULT_LOG_LEVEL'</span>]
+    <span class="keyword">else</span>:
+        <span class="keyword">return</span> <span class="keyword">None</span>
+</pre></td></tr></table></figure>
+
+<p>Do:</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+</pre></td><td class="code"><pre><span class="function"><span class="keyword">def</span> <span class="title">get_log_level</span><span class="params">(config_dict)</span>:</span>
+    <span class="keyword">try</span>:
+        <span class="keyword">if</span> config_dict[<span class="string">'ENABLE_LOGGING'</span>]:
+            <span class="keyword">return</span> config_dict[<span class="string">'DEFAULT_LOG_LEVEL'</span>]
+    <span class="keyword">except</span> KeyError:
+        <span class="comment">#if either value wasn't present,a</span>
+        <span class="comment">#KeyError will be raised,so</span>
+        <span class="comment">#return None</span>
+        <span class="keyword">return</span> <span class="keyword">None</span>
+</pre></td></tr></table></figure>
+
+<h4 id="4-3-_Avoid_‘’Swallowing’’_Useful_Exceptions_With_Bare_Except_Clauses">4.3. Avoid ‘’Swallowing’’ Useful <code>Exceptions</code> With Bare Except Clauses</h4>
+<p>A common mistake made by novices when using <code>exceptions</code> is to feel compelled to catch anye xception code could raise.</p>
+<p>Don’t:</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+</pre></td><td class="code"><pre><span class="keyword">import</span> requests
+<span class="function"><span class="keyword">def</span> <span class="title">get_json_response</span><span class="params">(url)</span>:</span>
+    <span class="keyword">try</span>:
+        r=requests.get(url)
+        <span class="keyword">return</span> r.json()
+    <span class="keyword">except</span>:
+        print(<span class="string">'Oops,somethingwentwrong!'</span>)
+        <span class="keyword">return</span> <span class="keyword">None</span>
+</pre></td></tr></table></figure>
+
+<p>Do:</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+</pre></td><td class="code"><pre><span class="keyword">import</span> requests
+<span class="function"><span class="keyword">def</span> <span class="title">get_json_response</span><span class="params">(url)</span>:</span>
+    <span class="keyword">return</span> requests.get(url).json()
+
+<span class="comment">#If we need to make note of the exception,we</span>
+<span class="comment">#would write the function this way...</span>
+<span class="function"><span class="keyword">def</span> <span class="title">alternate_get_json_response</span><span class="params">(url)</span>:</span>
+    <span class="keyword">try</span>:
+        r=requests.get(url)
+        returnr.json()
+    <span class="keyword">except</span>:
+        <span class="comment">#do some logging here,but don't handle the exception</span>
+        <span class="comment">#...</span>
+        <span class="keyword">raise</span>
+</pre></td></tr></table></figure>
+
+<h4 id="5-_Data_Structure">5. Data Structure</h4>
+<h4 id="5-1_Use_multiple_assignment_to_condense_variables_all_set_to_the_same_value">5.1 Use multiple assignment to condense variables all set to the same value</h4>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+</pre></td><td class="code"><pre><span class="attribute">x </span>=<span class="string"> y = z = 5</span>
+</pre></td></tr></table></figure><br>instead of<br><figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+</pre></td><td class="code"><pre><span class="setting">x = <span class="value"><span class="number">5</span></span></span>
+<span class="setting">y = <span class="value"><span class="number">5</span></span></span>
+<span class="setting">z = <span class="value"><span class="number">5</span></span></span>
+</pre></td></tr></table></figure>
+
+<h4 id="5-2-_Avoid_using_a_temporary_variable_when_performing_a_swap_of_two_values">5.2. Avoid using a temporary variable when performing a swap of two values</h4>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+</pre></td><td class="code"><pre><span class="xml"><span class="tag"><span class="attribute">x</span> = <span class="attribute">10</span>
+<span class="attribute">y</span> = <span class="attribute">5</span>
+# <span class="attribute">tmp</span>=<span class="value">x,</span> <span class="attribute">x</span>=<span class="value">y,</span> <span class="attribute">y</span>=<span class="value">temp</span>
+<span class="attribute">x</span>, <span class="attribute">y</span> = <span class="attribute">y</span>, <span class="attribute">x</span></span></span>
+</pre></td></tr></table></figure>
+
+<h4 id="5-3-_Chain_string_functions_to_make_a_simple_series_of_transformations_more_clear">5.3. Chain string functions to make a simple series of transformations more clear</h4>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+</pre></td><td class="code"><pre>str1 = <span class="string">'i am a bug!'</span>
+str4 = str1.strip().<span class="built_in">upper</span>().<span class="built_in">replace</span>(<span class="string">'!'</span>, <span class="string">'?'</span>)
+</pre></td></tr></table></figure>
+
+<h4 id="5-4-_Use_&#39;&#39;-join_when_creating_a_single_string_for_list_elements">5.4. Use <code>&#39;&#39;.join</code> when creating a single string for <code>list</code> elements</h4>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+</pre></td><td class="code"><pre>mylist = [<span class="string">'i'</span>, <span class="string">'am'</span>, <span class="string">'a'</span>, <span class="string">'bug'</span>]
+resultStr = <span class="string">''</span>.<span class="keyword">join</span>(mylist)
+</pre></td></tr></table></figure>
+
+<h4 id="5-5-_Prefer_the_format_function_for_formatting_strings">5.5. Prefer the <code>format</code> function for formatting strings</h4>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+</pre></td><td class="code"><pre><span class="setting">name = <span class="value"><span class="string">"tony"</span></span></span>
+<span class="setting">age = <span class="value"><span class="number">100</span></span></span>
+<span class="setting">str2 = <span class="value"><span class="string">"myname : {} my age {}"</span>.format(name, age)</span></span>
+</pre></td></tr></table></figure>
+
+<h4 id="5-6-_Usea_list_comprehension_to_create_a_transformed_version_of_an_existing_list">5.6. Usea <code>list</code> comprehension to create a transformed version of an existing <code>list</code></h4>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+</pre></td><td class="code"><pre>mylist = <span class="keyword">range</span>(<span class="number">20</span>)
+odd_list = [e <span class="keyword">for</span> e <span class="keyword">in</span> mylist <span class="keyword">if</span> e % <span class="number">2</span> == <span class="number">1</span>]
+last_five_list = mylist[-<span class="number">5</span>:]
+</pre></td></tr></table></figure>
+
+<h4 id="5-7-_Prefer_list_comprehensions_to_the_built-in_map()_and_filter()_functions">5.7. Prefer <code>list</code> comprehensions to the built-in <code>map()</code> and <code>filter()</code> functions</h4>
+<p>Don’t:</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+</pre></td><td class="code"><pre>the_list=[<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>,<span class="number">6</span>,<span class="number">7</span>,<span class="number">8</span>,<span class="number">9</span>,<span class="number">10</span>]
+
+<span class="function"><span class="keyword">def</span> <span class="title">is_odd</span><span class="params">(number)</span>:</span>
+    retrun number % <span class="number">2</span> == <span class="number">1</span>
+
+odd_numbers=filter(is_odd,the_list)
+odd_numbers_times_two=list(map(lambdax:x*<span class="number">2</span>,odd_numbers))
+</pre></td></tr></table></figure>
+
+<p>Do:</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+</pre></td><td class="code"><pre>odd_numbers_times_two = [n*<span class="number">2</span> <span class="keyword">for</span> n <span class="keyword">in</span> the_list <span class="keyword">if</span> n % <span class="number">2</span> == <span class="number">1</span>]
+</pre></td></tr></table></figure>
+
+<h4 id="5-8-_Use_the_built-in_function_sum_to_calculate_the_sum_of_a_list_of_values">5.8. Use the built-in function <code>sum</code> to calculate the sum of a list of values</h4>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+</pre></td><td class="code"><pre><span class="attribute">the_sum </span>=<span class="string"> sum(the_list)</span>
+</pre></td></tr></table></figure>
+
+<h4 id="5-9-_Use_all_to_determine_if_all_elements_of_an_iterable_are_True">5.9. Use <code>all</code> to determine if all elements of an iterable are <code>True</code></h4>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+</pre></td><td class="code"><pre><span class="function"><span class="keyword">def</span> <span class="title">contains_zero</span><span class="params">(itor)</span>:</span>
+    <span class="string">"""all只有在列表中的每个元素都返回True时才会返回True"""</span>
+    <span class="keyword">return</span> <span class="keyword">not</span> all(itor)
+</pre></td></tr></table></figure>
+
+
+<h4 id="5-10-_Prefer_xrange_to_range_unless_you_need_the_resulting_list">5.10. Prefer <code>xrange</code> to <code>range</code> unless you need the resulting list</h4>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+</pre></td><td class="code"><pre><span class="keyword">for</span> <span class="keyword">index</span> in xrange(<span class="number">3</span>, <span class="number">1000000000</span>):
+    <span class="keyword">if</span> <span class="keyword">index</span> % <span class="number">2</span> == <span class="number">0</span>:
+        <span class="keyword">print</span> <span class="keyword">index</span>
+</pre></td></tr></table></figure>
+
+<h4 id="5-11-_用dict对象完成_switch…case…_的功能">5.11. 用dict对象完成 switch…case… 的功能</h4>
+<h4 id="5-12-_使用dict-get方法可以提供一个默认值">5.12. 使用dict.get方法可以提供一个默认值</h4>
+<p>print mydict.get(‘b’, 2)</p>
+<h4 id="5-13-_list/dict/set_comprehension">5.13. <code>list/dict/set</code> comprehension</h4>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+</pre></td><td class="code"><pre>user_list = [{<span class="string">'name'</span>: <span class="string">'lucy'</span>, <span class="string">'email'</span>: <span class="string">'lucy@g.com'</span>}, {<span class="string">'name'</span>: <span class="string">'lily'</span>,\
+<span class="string">'email'</span>: <span class="string">'lily@g.com'</span>}]
+{user[<span class="string">'name'</span>]: user[<span class="string">'email'</span>] <span class="keyword">for</span> user <span class="keyword">in</span> user_list <span class="keyword">if</span> <span class="string">'email'</span> <span class="keyword">in</span> user}
+
+users_first_names = {user.first_name <span class="keyword">for</span> user <span class="keyword">in</span> users}
+</pre></td></tr></table></figure>
+
+<h4 id="5-14-_Use_sets_to_eliminate_duplicate_entries_from_Iterable_containers">5.14. Use <code>sets</code> to eliminate duplicate entries from Iterable containers</h4>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+</pre></td><td class="code"><pre>unique_names = <span class="keyword">set</span>(name_list)
+</pre></td></tr></table></figure>
+
+<h4 id="5-15-_Use_collections-namedtuple_to_make_tuple-heavy_code_more_clear">5.15. Use <code>collections.namedtuple</code> to make tuple-heavy code more clear</h4>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+</pre></td><td class="code"><pre>rows = [(<span class="string">'lily'</span>, <span class="number">20</span>, <span class="number">2000</span>), (<span class="string">'lucy'</span>, <span class="number">19</span>, <span class="number">2500</span>)]
+<span class="keyword">for</span> row <span class="keyword">in</span> rows:
+    <span class="keyword">print</span> <span class="string">'{}` age is {}, salary is {} '</span>.format(row[<span class="number">0</span>], row[<span class="number">1</span>], row[<span class="number">2</span>])
+
+<span class="keyword">from</span> collections <span class="keyword">import</span> namedtuple
+Employee = namedtuple(<span class="string">'Employee'</span>, <span class="string">'name, age, salary'</span>)
+<span class="keyword">for</span> row <span class="keyword">in</span> rows:
+    employee = Employee._make(row)
+    <span class="keyword">print</span> <span class="string">'{}` age is {}, salary is {} '</span>.format(employee.name, employee.age, employee.salary)
+</pre></td></tr></table></figure>
+
+
+<h4 id="5-16-_Use___as_a_placeholder_for_data_in_a_tuple_that_should_be_ignored">5.16. Use <code>_</code> as a placeholder for data in a <code>tuple</code> that should be ignored</h4>
+<p>Don’t:</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+</pre></td><td class="code"><pre>(<span class="property">name</span>,age,temp,temp2)=get_user_info(user)
+<span class="keyword">if</span> age&gt;<span class="number">21</span>:
+    output='{<span class="property">name</span>} can drink!'.format(<span class="property">name</span>=<span class="property">name</span>)
+<span class="comment">#"Wait,where are temp and temp2 being used?"</span>
+</pre></td></tr></table></figure>
+
+<p>Do:</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+</pre></td><td class="code"><pre>(<span class="property">name</span>,age,_,_)=get_user_info(user)
+<span class="keyword">if</span> age&gt;<span class="number">21</span>:
+    output='{<span class="property">name</span>} cand rink!'.format(<span class="property">name</span>=<span class="property">name</span>)
+<span class="comment">#"Clearly,only name and age are interesting"</span>
+</pre></td></tr></table></figure>
+
+<h4 id="5-17-_Use_tuples_to_unpack_data">5.17. Use <code>tuples</code> to unpack data</h4>
+<p>Don’t:</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+</pre></td><td class="code"><pre>list_from_comma_separated_value_file=['dog','Fido',<span class="number">10</span>]
+animal=list_from_comma_separated_value_file[<span class="number">0</span>]
+<span class="property">name</span>=list_from_comma_separated_value_file[<span class="number">1</span>]
+age=list_from_comma_separated_value_file[<span class="number">2</span>]
+
+output=('{<span class="property">name</span>} <span class="keyword">the</span> {animal} <span class="keyword">is</span> {age} years old'.format(\
+    animal=animal,<span class="property">name</span>=<span class="property">name</span>,age=age))
+</pre></td></tr></table></figure>
+
+<p>Do:</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+</pre></td><td class="code"><pre>list_from_comma_separated_value_file=['dog','Fido',<span class="number">10</span>]
+(animal,<span class="property">name</span>,age)=list_from_comma_separated_value_file
+output=('{<span class="property">name</span>} <span class="keyword">the</span> {animal} <span class="keyword">is</span> {age} years old'.format(\
+    animal=animal,<span class="property">name</span>=<span class="property">name</span>,age=age))
+</pre></td></tr></table></figure>
+
+<h4 id="5-18-_Use_a_tuple_to_return_multiple_values_from_a_function">5.18. Use a <code>tuple</code> to <code>return</code> multiple values from a function</h4>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+</pre></td><td class="code"><pre><span class="keyword">from</span> collections <span class="keyword">import</span> Counter
+<span class="function"><span class="keyword">def</span> <span class="title">calculate_staistics</span><span class="params">(value_list)</span>:</span>
+    mean=float(sum(value_list)/len(value_list))
+    median=value_list[int(len(value_list)/<span class="number">2</span>)]
+    mode=Counter(value_list).most_common(<span class="number">1</span>)[<span class="number">0</span>][<span class="number">0</span>]
+    <span class="keyword">return</span>(mean,median,mode)
+
+(mean,median,mode)=calculate_staistics([<span class="number">10</span>,<span class="number">20</span>,<span class="number">20</span>,<span class="number">30</span>])
+</pre></td></tr></table></figure>
+
+<h3 id="6-_Classes">6. Classes</h3>
+<h4 id="6-1-_Use_the_isinstance_function_to_determine_the_type_of_ano_bject">6.1. Use the <code>isinstance</code> function to determine the type of ano bject</h4>
+<p>用<code>isinstance</code>来判断对象的类型</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+</pre></td><td class="code"><pre><span class="function"><span class="keyword">def</span> <span class="title">get_size</span><span class="params">(some_object)</span>:</span>
+    <span class="keyword">if</span> isinstance(some_object, (list, dict, str, tuple)):
+        <span class="keyword">return</span> len(some_object)
+    <span class="keyword">elif</span> isinstance(some_object, (bool, type(<span class="keyword">None</span>))):
+        <span class="keyword">return</span> <span class="number">1</span>
+    <span class="keyword">elif</span> isinstance(some_object, (int, float)):
+        <span class="keyword">return</span> int(some_object)
+</pre></td></tr></table></figure>
+
+<h4 id="6-2-_Use_leading_underscores_in_function_and_variable_names_to_denote">6.2. Use leading underscores in function and variable names to denote</h4>
+<p>private attribute<br>Don’t:</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+</pre></td><td class="code"><pre><span class="class"><span class="keyword">class</span>   <span class="title">Foo</span><span class="params">(object)</span>:</span>
+    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self)</span>:</span>
+        self.id=<span class="number">8</span>
+        self.value=self.get_value()
+
+    <span class="function"><span class="keyword">def</span> <span class="title">get_value</span><span class="params">(self)</span>:</span>
+        <span class="keyword">pass</span>
+
+    <span class="function"><span class="keyword">def</span> <span class="title">should_destroy_earth</span><span class="params">(self)</span>:</span>
+        <span class="keyword">return</span> self.id==<span class="number">42</span>
+
+<span class="class"><span class="keyword">class</span> <span class="title">Baz</span><span class="params">(Foo)</span>:</span>
+    <span class="function"><span class="keyword">def</span> <span class="title">get_value</span><span class="params">(self,some_new_parameter)</span>:</span>
+        <span class="string">"""Since 'get_value' is called from the base class's __init__ method
+        and the base class definition doesn't take a parameter,trying to
+        createa Baz instance will fail"""</span>
+        <span class="keyword">pass</span>
+
+<span class="class"><span class="keyword">class</span> <span class="title">Qux</span><span class="params">(Foo)</span>:</span>
+    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self)</span>:</span>
+        <span class="string">"""We aren't aware of Foo's internals,and we innocently createan
+        instance attribute named'id' and set it to 42.This overwrites
+        Foo's id attribute and we inadvertently blow up the earth."""</span>
+        super(Qux,self).__init__()
+        self.id=<span class="number">42</span>
+
+q=Qux()
+b=Baz() <span class="comment">#Raises'TypeError'</span>
+q.should_destroy_earth()<span class="comment">#returnsTrue</span>
+q.id==<span class="number">42</span><span class="comment">#returnsTrue</span>
+</pre></td></tr></table></figure>
+
+<p>Do:</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+</pre></td><td class="code"><pre><span class="class"><span class="keyword">class</span> <span class="title">Foo</span><span class="params">(object)</span>:</span>
+    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self)</span>:</span>
+        <span class="string">""" Since 'id' is of vital importance to us,we don't want a derived
+        class accidentally overwriting it.We'll prepend with double
+        underscores to introduce name mangling."""</span>
+        self.__id=<span class="number">8</span>
+        self.value=self.__get_value() <span class="comment"># call our 'private copy'</span>
+
+    <span class="function"><span class="keyword">def</span> <span class="title">get_value</span><span class="params">(self)</span>:</span>
+        <span class="keyword">pass</span>
+
+    <span class="function"><span class="keyword">def</span> <span class="title">should_destroy_earth</span><span class="params">(self)</span>:</span>
+        <span class="keyword">return</span> self.__id==<span class="number">42</span>
+
+    <span class="comment">#Here,we're storing a 'private copy' of get_value,</span>
+    <span class="comment">#and assigning it to '__get_value'.Even if aderived</span>
+    <span class="comment">#class overrides get_value in a way incompatible with</span>
+    <span class="comment">#ours,we're fine</span>
+    __get_value=get_value
+
+<span class="class"><span class="keyword">class</span> <span class="title">Baz</span><span class="params">(Foo)</span>:</span>
+    <span class="function"><span class="keyword">def</span> <span class="title">get_value</span><span class="params">(self,some_new_parameter)</span>:</span>
+        <span class="keyword">pass</span>
+
+<span class="class"><span class="keyword">class</span> <span class="title">Qux</span><span class="params">(Foo)</span>:</span>
+    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self)</span>:</span>
+        <span class="string">""" Now when we set 'id' to 42,it's not the same 'id' that
+        'should_destroy_earth' is concerned with. In fact,if you inspecta
+        Qux object,you'll find it doesn't havean __id attribute.So we can't
+        mistakenly change Foo's__id attribute even if we wanted to."""</span>
+        super(Qux,self).__init__()
+        <span class="comment">#No relation to Foo's id,purely coincidental</span>
+        self.id=<span class="number">42</span>
+
+q=Qux()
+b=Baz() <span class="comment">#Works fine now</span>
+q.should_destroy_earth()<span class="comment">#returns False</span>
+q.id==<span class="number">42</span> <span class="comment">#returns True</span>
+</pre></td></tr></table></figure>
+
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+</pre></td><td class="code"><pre><span class="comment"># "private" data</span>
+<span class="class"><span class="keyword">class</span> <span class="title">A</span><span class="params">(object)</span>:</span>
+    __i = <span class="number">1</span>
+ 
+    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self)</span>:</span>
+        self._j = <span class="number">2</span>
+ 
+    <span class="function"><span class="keyword">def</span> <span class="title">printJ</span><span class="params">(self)</span>:</span>
+        <span class="keyword">return</span> self._j
+       
+<span class="class"><span class="keyword">class</span> <span class="title">B</span><span class="params">(A)</span>:</span>
+    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self)</span>:</span>
+        super(B, self).__init__()
+        self._j = <span class="number">3</span>
+ 
+b = B()
+<span class="keyword">print</span> b.printJ()
+<span class="string">"""比如某一个类属性以下划线(_)
+开头，则是显式的的约定该成员是具有私有属性的，最好不要在外部直接调用"""</span>
+
+<span class="string">"""而双下划线(__)开头的成员更具有“私有”的属性，
+因为在外部不能直接调用，因为python解译器把这些的成员名称进行变形处理，
+使外部不能轻易直接访问。"""</span>
+<span class="class"><span class="keyword">class</span> <span class="title">A</span><span class="params">(object)</span>:</span>
+    __i = <span class="number">1</span>
+ 
+    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self)</span>:</span>
+        self.__j = <span class="number">2</span>
+ 
+    <span class="function"><span class="keyword">def</span> <span class="title">printJ</span><span class="params">(self)</span>:</span>
+        <span class="keyword">return</span> self.__j
+       
+<span class="class"><span class="keyword">class</span> <span class="title">B</span><span class="params">(A)</span>:</span>
+    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self)</span>:</span>
+        super(B, self).__init__()
+        self.__j = <span class="number">3</span>
+ 
+b = B()
+<span class="keyword">print</span> b.printJ()
+</pre></td></tr></table></figure>
+
+
+<h4 id="6-3-_Use_properties_to_“future-proof”_your_class_implementation">6.3. Use properties to “future-proof” your class implementation</h4>
+<p>Oftentimes,it is convenient to provide direct access to a class’s data attributes.A Point class,for example,may have x and y attributes rather than using <code>getter</code> and <code>setter</code> functions.<br>Don’t:</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+</pre></td><td class="code"><pre><span class="class"><span class="keyword">class</span> <span class="title">Product</span>(<span class="title">object</span>):</span>
+    default__init_<span class="number">_</span>(<span class="keyword">self</span>,name,price)<span class="symbol">:</span>
+        <span class="keyword">self</span>.name=name
+        <span class="keyword">self</span>.price =price
+</pre></td></tr></table></figure>
+
+<p>Do:</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+</pre></td><td class="code"><pre><span class="class"><span class="keyword">class</span> <span class="title">Product</span><span class="params">(object)</span>:</span>
+    default__init__(self,name,price):
+        self.name=name
+        self.price =price
+
+    <span class="decorator">@property</span>
+    <span class="function"><span class="keyword">def</span> <span class="title">price</span><span class="params">(self)</span>:</span>
+        <span class="comment">#now if we need to change how price is calculated,we can do it</span>
+        <span class="comment">#here(or in the "setter" and __init__)</span>
+        retrun self._price * TAX_RATE
+
+    <span class="decorator">@price.setter</span>
+    <span class="function"><span class="keyword">def</span> <span class="title">price</span><span class="params">(self,value)</span>:</span>
+        <span class="comment">#The "setter" function must have the same name as the property</span>
+        self._price=value
+</pre></td></tr></table></figure>
+
+
+<h4 id="6-4-_Use___repr___for_a_machine-readable_representation_of_a_class_and_deﬁne___str___in_a_class_to_show_a_human-readable_representation">6.4. Use <code>__repr__</code> for a machine-readable representation of a class and deﬁne <code>__str__</code> in a class to show a human-readable representation</h4>
+<p>While <code>__str__</code> is used for printing a class in a way that a human can read,<code>__repr__</code> is used for machines to read.<br>Don’t</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+</pre></td><td class="code"><pre><span class="class"><span class="keyword">class</span> <span class="title">Foo</span><span class="params">(object)</span>:</span>
+    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self,bar=<span class="number">10</span>,baz=<span class="number">12</span>,cache=None)</span>:</span>
+        self.bar=bar
+        self.baz=baz
+        self._cache=cache <span class="keyword">or</span> {}
+
+    def__str__(self):
+        <span class="keyword">return</span><span class="string">'Bar is{},Baz is{}'</span>.format(self.bar,self.baz)
+
+<span class="function"><span class="keyword">def</span> <span class="title">log_to_console</span><span class="params">(instance)</span>:</span>
+    print(instance)
+
+log_to_console([Foo(),Foo(cache={<span class="string">'x'</span>:<span class="string">'y'</span>})])
+</pre></td></tr></table></figure>
+
+<p>Do</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+</pre></td><td class="code"><pre><span class="class"><span class="keyword">class</span> <span class="title">Foo</span><span class="params">(object)</span>:</span>
+    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self,bar=<span class="number">10</span>,baz=<span class="number">12</span>,cache=None)</span>:</span>
+        self.bar=bar
+        self.baz=baz
+        self._cache=cache <span class="keyword">or</span> {}
+
+    <span class="function"><span class="keyword">def</span> <span class="title">__str__</span><span class="params">(self)</span>:</span>
+        <span class="keyword">return</span> <span class="string">'Bar is{},Baz is{}'</span>.format(self.bar,self.baz)
+
+    <span class="function"><span class="keyword">def</span> <span class="title">__repr__</span><span class="params">(self)</span>:</span>
+        <span class="keyword">return</span> <span class="string">'Foo({},{},{})'</span>.format(self.bar,self.baz,self._cache)
+
+<span class="function"><span class="keyword">def</span> <span class="title">log_to_console</span><span class="params">(instance)</span>:</span>
+    print(instance)
+
+log_to_console([Foo(),Foo(cache={<span class="string">'x'</span>:<span class="string">'y'</span>})])
+</pre></td></tr></table></figure>
+
+
+<h3 id="7-_Context_Managers">7. Context Managers</h3>
+<h4 id="7-1-_Use_a_context_manager_to_ensure_resources_are_properly_managed">7.1. Use a context manager to ensure resources are properly managed</h4>
+<p>Don’t:</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+</pre></td><td class="code"><pre>file_handle=<span class="built_in">open</span>(path_to_file,<span class="string">'r'</span>)
+<span class="keyword">for</span> <span class="built_in">line</span> <span class="operator">in</span> file_handle.readlines():
+    <span class="keyword">if</span> raise_exception(<span class="built_in">line</span>):
+        print(<span class="string">'No!An Exception!'</span>)
+</pre></td></tr></table></figure>
+
+<p>Do:</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+</pre></td><td class="code"><pre><span class="operator">with</span> <span class="built_in">open</span>(path_to_file,<span class="string">'r'</span>) <span class="keyword">as</span> file_handle:
+    <span class="keyword">for</span> <span class="built_in">line</span> <span class="operator">in</span> file_handle:
+        <span class="keyword">if</span> raise_exception(<span class="built_in">line</span>):
+            print(<span class="string">'No!AnException!'</span>)
+</pre></td></tr></table></figure>
+
+<h4 id="8-_Generators">8. Generators</h4>
+<h4 id="8-1-_Prefer_a_generator_expression_to_a_list_comprehension_for_simple_iteration">8.1. Prefer a <code>generator</code> expression to a list comprehension for simple iteration</h4>
+<p>generator, 用 (…) 代替 [….], 就像用xrange代替range一样        </p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+</pre></td><td class="code"><pre><span class="keyword">for</span> e <span class="keyword">in</span> (i * <span class="number">2</span> <span class="keyword">for</span> i <span class="keyword">in</span> oneList):
+    <span class="keyword">pass</span>
+</pre></td></tr></table></figure>
+
+<h4 id="8-2-_Use_a_generator_to_lazily_load_inﬁnite_sequences">8.2. Use a <code>generator</code> to lazily load inﬁnite sequences</h4>
+<p>Don’t:</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+</pre></td><td class="code"><pre><span class="function"><span class="keyword">def</span> <span class="title">get_twitter_stream_for_keyword</span><span class="params">(keyword)</span>:</span>
+    imaginary_twitter_api=ImaginaryTwitterAPI()
+    <span class="keyword">if</span> imaginary_twitter_api.can_get_stream_data(keyword):
+        <span class="keyword">return</span> imaginary_twitter_api.get_stream(keyword)
+
+current_stream=get_twitter_stream_for_keyword(<span class="string">'#jeffknupp'</span>)
+<span class="keyword">for</span> tweet <span class="keyword">in</span> current_stream:
+    process_tweet(tweet)
+
+<span class="function"><span class="keyword">def</span> <span class="title">get_list_of_incredibly_complex_calculation_results</span><span class="params">(data)</span>:</span>
+    <span class="keyword">return</span>  [first_incredibly_long_calculation(data),\
+    second_incredibly_long_calculation(data),\
+    third_incredibly_long_calculation(data)]
+</pre></td></tr></table></figure>
+
+<p>Do:</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+</pre></td><td class="code"><pre><span class="function"><span class="keyword">def</span> <span class="title">get_twitter_stream_for_keyword</span><span class="params">(keyword)</span>:</span>
+    imaginary_twitter_api=ImaginaryTwitterAPI()
+    <span class="keyword">while</span> imaginary_twitter_api.can_get_stream_data(keyword):
+        <span class="keyword">yield</span> imaginary_twitter_api.get_stream(keyword)
+
+<span class="keyword">for</span> tweet <span class="keyword">in</span> get_twitter_stream_for_keyword(<span class="string">'#jeffknupp'</span>):
+    <span class="keyword">if</span> got_stop_signal:
+        <span class="keyword">break</span>
+    process_tweet(tweet)
+
+<span class="function"><span class="keyword">def</span> <span class="title">get_list_of_incredibly_complex_calculation_results</span><span class="params">(data)</span>:</span>
+    <span class="keyword">yield</span> first_incredibly_long_calculation(data)
+    <span class="keyword">yield</span> second_incredibly_long_calculation(data)
+    <span class="keyword">yield</span> third_incredibly_long_calculation(data)
+</pre></td></tr></table></figure>
+
+
+<h3 id="10-_Organizing_Your_Code">10. Organizing Your Code</h3>
+<h4 id="10-1-_Use_all_capital_letters_when_declaring_global_constant_values">10.1. Use all capital letters when declaring global constant values</h4>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+</pre></td><td class="code"><pre>SECONDS_IN_A_DAY=<span class="number">60</span><span class="variable">*60</span><span class="variable">*24</span>
+</pre></td></tr></table></figure>
+
+<h4 id="10-2-_Avoid_placing_multiple_statements_on_a_single_line">10.2. Avoid placing multiple statements on a single line</h4>
+<h4 id="10-3-_Multiple_line_docstring_&quot;&quot;&quot;&quot;&quot;&quot;">10.3. Multiple line docstring  <code>&quot;&quot;&quot;&quot;&quot;&quot;</code></h4>
+<h4 id="10-4-_Document_what_something_does,not_how">10.4. Document what something does,not how</h4>
+<h4 id="10-5-_Arrange_your_import_statements_in_a_standard_order">10.5. Arrange your <code>import</code> statements in a standard order</h4>
+<h4 id="10-6-_Prefer_absolute_imports_to_relative_imports">10.6. Prefer absolute <code>imports</code> to relative <code>imports</code></h4>
+<h4 id="10-7-_Do_not_use_from_foo_import_*_to_import_the_contents_of_a_module-">10.7. Do not use <code>from foo import *</code> to import the contents of a module.</h4>
+<h4 id="10-8-_Use_the_tuples_to_organizea_long_list_of_modules_to_import">10.8. Use the tuples to organizea long list of modules to import</h4>
+<h4 id="10-9-_Make_use_of___init__-py_ﬁles_to_simplify_package_interfaces">10.9. Make use of <code>__init__.py</code> ﬁles to simplify package interfaces</h4>
+<h4 id="10-10-_Separate_your_test_code_from_your_application_code">10.10. Separate your test code from your application code</h4>
+<h4 id="10-11-_Use_unit_tests_to_aidin_refactoring">10.11. Use <code>unit tests</code> to aidin refactoring</h4>
+<h3 id="Refernces">Refernces</h3>
+<p><a href="http://wenku.baidu.com/link?url=x9aJ0UOZ4JFw_Te7WlQZMiQbSoLVaQM9Kxl3j-aQwZ-ZLSJ9pPwCg-vWmtHBLNShLbvLstWSjQi7ExwVVxiEgV4u7sI51FRDHXi_ya-U--m" target="_blank" rel="external">1.Writing idiomatic python</a></p>
+<p><a href="http://www.cnblogs.com/jcli/p/3629053.html" target="_blank" rel="external">2.Writing idiomatic python in ZH</a></p>
+<p><a href="http://jeffknupp.com/blog/2014/01/31/a-python-app-to-see-what-people-are-saying-about-you/" target="_blank" rel="external">http://jeffknupp.com/blog/2014/01/31/a-python-app-to-see-what-people-are-saying-about-you/</a></p>
+<p><a href="http://jeffknupp.com/blog/2014/06/18/improve-your-python-python-classes-and-object-oriented-programming/" target="_blank" rel="external">http://jeffknupp.com/blog/2014/06/18/improve-your-python-python-classes-and-object-oriented-programming/</a></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://buttonwood.bitbucket.org/2015/01/14/Writing-idiomatic-python/" data-id="0wgsn5vtgdg7drlp" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Python/">Python</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Tips/">Tips</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2014/12/15/20141215-rChart/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">rChart and morris.js</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+<!-- DISQUS
+
+-->
+
+
+  <section id="comments">
+  <!-- Duoshuo Comment BEGIN -->
+  <div class="ds-thread"></div>
+  <script type="text/javascript">
+  var duoshuoQuery = {short_name:"buttonwood"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0]
+     || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+  </script>
+  <!-- Duoshuo Comment END -->
+</section>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    <div class="widget-wrap">
+    <h3 class="widget-title">About</h3>
+    <div class="widget">
+    <img src="http://ww1.sinaimg.cn/mw690/6fbc15dcjw1do9bywpfjjj.jpg" style="margin: auto; width: 100%;"/>
+        <h4 style="text-align: center"><strong>Buttonwood(th)</strong></h4>
+        <div style="margin: auto; text-align: center;">
+            <a href="http://weibo.com/buttonwood" target="_blank"><img src="http://www.sinaimg.cn/blog/developer/wiki/LOGO_64x64.png" style="border:0;width:32px;height:32px;"/></a>
+            <a href="https://github.com/Buttonwood" target="_blank"><img src="https://assets-cdn.github.com/images/modules/logos_page/Octocat.png" style="border:0;width:32px;height:32px;"/></a>
+            <a class="fancybox" href="mailto:tanhao2013@gmail.com"><img src="http://icons.iconarchive.com/icons/mcdo-design/letter/64/Letter-GMail-pen-icon.png" style="border:0;width:32px;height:32px;"/></a>
+            <a href="http://www.douban.com/people/buttonwood/" target="_blank"><img src="http://img3.douban.com/pics/douban-icons/favicon_32x32.png" style="border:0;width:32px;height:32px;"/></a>
+        </div>
+    </div>
+</div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Data-Mining/">Data Mining</a><span class="category-list-count">7</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Data-Visualization/">Data Visualization</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/MySQL/">MySQL</a><span class="category-list-count">4</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Python/">Python</a><span class="category-list-count">8</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/R/">R</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Tools/">Tools</a><span class="category-list-count">3</span></li></ul>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/CART/">CART</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Circos/">Circos</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/DV/">DV</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/EM/">EM</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Git/">Git</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ML/">ML</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MySQL/">MySQL</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Mysql/">Mysql</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/PageRank/">PageRank</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Python/">Python</a><span class="tag-list-count">10</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/R/">R</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SVM/">SVM</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Thread/">Thread</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Tips/">Tips</a><span class="tag-list-count">9</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Tools/">Tools</a><span class="tag-list-count">10</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/books/">books</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/classification/">classification</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/clustering/">clustering</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/k-means/">k-means</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/kNN/">kNN</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/sysbench/">sysbench</a><span class="tag-list-count">3</span></li></ul>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/CART/" style="font-size: 10.00px;">CART</a><a href="/tags/Circos/" style="font-size: 10.00px;">Circos</a><a href="/tags/DV/" style="font-size: 10.00px;">DV</a><a href="/tags/EM/" style="font-size: 10.00px;">EM</a><a href="/tags/Git/" style="font-size: 10.00px;">Git</a><a href="/tags/ML/" style="font-size: 12.00px;">ML</a><a href="/tags/MySQL/" style="font-size: 16.00px;">MySQL</a><a href="/tags/Mysql/" style="font-size: 10.00px;">Mysql</a><a href="/tags/PageRank/" style="font-size: 10.00px;">PageRank</a><a href="/tags/Python/" style="font-size: 20.00px;">Python</a><a href="/tags/R/" style="font-size: 14.00px;">R</a><a href="/tags/SVM/" style="font-size: 10.00px;">SVM</a><a href="/tags/Thread/" style="font-size: 10.00px;">Thread</a><a href="/tags/Tips/" style="font-size: 18.00px;">Tips</a><a href="/tags/Tools/" style="font-size: 20.00px;">Tools</a><a href="/tags/books/" style="font-size: 10.00px;">books</a><a href="/tags/classification/" style="font-size: 10.00px;">classification</a><a href="/tags/clustering/" style="font-size: 10.00px;">clustering</a><a href="/tags/k-means/" style="font-size: 10.00px;">k-means</a><a href="/tags/kNN/" style="font-size: 10.00px;">kNN</a><a href="/tags/sysbench/" style="font-size: 14.00px;">sysbench</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/01">January 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/12">December 2014</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/10">October 2014</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/07">July 2014</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/06">June 2014</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/05">May 2014</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/04">April 2014</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/02">February 2014</a><span class="archive-list-count">1</span></li></ul>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recents</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2015/01/14/Writing-idiomatic-python/">Writing idiomatic python</a>
+          </li>
+        
+          <li>
+            <a href="/2014/12/15/20141215-rChart/">rChart and morris.js</a>
+          </li>
+        
+          <li>
+            <a href="/2014/10/10/python_pocker_reference/">Python Pocket Reference</a>
+          </li>
+        
+          <li>
+            <a href="/2014/07/25/20140725-sysbench-mysql/">Sysbench for MySQL Testing</a>
+          </li>
+        
+          <li>
+            <a href="/2014/07/24/20140724-sysbench-testing/">sysbench testing</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+    <iframe width="100%" height="550" class="share_self"  frameborder="0" scrolling="no" src="http://widget.weibo.com/weiboshow/index.php?language=&width=0&height=550&fansRow=2&ptype=1&speed=0&skin=1&isTitle=1&noborder=1&isWeibo=1&isFans=1&uid=1874597340&verifier=b3593ceb&dpc=1"></iframe>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2015 The Eye of Data ( <a href="http://buttonwood.github.io" target="_blank">@Buttonwood )</a><br>
+      Powered by <a href="http://zespia.tw/hexo/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/about" class="mobile-nav-link">About</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+
+
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js" type="text/javascript"></script>
+
+  </div>
+</body>
+</html>
