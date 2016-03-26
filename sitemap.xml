@@ -2,8 +2,43 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
-    <loc>http://buttonwood.bitbucket.org/2015/01/14/Writing-idiomatic-python/</loc>
-    <lastmod>2015-01-14T11:43:00.000Z</lastmod>
+    <loc>http://buttonwood.bitbucket.org/2016/01/29/2016-01-29-mysql-truncate-partition/</loc>
+    <lastmod>2016-01-29T15:51:00.000Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://buttonwood.bitbucket.org/2014/08/27/2014-08-27-time-monitoring/</loc>
+    <lastmod>2014-08-27T11:51:00.000Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://buttonwood.bitbucket.org/2014/12/31/2014-12-31-gitlab/</loc>
+    <lastmod>2014-12-31T02:51:00.000Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://buttonwood.bitbucket.org/2015/01/16/2015-01-16-gitlab-workflow/</loc>
+    <lastmod>2015-01-16T11:51:00.000Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://buttonwood.bitbucket.org/2014/08/22/2014-08-22-centOS-reinstall/</loc>
+    <lastmod>2014-08-22T02:51:00.000Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://buttonwood.bitbucket.org/2016/03/15/2016-03-15-zookeeper-and-docker/</loc>
+    <lastmod>2016-03-15T07:51:00.000Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://buttonwood.bitbucket.org/2016/02/17/2016-02-17-ElasticSearch-Queen-Too-High/</loc>
+    <lastmod>2016-02-17T07:51:00.000Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://buttonwood.bitbucket.org/2013/08/14/2013-08-14-A-Single-Library/</loc>
+    <lastmod>2013-08-14T11:43:00.000Z</lastmod>
   </url>
   
   <url>
@@ -12,13 +47,23 @@
   </url>
   
   <url>
-    <loc>http://buttonwood.bitbucket.org/fish/graph1.html</loc>
-    <lastmod>2014-12-30T12:03:07.000Z</lastmod>
+    <loc>http://buttonwood.bitbucket.org/2015/01/14/Writing-idiomatic-python/</loc>
+    <lastmod>2015-01-14T11:43:00.000Z</lastmod>
   </url>
   
   <url>
-    <loc>http://buttonwood.bitbucket.org/2014/12/15/20141215-rChart/</loc>
+    <loc>http://buttonwood.bitbucket.org/2014/07/02/2014-07-02-Bayesian-Genome-Assembly/</loc>
+    <lastmod>2014-07-02T13:51:00.000Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://buttonwood.bitbucket.org/2014/12/15/2014-12-15-rChart/</loc>
     <lastmod>2014-12-15T03:51:00.000Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://buttonwood.bitbucket.org/fish/graph1.html</loc>
+    <lastmod>2014-12-30T12:03:07.000Z</lastmod>
   </url>
   
   <url>
@@ -27,33 +72,43 @@
   </url>
   
   <url>
-    <loc>http://buttonwood.bitbucket.org/2014/07/22/20140722-sysbench-install/</loc>
-    <lastmod>2014-07-22T13:51:00.000Z</lastmod>
-  </url>
-  
-  <url>
-    <loc>http://buttonwood.bitbucket.org/2014/07/22/20140722-mysql-install/</loc>
-    <lastmod>2014-07-22T03:51:00.000Z</lastmod>
-  </url>
-  
-  <url>
-    <loc>http://buttonwood.bitbucket.org/2014/07/24/20140724-sysbench-testing/</loc>
-    <lastmod>2014-07-24T15:51:00.000Z</lastmod>
-  </url>
-  
-  <url>
-    <loc>http://buttonwood.bitbucket.org/2014/07/25/20140725-sysbench-mysql/</loc>
+    <loc>http://buttonwood.bitbucket.org/2014/07/25/2014-07-25-sysbench-mysql/</loc>
     <lastmod>2014-07-25T15:51:00.000Z</lastmod>
   </url>
   
   <url>
-    <loc>http://buttonwood.bitbucket.org/2014/07/07/20140707-r-prog/</loc>
+    <loc>http://buttonwood.bitbucket.org/2013/03/20/2013-03-20-install-matplotlib-is-a-nightmare/</loc>
+    <lastmod>2013-03-20T14:51:00.000Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://buttonwood.bitbucket.org/2014/07/22/2014-07-22-sysbench-install/</loc>
+    <lastmod>2014-07-22T13:51:00.000Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://buttonwood.bitbucket.org/2014/07/22/2014-07-22-mysql-install/</loc>
+    <lastmod>2014-07-22T03:51:00.000Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://buttonwood.bitbucket.org/2014/07/24/2014-07-24-sysbench-testing/</loc>
+    <lastmod>2014-07-24T15:51:00.000Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://buttonwood.bitbucket.org/2014/07/07/2014-07-07-r-prog/</loc>
     <lastmod>2014-07-07T03:51:00.000Z</lastmod>
   </url>
   
   <url>
-    <loc>http://buttonwood.bitbucket.org/2014/07/09/20140709-tools/</loc>
+    <loc>http://buttonwood.bitbucket.org/2014/07/09/2014-07-09-tools/</loc>
     <lastmod>2014-07-09T03:51:00.000Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://buttonwood.bitbucket.org/2014/06/22/2014-06-22-SSPACE-LongRead/</loc>
+    <lastmod>2014-06-22T03:51:00.000Z</lastmod>
   </url>
   
   <url>
@@ -62,7 +117,7 @@
   </url>
   
   <url>
-    <loc>http://buttonwood.bitbucket.org/2014/05/18/3_data_preparation/</loc>
+    <loc>http://buttonwood.bitbucket.org/2014/05/18/2014-05-18-data-preparation/</loc>
     <lastmod>2014-05-18T00:00:00.000Z</lastmod>
   </url>
   
@@ -92,22 +147,12 @@
   </url>
   
   <url>
-    <loc>http://buttonwood.bitbucket.org/2014/04/24/20140424-10-algorithms-dm/</loc>
-    <lastmod>2014-04-24T00:00:00.000Z</lastmod>
+    <loc>http://buttonwood.bitbucket.org/2014/05/17/2014-05-17-circos/</loc>
+    <lastmod>2014-05-17T00:00:00.000Z</lastmod>
   </url>
   
   <url>
-    <loc>http://buttonwood.bitbucket.org/2014/02/13/hello-world/</loc>
-    <lastmod>2014-02-13T15:05:33.000Z</lastmod>
-  </url>
-  
-  <url>
-    <loc>http://buttonwood.bitbucket.org/2014/05/01/20140501-PREA/</loc>
-    <lastmod>2014-05-01T00:00:00.000Z</lastmod>
-  </url>
-  
-  <url>
-    <loc>http://buttonwood.bitbucket.org/2014/05/11/20140511-python-tips-map/</loc>
+    <loc>http://buttonwood.bitbucket.org/2014/05/11/2014-05-11-python-tips-map/</loc>
     <lastmod>2014-05-11T00:00:00.000Z</lastmod>
   </url>
   
@@ -117,23 +162,18 @@
   </url>
   
   <url>
-    <loc>http://buttonwood.bitbucket.org/2014/05/17/circos/</loc>
-    <lastmod>2014-05-17T00:00:00.000Z</lastmod>
-  </url>
-  
-  <url>
-    <loc>http://buttonwood.bitbucket.org/2014/05/12/20140424-ml-0/</loc>
+    <loc>http://buttonwood.bitbucket.org/2014/05/12/2014-04-24-ml/</loc>
     <lastmod>2014-05-12T03:51:00.000Z</lastmod>
   </url>
   
   <url>
-    <loc>http://buttonwood.bitbucket.org/2014/04/20/python-sci/</loc>
-    <lastmod>2014-04-20T03:51:00.000Z</lastmod>
+    <loc>http://buttonwood.bitbucket.org/2014/04/24/2014-04-24-10-algorithms-dm/</loc>
+    <lastmod>2014-04-24T00:00:00.000Z</lastmod>
   </url>
   
   <url>
-    <loc>http://buttonwood.bitbucket.org/2014/05/14/designing-data-visualizations/</loc>
-    <lastmod>2014-05-14T13:08:44.000Z</lastmod>
+    <loc>http://buttonwood.bitbucket.org/links/index.html</loc>
+    <lastmod>2014-05-03T07:08:44.000Z</lastmod>
   </url>
   
   <url>
@@ -142,13 +182,58 @@
   </url>
   
   <url>
+    <loc>http://buttonwood.bitbucket.org/2014/05/14/designing-data-visualizations/</loc>
+    <lastmod>2014-05-14T13:08:44.000Z</lastmod>
+  </url>
+  
+  <url>
     <loc>http://buttonwood.bitbucket.org/2014/05/12/machine_learning_an_algorithmic_perspective(2009)/</loc>
     <lastmod>2014-05-12T03:51:00.000Z</lastmod>
   </url>
   
   <url>
-    <loc>http://buttonwood.bitbucket.org/links/index.html</loc>
-    <lastmod>2014-05-03T07:08:44.000Z</lastmod>
+    <loc>http://buttonwood.bitbucket.org/2014/05/01/2014-05-01-PREA/</loc>
+    <lastmod>2014-05-01T00:00:00.000Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://buttonwood.bitbucket.org/2014/04/20/python-sci/</loc>
+    <lastmod>2014-04-20T03:51:00.000Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://buttonwood.bitbucket.org/2012/12/28/2012-12-28-about-this-blog/</loc>
+    <lastmod>2012-12-28T00:21:00.000Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://buttonwood.bitbucket.org/2013/01/04/2013-01-04-about-me/</loc>
+    <lastmod>2013-01-04T07:08:44.000Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://buttonwood.bitbucket.org/2013/11/18/2013-11-18-genome-assembly/</loc>
+    <lastmod>2013-11-18T15:22:00.000Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://buttonwood.bitbucket.org/2013/12/29/2013-12-29-genome-annotation/</loc>
+    <lastmod>2013-12-29T13:59:00.000Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://buttonwood.bitbucket.org/2014/02/12/2014-02-12-pacbio-sequencing/</loc>
+    <lastmod>2014-02-12T12:32:00.000Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://buttonwood.bitbucket.org/2014/05/02/2014-05-02-de-novo-assembly-of-highly-heterozygous-genomes/</loc>
+    <lastmod>2014-05-02T03:51:00.000Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://buttonwood.bitbucket.org/2013/01/10/2013-01-10-assemble-a-genome/</loc>
+    <lastmod>2013-01-10T02:04:00.000Z</lastmod>
   </url>
   
 </urlset>
