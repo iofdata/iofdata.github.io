@@ -98,6 +98,354 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-2014-05-18-data-preparation" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2014/05/18/2014-05-18-data-preparation/" class="article-date">
+  <time datetime="2014-05-18T00:00:00.000Z" itemprop="datePublished">May 18 2014</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/Data-Mining/">Data Mining</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2014/05/18/2014-05-18-data-preparation/">Making sense of data[^1]</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="3_Data_Preparation">3 Data Preparation</h3>
+<p>Preparing the data is one of the most time-consuming parts of any data analysis/data mining project. </p>
+<h4 id="3-1_DATA_SOURCES">3.1 DATA SOURCES</h4>
+<ol>
+<li>Surveys or polls</li>
+<li>Experiments</li>
+<li>Observational and other studies</li>
+<li>Operational databases(CRM etc)</li>
+<li>Data warehouses</li>
+<li>Historical databases</li>
+<li>Purchased data</li>
+</ol>
+<h4 id="3-2_DATA_UNDERSTANDING">3.2 DATA UNDERSTANDING</h4>
+<ol>
+<li>Data Tables</li>
+<li>Continuous and Discrete Variables</li>
+<li>Scales of Measurement(Nominal/Ordinal/IntervalRatio)</li>
+<li>Roles in Analysis(Labels/Descriptors/Response)</li>
+<li>Frequency Distribution</li>
+</ol>
+<h4 id="3-3_DATA_PREPARATION">3.3 DATA PREPARATION</h4>
+<ol>
+<li>Normalization<ul>
+<li><strong><em>Min-max</em></strong>: $$\acute{value} = \frac{Value - OriginalMin}{OriginalMax - OriginalMin}*(NewMax - NewMin) + NewMin$$</li>
+<li><strong><em>z-score</em></strong>: $$\acute{value} = \frac{Value - \bar{x}}{s}$$</li>
+<li><strong><em>Decimal scaling</em></strong>: $$\acute{value} = \frac{Value}{10^n}$$</li>
+</ul>
+</li>
+</ol>
+
+        
+          <p class="article-more-link">
+            <a href="/2014/05/18/2014-05-18-data-preparation/#more">Read More</a>
+          </p>
+        
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://buttonwood.bitbucket.org/2014/05/18/2014-05-18-data-preparation/" data-id="1i673ckxhuy7kvyh" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/books/">books</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+<!-- DISQUS
+
+-->
+
+
+
+  
+    <article id="post-2014-05-17-circos" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2014/05/17/2014-05-17-circos/" class="article-date">
+  <time datetime="2014-05-17T00:00:00.000Z" itemprop="datePublished">May 17 2014</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/Bioinformatics/">Bioinformatics</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2014/05/17/2014-05-17-circos/">Circos for Comparative genomics</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="Synteny_and_Comparative_genomics">Synteny and Comparative genomics</h3>
+<p>Welcome to see details in my <a href="https://github.com/Buttonwood/Bioinformatics/issues/4" target="_blank" rel="external">github issues</a>.</p>
+<p>First, use <a href="http://www.bx.psu.edu/miller_lab/dist/README.lastz-1.02.00/README.lastz-1.02.00a.html" target="_blank" rel="external">Lastz</a> for synteny block alignment.</p>
+<p>Then use SVG for synteny block drawing.<br><img src="https://dl.dropboxusercontent.com/u/78977353/hexo-git/cg/line.png" alt="line"></p>
+<p>And we found <a href="http://circos.ca/" target="_blank" rel="external">Circos</a> more powerful on handing this.</p>
+<p><img src="https://dl.dropboxusercontent.com/u/78977353/hexo-git/cg/circos.png" alt="circos"></p>
+<p>说明,本文以下内容多数来自网络资源转载,像原作者致意,感谢他们的原创工作!如想详细了解，请点击衔接，接入原文！</p>
+<h3 id="Circos_Installation">Circos Installation</h3>
+<p>For OSX: you can refer to this <a href="http://kylase.github.io/CircosAPI/os-x-installation-guide/" target="_blank" rel="external">os-x-installation-guide</a> and <a href="http://pgfe.umassmed.edu/ou/archives/2513" target="_blank" rel="external">this</a>.</p>
+<h3 id="Read_this_first">Read this first</h3>
+<p><a href="http://pgfe.umassmed.edu/ou/archives/2513" target="_blank" rel="external">Circos系列教程一安装</a></p>
+<p><a href="http://pgfe.umassmed.edu/ou/archives/2519" target="_blank" rel="external">Circos系列教程二染色体示意图ideograms</a></p>
+<p><a href="http://pgfe.umassmed.edu/ou/archives/2554" target="_blank" rel="external">Circos系列教程三突出标记Highlight</a></p>
+<p><a href="http://pgfe.umassmed.edu/ou/archives/2579" target="_blank" rel="external">Circos系列教程四连线links</a></p>
+<h3 id="Tutorial">Tutorial</h3>
+<p><a href="http://blog.csdn.net/skenoy/article/details/8696402" target="_blank" rel="external"> CIRCOS教程翻译 1.1——helloworld</a><br><img src="http://img.my.csdn.net/uploads/201303/20/1363765909_2834.png" alt="1.1"></p>
+<p><a href="http://blog.csdn.net/skenoy/article/details/8697823" target="_blank" rel="external">CIRCOS教程翻译 1.2——ticks</a><br><img src="http://img.my.csdn.net/uploads/201303/20/1363778829_5544.png" alt="1.2"></p>
+<p><a href="http://blog.csdn.net/skenoy/article/details/8716127" target="_blank" rel="external">CIRCOS教程翻译 1.3 ——染色体的变化</a><br><img src="http://img.my.csdn.net/uploads/201303/25/1364182311_2969.png" alt="1.3"></p>
+<p><a href="http://blog.csdn.net/skenoy/article/details/8716632" target="_blank" rel="external">CIRCOS教程翻译 1.4——links和rules</a><br><img src="http://img.my.csdn.net/uploads/201303/25/1364190625_3670.png" alt="1.4"></p>
+
+        
+          <p class="article-more-link">
+            <a href="/2014/05/17/2014-05-17-circos/#more">Read More</a>
+          </p>
+        
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://buttonwood.bitbucket.org/2014/05/17/2014-05-17-circos/" data-id="ids7uz157ixi5geo" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Circos/">Circos</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Comparative-genomics/">Comparative genomics</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Synteny/">Synteny</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+<!-- DISQUS
+
+-->
+
+
+
+  
+    <article id="post-designing-data-visualizations" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2014/05/14/designing-data-visualizations/" class="article-date">
+  <time datetime="2014-05-14T13:08:44.000Z" itemprop="datePublished">May 14 2014</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/Data-Visualization/">Data Visualization</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2014/05/14/designing-data-visualizations/">Designing Data Visualizations</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="Data_Visualization">Data Visualization</h3>
+<p>The terms data visualization and information visualization (casually, data viz and infoviz) are useful for referring to any visual representation of data that is:</p>
+<ul>
+<li>algorithmically drawn (may have custom touches but is largely rendered with the help of computerized methods);</li>
+<li>easy to regenerate with different data (the same form may be repurposed to rep-resent different datasets with similar dimensions or characteristics);</li>
+<li>often aesthetically barren (data is not decorated); and</li>
+<li>relatively data-rich (large volumes of data are welcome and viable, in contrast to infographics).</li>
+</ul>
+<h4 id="Encoding_for_your_data_type">Encoding for your data type</h4>
+
+        
+          <p class="article-more-link">
+            <a href="/2014/05/14/designing-data-visualizations/#more">Read More</a>
+          </p>
+        
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://buttonwood.bitbucket.org/2014/05/14/designing-data-visualizations/" data-id="hvnija6eiz4qmcqn" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/DV/">DV</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+<!-- DISQUS
+
+-->
+
+
+
+  
+    <article id="post-machine_learning_an_algorithmic_perspective(2009)" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2014/05/12/machine_learning_an_algorithmic_perspective(2009)/" class="article-date">
+  <time datetime="2014-05-12T03:51:00.000Z" itemprop="datePublished">May 12 2014</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/Data-Mining/">Data Mining</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2014/05/12/machine_learning_an_algorithmic_perspective(2009)/">Machine learning: an algorithmic perspective(2009)</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="The_Multi-Layer_Perceptron(MLP)">The Multi-Layer Perceptron(MLP)</h3>
+<p>Training the MLP consists of two parts:     </p>
+<ol>
+<li>working out what the outputs are for the given inputs and the current weights;</li>
+<li>and then updating the weights according to the <strong><em>error</em></strong>, which is a function of the difference between the outputs and the targets.</li>
+</ol>
+<p>These are generally known as going <strong>forwards</strong> and <strong>backwards</strong> through network.</p>
+<h3 id="Going_Backwards：Back-Propagation_of_Error">Going Backwards：Back-Propagation of Error</h3>
+<p>Which makes it clear that the errors are sent  backwards through the network.  It is a form of <strong>gradient descent(梯度下降法)</strong>.</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://buttonwood.bitbucket.org/2014/05/12/machine_learning_an_algorithmic_perspective(2009)/" data-id="lob1xp8pz8ouxbvg" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/ML/">ML</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+<!-- DISQUS
+
+-->
+
+
+
+  
+    <article id="post-2014-04-24-ml" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2014/05/12/2014-04-24-ml/" class="article-date">
+  <time datetime="2014-05-12T03:51:00.000Z" itemprop="datePublished">May 12 2014</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/Data-Mining/">Data Mining</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2014/05/12/2014-04-24-ml/">Short Introduction to Machine learning</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="Learning">Learning</h3>
+<p>When come to learning, what do we talk about it?</p>
+<p>For machines, they are learning from data, since data is what they have.<br>For our human beings, especially  behavioural  terms, we are talking about learning from experience.</p>
+<p><strong><em>Machine Learning</em></strong>, is about computers modify or adapt their actions(whether these actions are making predictions or controlling a robot), so that these actions get more accurate, where accuracy is measured by how well the chosen actions reflect the correct ones.</p>
+<h3 id="Types_of_Machine_Learning">Types of Machine Learning</h3>
+<ol>
+<li>Supervised learning.<br>A training set of examples with the correct responses (targets) are provided and, based on this training set, the algorithm <strong><em>generalizes</em></strong> to respond correctly to all possible inputs. This is called learning from examples. </li>
+<li>Unsupervised learning.<br>Correct responses (targets) are not provided, instead the algorithm tries to identify similarities between the inputs so that inputs that have something in common are <strong><em>categorized</em></strong> together. The statistical approach to unsupervised learning is known as density estimation.</li>
+<li>Reinforcement learning.<br>Somewhere between supervised learning and unsupervised learning. The algorithm gets told when the answer is wrong but does not get told how to correct it. It has to explore and try different possibilities until it works out how to get the answer right. It ‘s sometime called learning withe a <strong><em>critic</em></strong> because of this monitor that scores the answer, but does not suggest improvements.</li>
+<li>Evolutionary learning.<br>Biological evolution can be seen as a learning process: biological organisms adapt to improve their survival rates and chances of having offspring in their environment. We’ll look at how we can model this in a computer by using an idea of <strong><em>fitness</em></strong>, which corresponds to a score for how good the current solutions is.</li>
+</ol>
+<p>By the way, from <strong>ISL</strong>(An Introduction to Statistical Learning) by Trevor Hastie and Robert Tibshirani:</p>
+<blockquote>
+<p><strong><em>Supervised statistical learning</em></strong> involves building a statistical model for predicting, or estimating, an output based on one or more inputs.<br>With <strong><em>unsupervised statistical learning</em></strong>, there are inputs but no supervising output; nevertheless we can learn relationships and structure from such data.     </p>
+</blockquote>
+<p>The most common type of learning is supervised learning.</p>
+<h3 id="Supervised"><strong><em>Supervised</em></strong></h3>
+<p>We wish to fit a model that relates the response to the predictors, with the aim of accurately predicting the response for future observations (prediction) or better understanding the relationship between the response and the predictors (inference).         </p>
+<ol>
+<li>Regression</li>
+<li>Classification</li>
+<li>GAM</li>
+<li>boosting</li>
+<li>support vector machines</li>
+</ol>
+<h3 id="Unsupervised"><strong><em>Unsupervised</em></strong></h3>
+<p>There is no response variable to predict, we observe a vector of measurements $x_i$ but no associated response $y_i$.  </p>
+<ol>
+<li>clustering</li>
+<li></li>
+</ol>
+<p>Reference:<br><a href="https://en.wikipedia.org/wiki/Book:Machine_Learning_-_The_Complete_Guide" target="_blank" rel="external">[1]: Machine Learning: The Complete Guide</a></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://buttonwood.bitbucket.org/2014/05/12/2014-04-24-ml/" data-id="jwbp391ecl4rn6j5" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/ML/">ML</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+<!-- DISQUS
+
+-->
+
+
+
+  
     <article id="post-2014-05-11-python-tips-map" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2014/05/11/2014-05-11-python-tips-map/" class="article-date">
@@ -217,7 +565,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://buttonwood.bitbucket.org/2014/05/11/2014-05-11-python-tips-map/" data-id="ms55rgj6n7cfmssq" class="article-share-link">Share</a>
+      <a data-url="http://buttonwood.bitbucket.org/2014/05/11/2014-05-11-python-tips-map/" data-id="eidu1whrdu8b90d7" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Python/">Python</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Tools/">Tools</a></li></ul>
@@ -301,7 +649,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://buttonwood.bitbucket.org/2014/05/03/about/" data-id="7exvv5d54u35hpxb" class="article-share-link">Share</a>
+      <a data-url="http://buttonwood.bitbucket.org/2014/05/03/about/" data-id="bx2sppir4nmdcw66" class="article-share-link">Share</a>
       
       
     </footer>
@@ -363,7 +711,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://buttonwood.bitbucket.org/2014/05/02/2014-05-02-de-novo-assembly-of-highly-heterozygous-genomes/" data-id="jnen3eusylz2ioi8" class="article-share-link">Share</a>
+      <a data-url="http://buttonwood.bitbucket.org/2014/05/02/2014-05-02-de-novo-assembly-of-highly-heterozygous-genomes/" data-id="qxql7r5crvc2088q" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/DBG/">DBG</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/OLC/">OLC</a></li></ul>
@@ -424,7 +772,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://buttonwood.bitbucket.org/2014/05/01/2014-05-01-PREA/" data-id="gd5wxdqlt0cev9qf" class="article-share-link">Share</a>
+      <a data-url="http://buttonwood.bitbucket.org/2014/05/01/2014-05-01-PREA/" data-id="yyu5l014x9parobn" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Tools/">Tools</a></li></ul>
@@ -477,393 +825,10 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://buttonwood.bitbucket.org/2014/04/24/2014-04-24-10-algorithms-dm/" data-id="zw075mrprq4y98az" class="article-share-link">Share</a>
+      <a data-url="http://buttonwood.bitbucket.org/2014/04/24/2014-04-24-10-algorithms-dm/" data-id="lf9c2c67zbpd4j0o" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/CART/">CART</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/EM/">EM</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/PageRank/">PageRank</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/SVM/">SVM</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/classification/">classification</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/clustering/">clustering</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/k-means/">k-means</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/kNN/">kNN</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-<!-- DISQUS
-
--->
-
-
-
-  
-    <article id="post-python-sci" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2014/04/20/python-sci/" class="article-date">
-  <time datetime="2014-04-20T03:51:00.000Z" itemprop="datePublished">Apr 20 2014</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/Data-Mining/">Data Mining</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2014/04/20/python-sci/">Use Python for Data Mining</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <a id="more"></a>
-
-<p>Here is my experience in a python production environment and configure illustrations to share with you.</p>
-<p>I mainly followed these blogs and you can refer to them with some minor adjustments.</p>
-<ol>
-<li><a href="http://datacommunitydc.org/blog/2013/03/getting-started-with-python-for-data-scientists/" target="_blank" rel="external">Getting started with python for data scientists</a>        </li>
-<li><a href="http://penandpants.com/2012/02/24/install-python/" target="_blank" rel="external">INSTALL PYTHON, NUMPY, SCIPY, AND MATPLOTLIB ON MAC OS X</a></li>
-</ol>
-<h3 id="Modules">Modules</h3>
-<p>And here is what i do:</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre>1
-2
-3
-4
-5
-6
-7
-8
-9
-10
-11
-12
-13
-</pre></td><td class="code"><pre><span class="built_in">sudo</span> pip install nose
-<span class="built_in">sudo</span> pip install jinja2
-<span class="built_in">sudo</span> pip install tornado
-<span class="built_in">sudo</span> pip install pyzmq
-<span class="built_in">sudo</span> pip install jinja2
-<span class="built_in">sudo</span> pip install ipython
-<span class="built_in">sudo</span> pip install pyreadline
-<span class="built_in">sudo</span> pip install pygments
-<span class="built_in">sudo</span> pip install numpy
-<span class="built_in">sudo</span> pip install scipy
-<span class="built_in">sudo</span> pip install cython
-<span class="built_in">sudo</span> pip install ipython
-<span class="built_in">sudo</span> pip install pandas
-</pre></td></tr></table></figure>
-
-<h3 id="Error_with_Pandas">Error with Pandas</h3>
-<p>But I come across  a strange problem that I can’t install pandas on my OSX 10.9. I google the errors and tried many solutions  on <a href="http://stackoverflow.com/questions/20586314/issues-installing-pandas-command-llvm-gcc-4-2-failed-with-exit-status-1/23239654#23239654" target="_blank" rel="external">stackoverflow</a>.</p>
-<p>Then on <a href="https://github.com/pydata/pandas/issues/6768#issuecomment-41154382" target="_blank" rel="external">githhub</a>, Tom Augspurger told  me that  virtualenv  and conda may work.</p>
-<h3 id="Fixed">Fixed</h3>
-<p>Here I tried <a href="http://www.virtualenv.org/en/latest/virtualenv.html#installation" target="_blank" rel="external">virtualenv</a> and it does  works .</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre>1
-2
-3
-4
-</pre></td><td class="code"><pre>pip <span class="keyword">install</span> virtualenv
-virtualenv ENV
-source bin/activate
-pip <span class="keyword">install</span> pandas
-</pre></td></tr></table></figure>
-
-
-<p>And python 3.3 with pythonbrew also works, it’s also a alternative.<br>pandas        </p>
-<figure class="highlight"><table><tr><td class="gutter"><pre>1
-2
-</pre></td><td class="code"><pre>pythonbrew <span class="keyword">switch</span> Python-<span class="number">3.3</span><span class="number">.1</span>
-pip install pandas
-</pre></td></tr></table></figure>            
-
-<p>And have fun!</p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://buttonwood.bitbucket.org/2014/04/20/python-sci/" data-id="5736bwbtlb52gjv2" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Python/">Python</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Tools/">Tools</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-<!-- DISQUS
-
--->
-
-
-
-  
-    <article id="post-2014-02-12-pacbio-sequencing" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2014/02/12/2014-02-12-pacbio-sequencing/" class="article-date">
-  <time datetime="2014-02-12T12:32:00.000Z" itemprop="datePublished">Feb 12 2014</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/Bioinformatics/">Bioinformatics</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2014/02/12/2014-02-12-pacbio-sequencing/">PacBio Sequencing</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>Here is a short talk about <a href="https://docs.google.com/file/d/0B_bKUAo13sMjN3gybEdGS2NyODQ/edit" target="_blank" rel="external">PacBio Sequencing</a> by me, any suggestion is welcome!</p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://buttonwood.bitbucket.org/2014/02/12/2014-02-12-pacbio-sequencing/" data-id="5ej464659jyif19s" class="article-share-link">Share</a>
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-<!-- DISQUS
-
--->
-
-
-
-  
-    <article id="post-2013-12-29-genome-annotation" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2013/12/29/2013-12-29-genome-annotation/" class="article-date">
-  <time datetime="2013-12-29T13:59:00.000Z" itemprop="datePublished">Dec 29 2013</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/Bioinformatics/">Bioinformatics</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2013/12/29/2013-12-29-genome-annotation/">genome annotation</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>Here I draw a genome annotation flow chart. Any suggestion is welcome!</p>
-<h3 id="A_roadmap_for_genome_annotation!">A roadmap for <strong><em>genome annotation</em></strong>!</h3>
-<img src="https://dl.dropboxusercontent.com/u/78977353/Octopress/image/genome/genome-annotation.png">
-
-
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://buttonwood.bitbucket.org/2013/12/29/2013-12-29-genome-annotation/" data-id="c1indi786j0ugl8b" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Annotation/">Annotation</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Genome/">Genome</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-<!-- DISQUS
-
--->
-
-
-
-  
-    <article id="photo-2013-11-18-genome-assembly" class="article article-type-photo" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2013/11/18/2013-11-18-genome-assembly/" class="article-date">
-  <time datetime="2013-11-18T15:22:00.000Z" itemprop="datePublished">Nov 18 2013</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/Bioinformatics/">Bioinformatics</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-<div class="article-gallery">
-  <div class="article-gallery-photos">
-    
-      <a class="article-gallery-img fancybox" href="https://dl.dropboxusercontent.com/u/78977353/hexo-git/DBG-img/DBG-img.001.jpg" rel="gallery_e9l66dc9hnz3tfun">
-        <img src="https://dl.dropboxusercontent.com/u/78977353/hexo-git/DBG-img/DBG-img.001.jpg" itemprop="image">
-      </a>
-    
-      <a class="article-gallery-img fancybox" href="https://dl.dropboxusercontent.com/u/78977353/hexo-git/DBG-img/DBG-img.002.jpg" rel="gallery_e9l66dc9hnz3tfun">
-        <img src="https://dl.dropboxusercontent.com/u/78977353/hexo-git/DBG-img/DBG-img.002.jpg" itemprop="image">
-      </a>
-    
-      <a class="article-gallery-img fancybox" href="https://dl.dropboxusercontent.com/u/78977353/hexo-git/DBG-img/DBG-img.003.jpg" rel="gallery_e9l66dc9hnz3tfun">
-        <img src="https://dl.dropboxusercontent.com/u/78977353/hexo-git/DBG-img/DBG-img.003.jpg" itemprop="image">
-      </a>
-    
-      <a class="article-gallery-img fancybox" href="https://dl.dropboxusercontent.com/u/78977353/hexo-git/DBG-img/DBG-img.004.jpg" rel="gallery_e9l66dc9hnz3tfun">
-        <img src="https://dl.dropboxusercontent.com/u/78977353/hexo-git/DBG-img/DBG-img.004.jpg" itemprop="image">
-      </a>
-    
-      <a class="article-gallery-img fancybox" href="https://dl.dropboxusercontent.com/u/78977353/hexo-git/DBG-img/DBG-img.005.jpg" rel="gallery_e9l66dc9hnz3tfun">
-        <img src="https://dl.dropboxusercontent.com/u/78977353/hexo-git/DBG-img/DBG-img.005.jpg" itemprop="image">
-      </a>
-    
-      <a class="article-gallery-img fancybox" href="https://dl.dropboxusercontent.com/u/78977353/hexo-git/DBG-img/DBG-img.006.jpg" rel="gallery_e9l66dc9hnz3tfun">
-        <img src="https://dl.dropboxusercontent.com/u/78977353/hexo-git/DBG-img/DBG-img.006.jpg" itemprop="image">
-      </a>
-    
-      <a class="article-gallery-img fancybox" href="https://dl.dropboxusercontent.com/u/78977353/hexo-git/DBG-img/DBG-img.007.jpg" rel="gallery_e9l66dc9hnz3tfun">
-        <img src="https://dl.dropboxusercontent.com/u/78977353/hexo-git/DBG-img/DBG-img.007.jpg" itemprop="image">
-      </a>
-    
-      <a class="article-gallery-img fancybox" href="https://dl.dropboxusercontent.com/u/78977353/hexo-git/DBG-img/DBG-img.008.jpg" rel="gallery_e9l66dc9hnz3tfun">
-        <img src="https://dl.dropboxusercontent.com/u/78977353/hexo-git/DBG-img/DBG-img.008.jpg" itemprop="image">
-      </a>
-    
-      <a class="article-gallery-img fancybox" href="https://dl.dropboxusercontent.com/u/78977353/hexo-git/DBG-img/DBG-img.009.jpg" rel="gallery_e9l66dc9hnz3tfun">
-        <img src="https://dl.dropboxusercontent.com/u/78977353/hexo-git/DBG-img/DBG-img.009.jpg" itemprop="image">
-      </a>
-    
-      <a class="article-gallery-img fancybox" href="https://dl.dropboxusercontent.com/u/78977353/hexo-git/DBG-img/DBG-img.010.jpg" rel="gallery_e9l66dc9hnz3tfun">
-        <img src="https://dl.dropboxusercontent.com/u/78977353/hexo-git/DBG-img/DBG-img.010.jpg" itemprop="image">
-      </a>
-    
-      <a class="article-gallery-img fancybox" href="https://dl.dropboxusercontent.com/u/78977353/hexo-git/DBG-img/DBG-img.011.jpg" rel="gallery_e9l66dc9hnz3tfun">
-        <img src="https://dl.dropboxusercontent.com/u/78977353/hexo-git/DBG-img/DBG-img.011.jpg" itemprop="image">
-      </a>
-    
-      <a class="article-gallery-img fancybox" href="https://dl.dropboxusercontent.com/u/78977353/hexo-git/DBG-img/DBG-img.012.jpg" rel="gallery_e9l66dc9hnz3tfun">
-        <img src="https://dl.dropboxusercontent.com/u/78977353/hexo-git/DBG-img/DBG-img.012.jpg" itemprop="image">
-      </a>
-    
-      <a class="article-gallery-img fancybox" href="https://dl.dropboxusercontent.com/u/78977353/hexo-git/DBG-img/DBG-img.013.jpg" rel="gallery_e9l66dc9hnz3tfun">
-        <img src="https://dl.dropboxusercontent.com/u/78977353/hexo-git/DBG-img/DBG-img.013.jpg" itemprop="image">
-      </a>
-    
-      <a class="article-gallery-img fancybox" href="https://dl.dropboxusercontent.com/u/78977353/hexo-git/DBG-img/DBG-img.014.jpg" rel="gallery_e9l66dc9hnz3tfun">
-        <img src="https://dl.dropboxusercontent.com/u/78977353/hexo-git/DBG-img/DBG-img.014.jpg" itemprop="image">
-      </a>
-    
-      <a class="article-gallery-img fancybox" href="https://dl.dropboxusercontent.com/u/78977353/hexo-git/DBG-img/DBG-img.015.jpg" rel="gallery_e9l66dc9hnz3tfun">
-        <img src="https://dl.dropboxusercontent.com/u/78977353/hexo-git/DBG-img/DBG-img.015.jpg" itemprop="image">
-      </a>
-    
-      <a class="article-gallery-img fancybox" href="https://dl.dropboxusercontent.com/u/78977353/hexo-git/DBG-img/DBG-img.016.jpg" rel="gallery_e9l66dc9hnz3tfun">
-        <img src="https://dl.dropboxusercontent.com/u/78977353/hexo-git/DBG-img/DBG-img.016.jpg" itemprop="image">
-      </a>
-    
-      <a class="article-gallery-img fancybox" href="https://dl.dropboxusercontent.com/u/78977353/hexo-git/DBG-img/DBG-img.017.jpg" rel="gallery_e9l66dc9hnz3tfun">
-        <img src="https://dl.dropboxusercontent.com/u/78977353/hexo-git/DBG-img/DBG-img.017.jpg" itemprop="image">
-      </a>
-    
-  </div>
-</div>
-
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2013/11/18/2013-11-18-genome-assembly/">genome assembly</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>Here is a short talk about <a href="https://docs.google.com/file/d/0B_bKUAo13sMjWlJSVTk0WE93aDA/edit" target="_blank" rel="external">genome assembly</a>.</p>
-<p>And for <strong><em>DBG</em></strong> details, please click on  <a href="https://docs.google.com/file/d/0B_bKUAo13sMjaWRhYVdqZTVuejQ/edit" target="_blank" rel="external">DBG</a>.</p>
-<p>Here I updated the images of the slide for you.</p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://buttonwood.bitbucket.org/2013/11/18/2013-11-18-genome-assembly/" data-id="e9l66dc9hnz3tfun" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/DBG/">DBG</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/OLC/">OLC</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-<!-- DISQUS
-
--->
-
-
-
-  
-    <article id="post-2013-08-14-A-Single-Library" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2013/08/14/2013-08-14-A-Single-Library/" class="article-date">
-  <time datetime="2013-08-14T11:43:00.000Z" itemprop="datePublished">Aug 14 2013</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/Bioinformatics/">Bioinformatics</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2013/08/14/2013-08-14-A-Single-Library/"> 单文库基因组组装 (A Single Library for Genome  Assemble) </a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p><a href="1"><em>Illumina</em> 报告</a>中比较了 Reads 长度，coverage，insert size 等对组装结果的影响，可以看到理想状况下，对于简单基因组，30X左右短片段reads加上适量长片段reads可以覆盖足够的基因组区域，并且有较好的N50等指标。</p>
-<p><a href="2">最开始sanger测序</a>可能为了避免重复序列的影响，采用了1k-40k的建库策略，后来soapdenovo在做人类基因组的时候沿用了200，500，2k，5k，10k的测序方法。但是不同基因组具体采用的策略并不一致，但是一般均需要短片段文库（<2k）和长片段文库(>2k)。像Abyss由于做<a href="3">非洲人</a>的时候就只用了42X的210文库数据。        </2k）和长片段文库(></p>
-<p><a href="4">GAGE评价了一些组装软件的组装效果</a>，有 Effect of multiple libraries on assembly 这一段。结合我自己的项目经验，multilib的策略是为了辅助scaffolding。因为contig的组装主要用到reads见的overlap信息，只要测序随机和均一，并且深度足够，短片段reads可以很好的组装出contig（无N的一致性序列），contig的组装步骤并不设计文库片段信息（insert-size和pair-end关系），后面scaffolding则需要用到文库信息来辅助contig间建立连接关系，而这里最主要的也是需要大雨2k的文库梯度分配。所以像allpath这种软件推荐的就是一个短片段文库加一个大片段文库。金小峰这种单倍体物种，基因组也不太大，考虑到个体小，提取DNA复杂，一只蜜蜂样品不足以构建三个短片段文库（200，500，800），我们可以尽量尝试建1到2个文库，对于contig组装影响不会太大（我曾经组装的单染色体蚂蚁也是由于样品原因，建了一个500的文库，效果也很好）。</p>
-<p>另外我们注意到像<a href="5">fermi这样的最新的组装软件的进展</a>，对人类基因组已经可以一个样品一个库，35X数据做denovo assembly了。</p>
-<p>为了更好的开展后续的分析和讨论工作，后面我还会具体找下已经出来的蜜蜂或蚂蚁的组装文献给大家看看，应该说膜翅目的研究现在还是比较热门的，有很多可参考的借鉴的地方。为了尽快推进这个项目，我们没必要非建3个文库。这是我的意见。    </p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://buttonwood.bitbucket.org/2013/08/14/2013-08-14-A-Single-Library/" data-id="rex8raxohg4k3p96" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Assemble/">Assemble</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Tips/">Tips</a></li></ul>
 
     </footer>
   </div>
@@ -905,7 +870,7 @@ pip install pandas
   <div class="widget-wrap">
     <h3 class="widget-title">Categories</h3>
     <div class="widget">
-      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Bioinformatics/">Bioinformatics</a><span class="category-list-count">9</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Bioinformatics/ML/">ML</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Compute/">Compute</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Data-Mining/">Data Mining</a><span class="category-list-count">7</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Data-Visualization/">Data Visualization</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/MySQL/">MySQL</a><span class="category-list-count">4</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Python/">Python</a><span class="category-list-count">9</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/R/">R</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Tips/">Tips</a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Tools/">Tools</a><span class="category-list-count">5</span></li></ul>
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Bioinformatics/">Bioinformatics</a><span class="category-list-count">9</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Bioinformatics/ML/">ML</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Compute/">Compute</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Data-Mining/">Data Mining</a><span class="category-list-count">7</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Data-Visualization/">Data Visualization</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/MySQL/">MySQL</a><span class="category-list-count">4</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Python/">Python</a><span class="category-list-count">9</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/R/">R</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Tips/">Tips</a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Tools/">Tools</a><span class="category-list-count">10</span></li></ul>
     </div>
   </div>
 
@@ -914,7 +879,7 @@ pip install pandas
   <div class="widget-wrap">
     <h3 class="widget-title">Tags</h3>
     <div class="widget">
-      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Annotation/">Annotation</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Assemble/">Assemble</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Assembly/">Assembly</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Bayesian/">Bayesian</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Blog/">Blog</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/CART/">CART</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Circos/">Circos</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Comparative-genomics/">Comparative genomics</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/DBG/">DBG</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/DV/">DV</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/EM/">EM</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ElasticSearch/">ElasticSearch</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Genome/">Genome</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Git/">Git</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Kmer/">Kmer</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MCMC/">MCMC</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ML/">ML</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MySQL/">MySQL</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Mysql/">Mysql</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/OLC/">OLC</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/OSX/">OSX</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Octopress/">Octopress</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/PacBio/">PacBio</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/PageRank/">PageRank</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Python/">Python</a><span class="tag-list-count">10</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/R/">R</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SVM/">SVM</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Scaffold/">Scaffold</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Synteny/">Synteny</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Thread/">Thread</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Tips/">Tips</a><span class="tag-list-count">10</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Tools/">Tools</a><span class="tag-list-count">10</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Web/">Web</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/books/">books</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/centOS/">centOS</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/classification/">classification</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/clustering/">clustering</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/docker/">docker</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/git/">git</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/k-means/">k-means</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/kNN/">kNN</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/matplotlib/">matplotlib</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/network/">network</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/people/">people</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/sysbench/">sysbench</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/zookeeper/">zookeeper</a><span class="tag-list-count">1</span></li></ul>
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Annotation/">Annotation</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Assemble/">Assemble</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Assembly/">Assembly</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Bayesian/">Bayesian</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Blog/">Blog</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/CART/">CART</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Circos/">Circos</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Comparative-genomics/">Comparative genomics</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/DBG/">DBG</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/DV/">DV</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/EM/">EM</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ElasticSearch/">ElasticSearch</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Genome/">Genome</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Git/">Git</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Kmer/">Kmer</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MCMC/">MCMC</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ML/">ML</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MySQL/">MySQL</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Mysql/">Mysql</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/OLC/">OLC</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/OSX/">OSX</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Octopress/">Octopress</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/PacBio/">PacBio</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/PageRank/">PageRank</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Python/">Python</a><span class="tag-list-count">10</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/R/">R</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SVM/">SVM</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Scaffold/">Scaffold</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Synteny/">Synteny</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Thread/">Thread</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Tips/">Tips</a><span class="tag-list-count">10</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Tools/">Tools</a><span class="tag-list-count">10</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Web/">Web</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/books/">books</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/centOS/">centOS</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/classification/">classification</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/clustering/">clustering</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/cobar/">cobar</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/consul/">consul</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/docker/">docker</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/git/">git</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hadoop/">hadoop</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hbase/">hbase</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/k-means/">k-means</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/kNN/">kNN</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/matplotlib/">matplotlib</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mysql/">mysql</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/network/">network</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/people/">people</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/registry/">registry</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/sysbench/">sysbench</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/zookeeper/">zookeeper</a><span class="tag-list-count">1</span></li></ul>
     </div>
   </div>
 
@@ -923,7 +888,7 @@ pip install pandas
   <div class="widget-wrap">
     <h3 class="widget-title">Tag Cloud</h3>
     <div class="widget tagcloud">
-      <a href="/tags/Annotation/" style="font-size: 10.00px;">Annotation</a><a href="/tags/Assemble/" style="font-size: 12.50px;">Assemble</a><a href="/tags/Assembly/" style="font-size: 10.00px;">Assembly</a><a href="/tags/Bayesian/" style="font-size: 10.00px;">Bayesian</a><a href="/tags/Blog/" style="font-size: 10.00px;">Blog</a><a href="/tags/CART/" style="font-size: 10.00px;">CART</a><a href="/tags/Circos/" style="font-size: 10.00px;">Circos</a><a href="/tags/Comparative-genomics/" style="font-size: 10.00px;">Comparative genomics</a><a href="/tags/DBG/" style="font-size: 15.00px;">DBG</a><a href="/tags/DV/" style="font-size: 10.00px;">DV</a><a href="/tags/EM/" style="font-size: 10.00px;">EM</a><a href="/tags/ElasticSearch/" style="font-size: 10.00px;">ElasticSearch</a><a href="/tags/Genome/" style="font-size: 12.50px;">Genome</a><a href="/tags/Git/" style="font-size: 10.00px;">Git</a><a href="/tags/Kmer/" style="font-size: 10.00px;">Kmer</a><a href="/tags/MCMC/" style="font-size: 10.00px;">MCMC</a><a href="/tags/ML/" style="font-size: 12.50px;">ML</a><a href="/tags/MySQL/" style="font-size: 17.50px;">MySQL</a><a href="/tags/Mysql/" style="font-size: 10.00px;">Mysql</a><a href="/tags/OLC/" style="font-size: 15.00px;">OLC</a><a href="/tags/OSX/" style="font-size: 10.00px;">OSX</a><a href="/tags/Octopress/" style="font-size: 10.00px;">Octopress</a><a href="/tags/PacBio/" style="font-size: 10.00px;">PacBio</a><a href="/tags/PageRank/" style="font-size: 10.00px;">PageRank</a><a href="/tags/Python/" style="font-size: 20.00px;">Python</a><a href="/tags/R/" style="font-size: 15.00px;">R</a><a href="/tags/SVM/" style="font-size: 10.00px;">SVM</a><a href="/tags/Scaffold/" style="font-size: 10.00px;">Scaffold</a><a href="/tags/Synteny/" style="font-size: 10.00px;">Synteny</a><a href="/tags/Thread/" style="font-size: 10.00px;">Thread</a><a href="/tags/Tips/" style="font-size: 20.00px;">Tips</a><a href="/tags/Tools/" style="font-size: 20.00px;">Tools</a><a href="/tags/Web/" style="font-size: 10.00px;">Web</a><a href="/tags/books/" style="font-size: 10.00px;">books</a><a href="/tags/centOS/" style="font-size: 10.00px;">centOS</a><a href="/tags/classification/" style="font-size: 10.00px;">classification</a><a href="/tags/clustering/" style="font-size: 10.00px;">clustering</a><a href="/tags/docker/" style="font-size: 10.00px;">docker</a><a href="/tags/git/" style="font-size: 17.50px;">git</a><a href="/tags/k-means/" style="font-size: 10.00px;">k-means</a>
+      <a href="/tags/Annotation/" style="font-size: 10.00px;">Annotation</a><a href="/tags/Assemble/" style="font-size: 12.00px;">Assemble</a><a href="/tags/Assembly/" style="font-size: 10.00px;">Assembly</a><a href="/tags/Bayesian/" style="font-size: 10.00px;">Bayesian</a><a href="/tags/Blog/" style="font-size: 10.00px;">Blog</a><a href="/tags/CART/" style="font-size: 10.00px;">CART</a><a href="/tags/Circos/" style="font-size: 10.00px;">Circos</a><a href="/tags/Comparative-genomics/" style="font-size: 10.00px;">Comparative genomics</a><a href="/tags/DBG/" style="font-size: 14.00px;">DBG</a><a href="/tags/DV/" style="font-size: 10.00px;">DV</a><a href="/tags/EM/" style="font-size: 10.00px;">EM</a><a href="/tags/ElasticSearch/" style="font-size: 10.00px;">ElasticSearch</a><a href="/tags/Genome/" style="font-size: 12.00px;">Genome</a><a href="/tags/Git/" style="font-size: 10.00px;">Git</a><a href="/tags/Kmer/" style="font-size: 10.00px;">Kmer</a><a href="/tags/MCMC/" style="font-size: 10.00px;">MCMC</a><a href="/tags/ML/" style="font-size: 12.00px;">ML</a><a href="/tags/MySQL/" style="font-size: 16.00px;">MySQL</a><a href="/tags/Mysql/" style="font-size: 10.00px;">Mysql</a><a href="/tags/OLC/" style="font-size: 14.00px;">OLC</a><a href="/tags/OSX/" style="font-size: 10.00px;">OSX</a><a href="/tags/Octopress/" style="font-size: 10.00px;">Octopress</a><a href="/tags/PacBio/" style="font-size: 10.00px;">PacBio</a><a href="/tags/PageRank/" style="font-size: 10.00px;">PageRank</a><a href="/tags/Python/" style="font-size: 20.00px;">Python</a><a href="/tags/R/" style="font-size: 14.00px;">R</a><a href="/tags/SVM/" style="font-size: 10.00px;">SVM</a><a href="/tags/Scaffold/" style="font-size: 10.00px;">Scaffold</a><a href="/tags/Synteny/" style="font-size: 10.00px;">Synteny</a><a href="/tags/Thread/" style="font-size: 10.00px;">Thread</a><a href="/tags/Tips/" style="font-size: 20.00px;">Tips</a><a href="/tags/Tools/" style="font-size: 20.00px;">Tools</a><a href="/tags/Web/" style="font-size: 10.00px;">Web</a><a href="/tags/books/" style="font-size: 10.00px;">books</a><a href="/tags/centOS/" style="font-size: 10.00px;">centOS</a><a href="/tags/classification/" style="font-size: 10.00px;">classification</a><a href="/tags/clustering/" style="font-size: 10.00px;">clustering</a><a href="/tags/cobar/" style="font-size: 10.00px;">cobar</a><a href="/tags/consul/" style="font-size: 10.00px;">consul</a><a href="/tags/docker/" style="font-size: 18.00px;">docker</a>
     </div>
   </div>
 
@@ -932,7 +897,7 @@ pip install pandas
   <div class="widget-wrap">
     <h3 class="widget-title">Archives</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/03">March 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/02">February 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/01">January 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/01">January 2015</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/12">December 2014</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/10">October 2014</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/08">August 2014</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/07">July 2014</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/06">June 2014</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/05">May 2014</a><span class="archive-list-count">9</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/04">April 2014</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/02">February 2014</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/12">December 2013</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/11">November 2013</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/08">August 2013</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/03">March 2013</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/01">January 2013</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2012/12">December 2012</a><span class="archive-list-count">1</span></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/03">March 2016</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/02">February 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/01">January 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/01">January 2015</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/12">December 2014</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/10">October 2014</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/08">August 2014</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/07">July 2014</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/06">June 2014</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/05">May 2014</a><span class="archive-list-count">9</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/04">April 2014</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/02">February 2014</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/12">December 2013</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/11">November 2013</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/08">August 2013</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/03">March 2013</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/01">January 2013</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2012/12">December 2012</a><span class="archive-list-count">1</span></li></ul>
     </div>
   </div>
 
@@ -944,23 +909,23 @@ pip install pandas
       <ul>
         
           <li>
+            <a href="/2016/03/31/2016-03-31-hadoop-ha-docker/">docker搭建高可用hadoop集群</a>
+          </li>
+        
+          <li>
+            <a href="/2016/03/31/2016-03-31-hbase-region-in-transition/">hbase region in transition too long</a>
+          </li>
+        
+          <li>
             <a href="/2016/03/15/2016-03-15-zookeeper-and-docker/">用docker创建zookeeper集群</a>
           </li>
         
           <li>
-            <a href="/2016/02/17/2016-02-17-ElasticSearch-Queen-Too-High/">ElasticSearch search queen size is too high</a>
+            <a href="/2016/03/10/2016-03-10-docker-consul/">docker consul 服务发现</a>
           </li>
         
           <li>
-            <a href="/2016/01/29/2016-01-29-mysql-truncate-partition/">mysql清理分区</a>
-          </li>
-        
-          <li>
-            <a href="/2015/01/16/2015-01-16-gitlab-workflow/">gitlab使用说明</a>
-          </li>
-        
-          <li>
-            <a href="/2015/01/14/Writing-idiomatic-python/">Writing idiomatic python</a>
+            <a href="/2016/03/10/2016-03-10-docker-registry/">docker registry 搭建</a>
           </li>
         
       </ul>

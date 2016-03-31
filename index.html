@@ -98,6 +98,380 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-2016-03-31-hadoop-ha-docker" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2016/03/31/2016-03-31-hadoop-ha-docker/" class="article-date">
+  <time datetime="2016-03-31T13:51:00.000Z" itemprop="datePublished">Mar 31 2016</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/Tools/">Tools</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/03/31/2016-03-31-hadoop-ha-docker/">docker搭建高可用hadoop集群</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>使用zookeeper和journalnode存储namenode的editlog可确保hadoop的高可用,避免单点故障!</p>
+<p>以下是我近期用docker实验的过程, 很大程度上参见了 <a href="https://github.com/jurmous/hadoop-ha-docker" target="_blank" rel="external">hadoop-ha-docker</a>这个项目, 做了如下修改.</p>
+<ul>
+<li>更换基础镜像为centOS7</li>
+<li>做了ssh免密码登录,方便集群间访问和管理</li>
+<li>去掉了自动化(该自动化并不总是正常运行),初次手工启动很重要,便于观察和调试</li>
+<li>由于基础环境docker 1.10及swarm集群,overlay网络可免掉dns</li>
+<li>做了详细启动记录</li>
+</ul>
+<h3 id="1-_创建镜像及容器">1. 创建镜像及容器</h3>
+<h4 id="1-1_镜像">1.1 镜像</h4>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+</pre></td><td class="code"><pre>docker build -t registry<span class="preprocessor">.mudan</span><span class="preprocessor">.com</span>:<span class="number">5000</span>/peony/hadoop .
+docker <span class="keyword">push</span> registry<span class="preprocessor">.mudan</span><span class="preprocessor">.com</span>:<span class="number">5000</span>/peony/hadoop .
+</pre></td></tr></table></figure>
+
+<h4 id="1-2_容器">1.2 容器</h4>
+<p>结合<a href="http://buttonwood.github.io/2016/03/15/2016-03-15-zookeeper-and-docker/" target="_blank" rel="external">zookeeper-and-docker</a>创建的5个zookeeper容器,我们这里再创建2个namenode,3个journal和3个datanoe.</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+</pre></td><td class="code"><pre><span class="preprocessor"># 2 namenode</span>
+sh nn<span class="preprocessor">.sh</span> hadoop-nn1 dc00<span class="preprocessor">.mudan</span><span class="preprocessor">.com</span> <span class="number">192.168</span><span class="number">.4</span><span class="number">.7</span>
+sh nn<span class="preprocessor">.sh</span> hadoop-nn2 dc04<span class="preprocessor">.mudan</span><span class="preprocessor">.com</span> <span class="number">192.168</span><span class="number">.4</span><span class="number">.8</span>
+<span class="preprocessor"># 3 journal</span>
+sh jn<span class="preprocessor">.sh</span> hadoop-jn1 dc00<span class="preprocessor">.mudan</span><span class="preprocessor">.com</span> <span class="number">192.168</span><span class="number">.4</span><span class="number">.9</span>
+sh jn<span class="preprocessor">.sh</span> hadoop-jn2 dc04<span class="preprocessor">.mudan</span><span class="preprocessor">.com</span> <span class="number">192.168</span><span class="number">.4</span><span class="number">.10</span>
+sh jn<span class="preprocessor">.sh</span> hadoop-jn3 dc05<span class="preprocessor">.mudan</span><span class="preprocessor">.com</span> <span class="number">192.168</span><span class="number">.4</span><span class="number">.11</span>
+<span class="preprocessor"># 3 datanoe</span>
+sh dn<span class="preprocessor">.sh</span> hadoop-dn1 dc00<span class="preprocessor">.mudan</span><span class="preprocessor">.com</span> <span class="number">192.168</span><span class="number">.4</span><span class="number">.12</span>
+sh dn<span class="preprocessor">.sh</span> hadoop-dn2 dc04<span class="preprocessor">.mudan</span><span class="preprocessor">.com</span> <span class="number">192.168</span><span class="number">.4</span><span class="number">.13</span>
+sh dn<span class="preprocessor">.sh</span> hadoop-dn3 dc05<span class="preprocessor">.mudan</span><span class="preprocessor">.com</span> <span class="number">192.168</span><span class="number">.4</span><span class="number">.14</span>
+</pre></td></tr></table></figure>
+
+<p>注意,为了与生产坏境部署一致，我们这里了固定ip的做法，实际上docker的overlay网络是不需要设定固定ip的，通过容器名可以直接进行服务发<br>现。</p>
+<h3 id="2-_启动hadoop集群">2. 启动hadoop集群</h3>
+<h4 id="2-1_格式化_ZooKeeper_集群,在任意的_namenode_上都可以执行">2.1 格式化 ZooKeeper 集群,在任意的 namenode 上都可以执行</h4>
+<p>宿主机登陆nn1容器</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+</pre></td><td class="code"><pre>sdocker exec <span class="attribute">-it</span> hadoop<span class="attribute">-nn1</span> bash
+</pre></td></tr></table></figure>
+
+<p>格式化ZooKeeper</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+</pre></td><td class="code"><pre>$HADOOP_HDFS_HOME/bin/hdfs zkfc -formatZK
+
+<span class="number">16</span>/<span class="number">03</span>/<span class="number">31</span> <span class="number">17</span>:<span class="number">13</span>:<span class="number">27</span> INFO ha<span class="preprocessor">.ActiveStandbyElector</span>: Session connected.
+<span class="number">16</span>/<span class="number">03</span>/<span class="number">31</span> <span class="number">17</span>:<span class="number">13</span>:<span class="number">27</span> INFO ha<span class="preprocessor">.ActiveStandbyElector</span>: Successfully created /hadoop-ha/cluster <span class="keyword">in</span> ZK.
+<span class="number">16</span>/<span class="number">03</span>/<span class="number">31</span> <span class="number">17</span>:<span class="number">13</span>:<span class="number">27</span> INFO zookeeper<span class="preprocessor">.ZooKeeper</span>: Session: <span class="number">0x30010fe11d90001</span> closed
+<span class="number">16</span>/<span class="number">03</span>/<span class="number">31</span> <span class="number">17</span>:<span class="number">13</span>:<span class="number">27</span> INFO zookeeper<span class="preprocessor">.ClientCnxn</span>: EventThread shut down
+</pre></td></tr></table></figure>
+
+<h4 id="2-2_启动_journalnode_结点">2.2  启动 journalnode 结点</h4>
+<p>宿主机上执行</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+</pre></td><td class="code"><pre>sdocker exec <span class="attribute">-it</span> hadoop<span class="attribute">-jn1</span> /usr/<span class="built_in">local</span>/hadoop/sbin/hadoop<span class="attribute">-daemon</span><span class="built_in">.</span>sh start journalnode
+sdocker exec <span class="attribute">-it</span> hadoop<span class="attribute">-jn2</span> /usr/<span class="built_in">local</span>/hadoop/sbin/hadoop<span class="attribute">-daemon</span><span class="built_in">.</span>sh start journalnode
+sdocker exec <span class="attribute">-it</span> hadoop<span class="attribute">-jn3</span> /usr/<span class="built_in">local</span>/hadoop/sbin/hadoop<span class="attribute">-daemon</span><span class="built_in">.</span>sh start journalnode
+</pre></td></tr></table></figure>
+
+<p>宿主机上登录验证</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+</pre></td><td class="code"><pre>sdocker exec <span class="attribute">-it</span> hadoop<span class="attribute">-jn3</span> bash
+</pre></td></tr></table></figure>
+
+<p>容器内查看运行日志</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+</pre></td><td class="code"><pre>tail /usr/local/hadoop/logs/hadoop-root-journalnode-hadoop-jn3<span class="preprocessor">.log</span>
+<span class="number">2016</span>-<span class="number">03</span>-<span class="number">31</span> <span class="number">17</span>:<span class="number">15</span>:<span class="number">58</span>,<span class="number">312</span> INFO org<span class="preprocessor">.mortbay</span><span class="preprocessor">.log</span>: Started HttpServer2$SelectChannelConnectorWithSafeStartup<span class="localvars">@0</span><span class="number">.0</span><span class="number">.0</span><span class="number">.0</span>:<span class="number">8480</span>
+<span class="number">2016</span>-<span class="number">03</span>-<span class="number">31</span> <span class="number">17</span>:<span class="number">16</span>:<span class="number">08</span>,<span class="number">443</span> INFO org<span class="preprocessor">.apache</span><span class="preprocessor">.hadoop</span><span class="preprocessor">.ipc</span><span class="preprocessor">.CallQueueManager</span>: Using callQueue class java<span class="preprocessor">.util</span><span class="preprocessor">.concurrent</span><span class="preprocessor">.LinkedBlockingQueue</span>
+<span class="number">2016</span>-<span class="number">03</span>-<span class="number">31</span> <span class="number">17</span>:<span class="number">16</span>:<span class="number">08</span>,<span class="number">460</span> INFO org<span class="preprocessor">.apache</span><span class="preprocessor">.hadoop</span><span class="preprocessor">.ipc</span><span class="preprocessor">.Server</span>: Starting Socket Reader <span class="preprocessor">#1 for port 8485</span>
+<span class="number">2016</span>-<span class="number">03</span>-<span class="number">31</span> <span class="number">17</span>:<span class="number">16</span>:<span class="number">08</span>,<span class="number">495</span> INFO org<span class="preprocessor">.apache</span><span class="preprocessor">.hadoop</span><span class="preprocessor">.ipc</span><span class="preprocessor">.Server</span>: IPC Server Responder: starting
+<span class="number">2016</span>-<span class="number">03</span>-<span class="number">31</span> <span class="number">17</span>:<span class="number">16</span>:<span class="number">08</span>,<span class="number">495</span> INFO org<span class="preprocessor">.apache</span><span class="preprocessor">.hadoop</span><span class="preprocessor">.ipc</span><span class="preprocessor">.Server</span>: IPC Server listener on <span class="number">8485</span>: starting
+</pre></td></tr></table></figure>
+
+<h4 id="2-3_格式化集群的_NameNode_并启动刚格式化的_NameNode">2.3 格式化集群的 NameNode 并启动刚格式化的 NameNode</h4>
+<p>nn1 容器内</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+</pre></td><td class="code"><pre><span class="variable">$HADOOP_PREFIX</span>/bin/hadoop namenode -<span class="keyword">format</span>
+</pre></td></tr></table></figure>
+
+<p>运行情况</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+</pre></td><td class="code"><pre><span class="number">16</span>/<span class="number">03</span>/<span class="number">31</span> <span class="number">17</span>:<span class="number">19</span>:<span class="number">55</span> WARN ssl.FileBasedKeyStoresFactory: The <span class="keyword">property</span> <span class="string">'ssl.client.truststore.location'</span> <span class="keyword">has</span> <span class="keyword">not</span> been <span class="keyword">set</span>, no TrustStore will be loaded
+<span class="number">16</span>/<span class="number">03</span>/<span class="number">31</span> <span class="number">17</span>:<span class="number">19</span>:<span class="number">55</span> INFO namenode.FSImage: Allocated <span class="keyword">new</span> BlockPoolId: BP-<span class="number">305947057</span>-<span class="number">192.168</span>.<span class="number">4.7</span>-<span class="number">1459415995773</span>
+<span class="number">16</span>/<span class="number">03</span>/<span class="number">31</span> <span class="number">17</span>:<span class="number">19</span>:<span class="number">55</span> INFO common.Storage: Storage directory /mnt/hadoop/dfs/name <span class="keyword">has</span> been successfully formatted.
+<span class="number">16</span>/<span class="number">03</span>/<span class="number">31</span> <span class="number">17</span>:<span class="number">19</span>:<span class="number">56</span> INFO namenode.NNStorageRetentionManager: Going <span class="keyword">to</span> retain <span class="number">1</span> images <span class="keyword">with</span> txid &gt;= <span class="number">0</span>
+<span class="number">16</span>/<span class="number">03</span>/<span class="number">31</span> <span class="number">17</span>:<span class="number">19</span>:<span class="number">56</span> INFO util.ExitUtil: Exiting <span class="keyword">with</span> status <span class="number">0</span>
+<span class="number">16</span>/<span class="number">03</span>/<span class="number">31</span> <span class="number">17</span>:<span class="number">19</span>:<span class="number">56</span> INFO namenode.NameNode: SHUTDOWN_MSG:
+</pre></td></tr></table></figure>
+
+<p>格式化成功, 启动该namenode</p>
+<p>nn1 容器内执行</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+</pre></td><td class="code"><pre><span class="variable">$HADOOP_PREFIX</span>/sbin/hadoop<span class="attribute">-daemon</span><span class="built_in">.</span>sh start namenode
+</pre></td></tr></table></figure>
+
+<p>检查上面运行的日志</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+</pre></td><td class="code"><pre>tail /usr/local/hadoop/logs/hadoop-root-namenode-hadoop-nn1<span class="preprocessor">.log</span>
+
+<span class="number">2016</span>-<span class="number">03</span>-<span class="number">31</span> <span class="number">17</span>:<span class="number">22</span>:<span class="number">44</span>,<span class="number">491</span> INFO org<span class="preprocessor">.apache</span><span class="preprocessor">.hadoop</span><span class="preprocessor">.ipc</span><span class="preprocessor">.Server</span>: IPC Server Responder: starting
+<span class="number">2016</span>-<span class="number">03</span>-<span class="number">31</span> <span class="number">17</span>:<span class="number">22</span>:<span class="number">44</span>,<span class="number">491</span> INFO org<span class="preprocessor">.apache</span><span class="preprocessor">.hadoop</span><span class="preprocessor">.ipc</span><span class="preprocessor">.Server</span>: IPC Server listener on <span class="number">8020</span>: starting
+<span class="number">2016</span>-<span class="number">03</span>-<span class="number">31</span> <span class="number">17</span>:<span class="number">22</span>:<span class="number">44</span>,<span class="number">492</span> INFO org<span class="preprocessor">.apache</span><span class="preprocessor">.hadoop</span><span class="preprocessor">.hdfs</span><span class="preprocessor">.server</span><span class="preprocessor">.namenode</span><span class="preprocessor">.NameNode</span>: NameNode RPC up at: hadoop-nn1/<span class="number">192.168</span><span class="number">.4</span><span class="number">.7</span>:<span class="number">8020</span>
+<span class="number">2016</span>-<span class="number">03</span>-<span class="number">31</span> <span class="number">17</span>:<span class="number">22</span>:<span class="number">44</span>,<span class="number">492</span> INFO org<span class="preprocessor">.apache</span><span class="preprocessor">.hadoop</span><span class="preprocessor">.hdfs</span><span class="preprocessor">.server</span><span class="preprocessor">.namenode</span><span class="preprocessor">.FSNamesystem</span>: Starting services required for standby state
+<span class="number">2016</span>-<span class="number">03</span>-<span class="number">31</span> <span class="number">17</span>:<span class="number">22</span>:<span class="number">44</span>,<span class="number">494</span> INFO org<span class="preprocessor">.apache</span><span class="preprocessor">.hadoop</span><span class="preprocessor">.hdfs</span><span class="preprocessor">.server</span><span class="preprocessor">.namenode</span><span class="preprocessor">.ha</span><span class="preprocessor">.EditLogTailer</span>: Will roll logs on active node at hadoop-nn2/<span class="number">192.168</span><span class="number">.4</span><span class="number">.8</span>:<span class="number">8020</span> every <span class="number">120</span> seconds.
+<span class="number">2016</span>-<span class="number">03</span>-<span class="number">31</span> <span class="number">17</span>:<span class="number">22</span>:<span class="number">44</span>,<span class="number">498</span> INFO org<span class="preprocessor">.apache</span><span class="preprocessor">.hadoop</span><span class="preprocessor">.hdfs</span><span class="preprocessor">.server</span><span class="preprocessor">.namenode</span><span class="preprocessor">.ha</span><span class="preprocessor">.StandbyCheckpointer</span>: Starting standby checkpoint thread...
+Checkpointing active NN at http://hadoop-nn2:<span class="number">50070</span>
+Serving checkpoints at http://hadoop-nn1:<span class="number">50070</span>
+</pre></td></tr></table></figure>
+
+<p>开启nn1上 zookeeper 进程</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+</pre></td><td class="code"><pre>$HADOOP_PREFIX/sbin/hadoop-daemon<span class="preprocessor">.sh</span> start zkfc
+
+tail /usr/local/hadoop/logs/hadoop-root-zkfc-hadoop-nn1<span class="preprocessor">.log</span>
+
+<span class="number">2016</span>-<span class="number">03</span>-<span class="number">31</span> <span class="number">17</span>:<span class="number">27</span>:<span class="number">20</span>,<span class="number">495</span> INFO org<span class="preprocessor">.apache</span><span class="preprocessor">.hadoop</span><span class="preprocessor">.ha</span><span class="preprocessor">.ActiveStandbyElector</span>: Checking for any old active which needs to be fenced...
+<span class="number">2016</span>-<span class="number">03</span>-<span class="number">31</span> <span class="number">17</span>:<span class="number">27</span>:<span class="number">20</span>,<span class="number">502</span> INFO org<span class="preprocessor">.apache</span><span class="preprocessor">.hadoop</span><span class="preprocessor">.ha</span><span class="preprocessor">.ActiveStandbyElector</span>: No old node to fence
+<span class="number">2016</span>-<span class="number">03</span>-<span class="number">31</span> <span class="number">17</span>:<span class="number">27</span>:<span class="number">20</span>,<span class="number">502</span> INFO org<span class="preprocessor">.apache</span><span class="preprocessor">.hadoop</span><span class="preprocessor">.ha</span><span class="preprocessor">.ActiveStandbyElector</span>: Writing znode /hadoop-ha/cluster/ActiveBreadCrumb to indicate that the local node is the most recent active...
+<span class="number">2016</span>-<span class="number">03</span>-<span class="number">31</span> <span class="number">17</span>:<span class="number">27</span>:<span class="number">20</span>,<span class="number">514</span> INFO org<span class="preprocessor">.apache</span><span class="preprocessor">.hadoop</span><span class="preprocessor">.ha</span><span class="preprocessor">.ZKFailoverController</span>: Trying to make NameNode at hadoop-nn1/<span class="number">192.168</span><span class="number">.4</span><span class="number">.7</span>:<span class="number">8020</span> active...
+<span class="number">2016</span>-<span class="number">03</span>-<span class="number">31</span> <span class="number">17</span>:<span class="number">27</span>:<span class="number">21</span>,<span class="number">083</span> INFO org<span class="preprocessor">.apache</span><span class="preprocessor">.hadoop</span><span class="preprocessor">.ha</span><span class="preprocessor">.ZKFailoverController</span>: Successfully transitioned NameNode at hadoop-nn1/<span class="number">192.168</span><span class="number">.4</span><span class="number">.7</span>:<span class="number">8020</span> to active state
+</pre></td></tr></table></figure>
+
+<h4 id="2-4_同步_NameNode1_元数据到_NameNode2_上">2.4 同步 NameNode1 元数据到 NameNode2 上</h4>
+<p>宿主机登录到nn2容器内</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+</pre></td><td class="code"><pre>sdocker exec <span class="attribute">-it</span> hadoop<span class="attribute">-nn2</span> bash
+</pre></td></tr></table></figure>
+
+<p>nn2 执行bootstrapStandby</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+</pre></td><td class="code"><pre>$HADOOP_PREFIX/bin/hadoop namenode -bootstrapStandby
+
+<span class="number">16</span>/<span class="number">03</span>/<span class="number">31</span> <span class="number">17</span>:<span class="number">25</span>:<span class="number">09</span> INFO namenode.TransferFsImage: Opening connection <span class="built_in">to</span> <span class="keyword">http</span>://hadoop-nn1:<span class="number">50070</span>/imagetransfer?getimage=<span class="number">1</span>&txid=<span class="number">0</span>&storageInfo=-<span class="number">57</span>:<span class="number">2142625186</span>:<span class="number">0</span>:CID-<span class="number">22</span>a35ddb-<span class="number">646e-4104</span>-be99-<span class="number">1</span>b7cbc578a83
+<span class="number">16</span>/<span class="number">03</span>/<span class="number">31</span> <span class="number">17</span>:<span class="number">25</span>:<span class="number">09</span> INFO namenode.TransferFsImage: Image Transfer timeout configured <span class="built_in">to</span> <span class="number">60000</span> <span class="built_in">milliseconds</span>
+<span class="number">16</span>/<span class="number">03</span>/<span class="number">31</span> <span class="number">17</span>:<span class="number">25</span>:<span class="number">09</span> INFO namenode.TransferFsImage: Transfer took <span class="number">0.02</span>s <span class="keyword">at</span> <span class="number">0.00</span> KB/s
+<span class="number">16</span>/<span class="number">03</span>/<span class="number">31</span> <span class="number">17</span>:<span class="number">25</span>:<span class="number">09</span> INFO namenode.TransferFsImage: Downloaded <span class="built_in">file</span> fsimage.ckpt_0000000000000000000 size <span class="number">351</span> <span class="keyword">bytes</span>.
+<span class="number">16</span>/<span class="number">03</span>/<span class="number">31</span> <span class="number">17</span>:<span class="number">25</span>:<span class="number">09</span> INFO util.ExitUtil: Exiting <span class="operator">with</span> status <span class="number">0</span>
+<span class="number">16</span>/<span class="number">03</span>/<span class="number">31</span> <span class="number">17</span>:<span class="number">25</span>:<span class="number">09</span> INFO namenode.NameNode: SHUTDOWN_MSG:
+</pre></td></tr></table></figure>
+
+<p>成功后同上nn1过程启动namenode</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+</pre></td><td class="code"><pre>$HADOOP_PREFIX/sbin/hadoop-daemon<span class="preprocessor">.sh</span> start namenode
+tail /usr/local/hadoop/logs/hadoop-root-namenode-hadoop-nn2<span class="preprocessor">.log</span>
+
+<span class="number">2016</span>-<span class="number">03</span>-<span class="number">31</span> <span class="number">17</span>:<span class="number">26</span>:<span class="number">25</span>,<span class="number">011</span> INFO org<span class="preprocessor">.apache</span><span class="preprocessor">.hadoop</span><span class="preprocessor">.ipc</span><span class="preprocessor">.Server</span>: IPC Server Responder: starting
+<span class="number">2016</span>-<span class="number">03</span>-<span class="number">31</span> <span class="number">17</span>:<span class="number">26</span>:<span class="number">25</span>,<span class="number">011</span> INFO org<span class="preprocessor">.apache</span><span class="preprocessor">.hadoop</span><span class="preprocessor">.ipc</span><span class="preprocessor">.Server</span>: IPC Server listener on <span class="number">8020</span>: starting
+<span class="number">2016</span>-<span class="number">03</span>-<span class="number">31</span> <span class="number">17</span>:<span class="number">26</span>:<span class="number">25</span>,<span class="number">013</span> INFO org<span class="preprocessor">.apache</span><span class="preprocessor">.hadoop</span><span class="preprocessor">.hdfs</span><span class="preprocessor">.server</span><span class="preprocessor">.namenode</span><span class="preprocessor">.NameNode</span>: NameNode RPC up at: hadoop-nn2/<span class="number">192.168</span><span class="number">.4</span><span class="number">.8</span>:<span class="number">8020</span>
+<span class="number">2016</span>-<span class="number">03</span>-<span class="number">31</span> <span class="number">17</span>:<span class="number">26</span>:<span class="number">25</span>,<span class="number">013</span> INFO org<span class="preprocessor">.apache</span><span class="preprocessor">.hadoop</span><span class="preprocessor">.hdfs</span><span class="preprocessor">.server</span><span class="preprocessor">.namenode</span><span class="preprocessor">.FSNamesystem</span>: Starting services required for standby state
+<span class="number">2016</span>-<span class="number">03</span>-<span class="number">31</span> <span class="number">17</span>:<span class="number">26</span>:<span class="number">25</span>,<span class="number">015</span> INFO org<span class="preprocessor">.apache</span><span class="preprocessor">.hadoop</span><span class="preprocessor">.hdfs</span><span class="preprocessor">.server</span><span class="preprocessor">.namenode</span><span class="preprocessor">.ha</span><span class="preprocessor">.EditLogTailer</span>: Will roll logs on active node at hadoop-nn1/<span class="number">192.168</span><span class="number">.4</span><span class="number">.7</span>:<span class="number">8020</span> every <span class="number">120</span> seconds.
+<span class="number">2016</span>-<span class="number">03</span>-<span class="number">31</span> <span class="number">17</span>:<span class="number">26</span>:<span class="number">25</span>,<span class="number">019</span> INFO org<span class="preprocessor">.apache</span><span class="preprocessor">.hadoop</span><span class="preprocessor">.hdfs</span><span class="preprocessor">.server</span><span class="preprocessor">.namenode</span><span class="preprocessor">.ha</span><span class="preprocessor">.StandbyCheckpointer</span>: Starting standby checkpoint thread...
+Checkpointing active NN at http://hadoop-nn1:<span class="number">50070</span>
+Serving checkpoints at http://hadoop-nn2:<span class="number">50070</span>
+</pre></td></tr></table></figure>
+
+<p>及zkfc</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+</pre></td><td class="code"><pre>$HADOOP_PREFIX/sbin/hadoop-daemon<span class="preprocessor">.sh</span> start zkfc
+
+tail /usr/local/hadoop/logs/hadoop-root-zkfc-hadoop-nn2<span class="preprocessor">.log</span>
+<span class="number">2016</span>-<span class="number">03</span>-<span class="number">31</span> <span class="number">17</span>:<span class="number">28</span>:<span class="number">15</span>,<span class="number">782</span> INFO org<span class="preprocessor">.apache</span><span class="preprocessor">.hadoop</span><span class="preprocessor">.ha</span><span class="preprocessor">.ZKFailoverController</span>: Local service NameNode at hadoop-nn2/<span class="number">192.168</span><span class="number">.4</span><span class="number">.8</span>:<span class="number">8020</span> entered state: SERVICE_HEALTHY
+<span class="number">2016</span>-<span class="number">03</span>-<span class="number">31</span> <span class="number">17</span>:<span class="number">28</span>:<span class="number">15</span>,<span class="number">821</span> INFO org<span class="preprocessor">.apache</span><span class="preprocessor">.hadoop</span><span class="preprocessor">.ha</span><span class="preprocessor">.ZKFailoverController</span>: ZK Election indicated that NameNode at hadoop-nn2/<span class="number">192.168</span><span class="number">.4</span><span class="number">.8</span>:<span class="number">8020</span> should become standby
+<span class="number">2016</span>-<span class="number">03</span>-<span class="number">31</span> <span class="number">17</span>:<span class="number">28</span>:<span class="number">15</span>,<span class="number">832</span> INFO org<span class="preprocessor">.apache</span><span class="preprocessor">.hadoop</span><span class="preprocessor">.ha</span><span class="preprocessor">.ZKFailoverController</span>: Successfully transitioned NameNode at hadoop-nn2/<span class="number">192.168</span><span class="number">.4</span><span class="number">.8</span>:<span class="number">8020</span> to standby state
+</pre></td></tr></table></figure>
+
+<h4 id="2-5_启动所有datanode">2.5 启动所有datanode</h4>
+<p>可在宿主机上启动</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+</pre></td><td class="code"><pre>sdocker exec <span class="attribute">-it</span> hadoop<span class="attribute">-dn1</span> /usr/<span class="built_in">local</span>/hadoop/sbin/hadoop<span class="attribute">-daemon</span><span class="built_in">.</span>sh start datanode
+sdocker exec <span class="attribute">-it</span> hadoop<span class="attribute">-dn2</span> /usr/<span class="built_in">local</span>/hadoop/sbin/hadoop<span class="attribute">-daemon</span><span class="built_in">.</span>sh start datanode
+sdocker exec <span class="attribute">-it</span> hadoop<span class="attribute">-dn3</span> /usr/<span class="built_in">local</span>/hadoop/sbin/hadoop<span class="attribute">-daemon</span><span class="built_in">.</span>sh start datanode
+</pre></td></tr></table></figure>
+
+<p>进入容器内部检查运行日志</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+</pre></td><td class="code"><pre>sdocker exec -it hadoop-dn1 bash
+
+tail /usr/local/hadoop/logs/hadoop-root-datanode-hadoop-dn1<span class="preprocessor">.log</span>
+
+<span class="number">2016</span>-<span class="number">03</span>-<span class="number">31</span> <span class="number">17</span>:<span class="number">31</span>:<span class="number">23</span>,<span class="number">791</span> INFO org<span class="preprocessor">.apache</span><span class="preprocessor">.hadoop</span><span class="preprocessor">.hdfs</span><span class="preprocessor">.server</span><span class="preprocessor">.datanode</span><span class="preprocessor">.BlockPoolSliceScanner</span>: Periodic Block Verification Scanner initialized with interval <span class="number">504</span> hours for block pool BP-<span class="number">305947057</span>-<span class="number">192.168</span><span class="number">.4</span><span class="number">.7</span>-<span class="number">1459415995773</span>
+<span class="number">2016</span>-<span class="number">03</span>-<span class="number">31</span> <span class="number">17</span>:<span class="number">31</span>:<span class="number">23</span>,<span class="number">795</span> INFO org<span class="preprocessor">.apache</span><span class="preprocessor">.hadoop</span><span class="preprocessor">.hdfs</span><span class="preprocessor">.server</span><span class="preprocessor">.datanode</span><span class="preprocessor">.DataBlockScanner</span>: Added bpid=BP-<span class="number">305947057</span>-<span class="number">192.168</span><span class="number">.4</span><span class="number">.7</span>-<span class="number">1459415995773</span> to blockPoolScannerMap, new size=<span class="number">1</span>
+</pre></td></tr></table></figure>
+
+<p>以上! 文档请移步 !</p>
+<p><a href="https://github.com/iofdata/Docker/tree/master/hadoop" target="_blank" rel="external">https://github.com/iofdata/Docker/tree/master/hadoop</a></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://buttonwood.bitbucket.org/2016/03/31/2016-03-31-hadoop-ha-docker/" data-id="h0jg2skl19gc5vsf" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/docker/">docker</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/hadoop/">hadoop</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+<!-- DISQUS
+
+-->
+
+
+
+  
+    <article id="post-2016-03-31-hbase-region-in-transition" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2016/03/31/2016-03-31-hbase-region-in-transition/" class="article-date">
+  <time datetime="2016-03-31T11:51:00.000Z" itemprop="datePublished">Mar 31 2016</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/Tools/">Tools</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/03/31/2016-03-31-hbase-region-in-transition/">hbase region in transition too long</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="1-_问题描述">1. 问题描述</h3>
+<p>2016年3月30日晚上10:15左右收到下载量低和爬虫流量低报警，意识到可能hbase存数据可能出问题，打开</p>
+<p><a href="119.254.110.32:60010/master-status#baseStats" target="_blank" rel="external">hbase监控页面</a></p>
+<p><img src="http://ww3.sinaimg.cn/large/6fbc15dcgw1f2g9oyhxyrj20ui0dxgog.jpg" alt=""></p>
+<p>有两个hbase结点宕机, 于是马上登陆相关服务器重启hbase服务。</p>
+<h3 id="2-_事后分析">2. 事后分析</h3>
+<p>zookeeper 网络抖动导致hhbase01/hbase02 被hbase-master下线。</p>
+<p>zookeeper 网络抖动。</p>
+<p><img src="http://ww4.sinaimg.cn/large/6fbc15dcgw1f2fz89mwhmj20m10cb0tt.jpg" alt=""></p>
+<p>hbase02 不能获取路由。</p>
+<p><img src="http://ww4.sinaimg.cn/large/6fbc15dcgw1f2g9togeloj20wx0e4k0m.jpg" alt=""></p>
+<p>hbase-master 将其标记为dead node 作下线处理。</p>
+<p><img src="http://ww3.sinaimg.cn/large/6fbc15dcgw1f2g9y4nzf3j20z006edjl.jpg" alt=""></p>
+<h3 id="3-_附加问题">3. 附加问题</h3>
+<p>重启hbase01 和 hbase02的过程中，hbase02与hbase05交互的一个region卡死，导致hbase02不能起来，整个集群无法做blancer， 20160331早上1点15集群崩溃，整个系统瘫痪。 我在早上六点半左右重启了hbase05和hbase02，问题解决。</p>
+<p>hbase02 无法起来，大量滚动 hfile.LruBlockCache </p>
+<p><img src="http://ww3.sinaimg.cn/large/6fbc15dcgw1f2ga58898xj20z909fjyw.jpg" alt=""></p>
+<p>master 无法 running balancer because 1 region(s) in transition</p>
+<p><img src="http://ww1.sinaimg.cn/large/6fbc15dcgw1f2ga2h6ozvj20z5089n36.jpg" alt=""></p>
+<p>回溯问题，可能断网那个时候, hbase05 该 region 在 in transition 过程中被标记为pending, 但是转移中，连接被重置，接着hbase02掉线重启，hbase02自身的wal记录状态和zookeerper 里面的状态不一致，拿不到该region，起不来服务,进而慢慢影响整个集群。</p>
+<p>hbase05 Connection reset by peer<br><img src="http://ww4.sinaimg.cn/large/6fbc15dcgw1f2gaab1d0dj20xe08rq74.jpg" alt=""></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://buttonwood.bitbucket.org/2016/03/31/2016-03-31-hbase-region-in-transition/" data-id="p87jxb8dun00talp" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/hbase/">hbase</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+<!-- DISQUS
+
+-->
+
+
+
+  
     <article id="post-2016-03-15-zookeeper-and-docker" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2016/03/15/2016-03-15-zookeeper-and-docker/" class="article-date">
@@ -310,10 +684,346 @@ IPADDRESS=<span class="variable">$MYIP</span>
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://buttonwood.bitbucket.org/2016/03/15/2016-03-15-zookeeper-and-docker/" data-id="zfp774k9z41kd1tg" class="article-share-link">Share</a>
+      <a data-url="http://buttonwood.bitbucket.org/2016/03/15/2016-03-15-zookeeper-and-docker/" data-id="xj2q0utmhu939xv2" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/docker/">docker</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/zookeeper/">zookeeper</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+<!-- DISQUS
+
+-->
+
+
+
+  
+    <article id="post-2016-03-10-docker-consul" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2016/03/10/2016-03-10-docker-consul/" class="article-date">
+  <time datetime="2016-03-10T13:51:00.000Z" itemprop="datePublished">Mar 10 2016</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/Tools/">Tools</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/03/10/2016-03-10-docker-consul/">docker consul 服务发现</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="1-_DC01_192-168-9-8">1. DC01 192.168.9.8</h3>
+<p>拉镜像, 起服务</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+</pre></td><td class="code"><pre><span class="char">$ </span>docker pull progrium/consul
+<span class="char">$ </span>mkdir ~/consul
+<span class="char">$ </span>docker run --rm progrium/consul <span class="method">cmd:</span>run <span class="number">192.168</span><span class="number">.9</span><span class="number">.8</span> -d -v ~/<span class="method">consul:</span>/data
+</pre></td></tr></table></figure>
+
+<p>运行上面生成的脚本</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+</pre></td><td class="code"><pre>docker run --name consul -h $HOSTNAME \
+    -<span class="ruby">p <span class="number">192.168</span>.<span class="number">9.8</span><span class="symbol">:</span><span class="number">8300</span><span class="symbol">:</span><span class="number">8300</span> \
+</span>    -<span class="ruby">p <span class="number">192.168</span>.<span class="number">9.8</span><span class="symbol">:</span><span class="number">8301</span><span class="symbol">:</span><span class="number">8301</span> \
+</span>    -<span class="ruby">p <span class="number">192.168</span>.<span class="number">9.8</span><span class="symbol">:</span><span class="number">8301</span><span class="symbol">:</span><span class="number">8301</span>/udp \
+</span>    -<span class="ruby">p <span class="number">192.168</span>.<span class="number">9.8</span><span class="symbol">:</span><span class="number">8302</span><span class="symbol">:</span><span class="number">8302</span> \
+</span>    -<span class="ruby">p <span class="number">192.168</span>.<span class="number">9.8</span><span class="symbol">:</span><span class="number">8302</span><span class="symbol">:</span><span class="number">8302</span>/udp \
+</span>    -<span class="ruby">p <span class="number">192.168</span>.<span class="number">9.8</span><span class="symbol">:</span><span class="number">8400</span><span class="symbol">:</span><span class="number">8400</span> \
+</span>    -<span class="ruby">p <span class="number">192.168</span>.<span class="number">9.8</span><span class="symbol">:</span><span class="number">8500</span><span class="symbol">:</span><span class="number">8500</span> \
+</span>    -<span class="ruby">p <span class="number">172.17</span>.<span class="number">0</span>.<span class="number">1</span><span class="symbol">:</span><span class="number">53</span><span class="symbol">:</span><span class="number">53</span>  \
+</span>    -<span class="ruby">p <span class="number">172.17</span>.<span class="number">0</span>.<span class="number">1</span><span class="symbol">:</span><span class="number">53</span><span class="symbol">:</span><span class="number">53</span>/udp \
+</span>    -<span class="ruby">d -v /home/ubuntu/<span class="symbol">consul:</span>/data \
+</span>    progrium/consul -server -advertise 192.168.9.8 -bootstrap-expect 3 -ui-dir /ui
+</pre></td></tr></table></figure>
+
+<p>验证本结点信息</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+</pre></td><td class="code"><pre><span class="comment">#$ curl localhost:8500/v1/catalog/nodes</span>
+<span class="variable">$ </span>curl <span class="symbol">dc01:</span><span class="number">8500</span>/v1/catalog/nodes
+<span class="variable">$ </span>dig <span class="variable">@0</span>.<span class="number">0</span>.<span class="number">0</span>.<span class="number">0</span> -p <span class="number">8600</span> node1.node.consul
+</pre></td></tr></table></figure>
+
+<h3 id="2-_DC02_192-168-9-253">2. DC02 192.168.9.253</h3>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+</pre></td><td class="code"><pre><span class="char">$ </span>docker pull progrium/consul
+<span class="char">$ </span>mkdir ~/consul
+<span class="char">$ </span>docker run --rm progrium/consul <span class="method">cmd:</span>run <span class="number">192.168</span><span class="number">.9</span><span class="number">.253</span>::<span class="number">192.168</span><span class="number">.9</span><span class="number">.8</span> -d -v ~/<span class="method">consul:</span>/data
+</pre></td></tr></table></figure>
+
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+</pre></td><td class="code"><pre>docker run --name consul -h $HOSTNAME 
+    -<span class="ruby">p <span class="number">192.168</span>.<span class="number">9.253</span><span class="symbol">:</span><span class="number">8300</span><span class="symbol">:</span><span class="number">8300</span> \
+</span>    -<span class="ruby">p <span class="number">192.168</span>.<span class="number">9.253</span><span class="symbol">:</span><span class="number">8301</span><span class="symbol">:</span><span class="number">8301</span> \
+</span>    -<span class="ruby">p <span class="number">192.168</span>.<span class="number">9.253</span><span class="symbol">:</span><span class="number">8301</span><span class="symbol">:</span><span class="number">8301</span>/udp \
+</span>    -<span class="ruby">p <span class="number">192.168</span>.<span class="number">9.253</span><span class="symbol">:</span><span class="number">8302</span><span class="symbol">:</span><span class="number">8302</span> \
+</span>    -<span class="ruby">p <span class="number">192.168</span>.<span class="number">9.253</span><span class="symbol">:</span><span class="number">8302</span><span class="symbol">:</span><span class="number">8302</span>/udp \
+</span>    -<span class="ruby">p <span class="number">192.168</span>.<span class="number">9.253</span><span class="symbol">:</span><span class="number">8400</span><span class="symbol">:</span><span class="number">8400</span> \
+</span>    -<span class="ruby">p <span class="number">192.168</span>.<span class="number">9.253</span><span class="symbol">:</span><span class="number">8500</span><span class="symbol">:</span><span class="number">8500</span> \
+</span>    -<span class="ruby">p <span class="number">172.17</span>.<span class="number">0</span>.<span class="number">1</span><span class="symbol">:</span><span class="number">53</span><span class="symbol">:</span><span class="number">53</span> \
+</span>    -<span class="ruby">p <span class="number">172.17</span>.<span class="number">0</span>.<span class="number">1</span><span class="symbol">:</span><span class="number">53</span><span class="symbol">:</span><span class="number">53</span>/udp \
+</span>    -<span class="ruby">d -v /home/ubuntu/<span class="symbol">consul:</span>/data \
+</span>    progrium/consul -server -advertise 192.168.9.253 -join 192.168.9.8
+</pre></td></tr></table></figure>
+
+<h3 id="3-_DC03_192-168-9-252">3. DC03 192.168.9.252</h3>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+</pre></td><td class="code"><pre><span class="char">$ </span>docker pull progrium/consul
+<span class="char">$ </span>mkdir ~/consul
+<span class="char">$ </span><span class="char">$(</span>docker run --rm progrium/consul <span class="method">cmd:</span>run <span class="number">192.168</span><span class="number">.9</span><span class="number">.252</span>::<span class="number">192.168</span><span class="number">.9</span><span class="number">.8</span> -d -v ~/<span class="method">consul:</span>/data)
+</pre></td></tr></table></figure>
+
+<h3 id="4-_DC01_192-168-9-8_验证">4. DC01 192.168.9.8 验证</h3>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+</pre></td><td class="code"><pre><span class="variable">$ </span>curl <span class="symbol">dc01:</span><span class="number">8500</span>/v1/catalog/nodes
+[{<span class="string">"Node"</span><span class="symbol">:<span class="string">"dc01.mudan.com"</span></span>,<span class="string">"Address"</span><span class="symbol">:<span class="string">"192.168.9.8"</span></span>},{<span class="string">"Node"</span><span class="symbol">:<span class="string">"dc02.mudan.com"</span></span>,<span class="string">"Address"</span><span class="symbol">:<span class="string">"192.168.9.253"</span></span>},{<span class="string">"Node"</span><span class="symbol">:<span class="string">"dc03.mudan.com"</span></span>,<span class="string">"Address"</span><span class="symbol">:<span class="string">"192.168.9.252"</span></span>}]
+</pre></td></tr></table></figure>
+
+<h4 id="consul_参考资料">consul 参考资料</h4>
+<p><a href="https://hub.docker.com/r/progrium/consul/" target="_blank" rel="external">https://hub.docker.com/r/progrium/consul/</a><br><a href="http://jlordiales.me/2015/02/03/registrator/" target="_blank" rel="external">http://jlordiales.me/2015/02/03/registrator/</a><br><a href="http://artplustech.com/docker-consul-dns-registrator/" target="_blank" rel="external">http://artplustech.com/docker-consul-dns-registrator/</a><br><a href="https://www.spirulasystems.com/blog/2015/06/25/building-an-automatic-environment-using-consul-and-docker-part-1/" target="_blank" rel="external">https://www.spirulasystems.com/blog/2015/06/25/building-an-automatic-environment-using-consul-and-docker-part-1/</a><br><a href="https://docs.docker.com/v1.5/swarm/discovery/" target="_blank" rel="external">https://docs.docker.com/v1.5/swarm/discovery/</a><br><a href="http://tonybai.com/2015/07/06/implement-distributed-services-registery-and-discovery-by-consul/" target="_blank" rel="external">http://tonybai.com/2015/07/06/implement-distributed-services-registery-and-discovery-by-consul/</a>        </p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://buttonwood.bitbucket.org/2016/03/10/2016-03-10-docker-consul/" data-id="2amu5bkr69by67z6" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/consul/">consul</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/docker/">docker</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+<!-- DISQUS
+
+-->
+
+
+
+  
+    <article id="post-2016-03-10-docker-registry" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2016/03/10/2016-03-10-docker-registry/" class="article-date">
+  <time datetime="2016-03-10T08:51:00.000Z" itemprop="datePublished">Mar 10 2016</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/Tools/">Tools</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/03/10/2016-03-10-docker-registry/">docker registry 搭建</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="DC01-192-168-9-8">DC01-192.168.9.8</h3>
+<h4 id="1-_工作目录">1. 工作目录</h4>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+</pre></td><td class="code"><pre><span class="variable">$ </span>mkdir -p /home/ubuntu/registry
+<span class="variable">$ </span>cd /home/ubuntu/registry
+<span class="comment"># sudo docker run -d -p 5000:5000 -v `pwd`/data:/var/lib/registry --restart=always --name registry registry:2</span>
+</pre></td></tr></table></figure>
+
+<h4 id="2-_CA证书">2. CA证书</h4>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+</pre></td><td class="code"><pre>$ mkdir certs
+$ openssl req -newkey rsa:<span class="number">2048</span> -nodes -sha256 -keyout certs/registry<span class="preprocessor">.mudan</span><span class="preprocessor">.com</span><span class="preprocessor">.key</span> -x509 -days <span class="number">3650</span> -<span class="keyword">out</span> certs/registry<span class="preprocessor">.mudan</span><span class="preprocessor">.com</span><span class="preprocessor">.crt</span>
+</pre></td></tr></table></figure>
+
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+</pre></td><td class="code"><pre><span class="tag">Country</span> <span class="tag">Name</span> (2 <span class="tag">letter</span> <span class="tag">code</span>) <span class="attr_selector">[AU]</span><span class="pseudo">:CN</span>
+<span class="tag">State</span> <span class="tag">or</span> <span class="tag">Province</span> <span class="tag">Name</span> (<span class="tag">full</span> <span class="tag">name</span>) <span class="attr_selector">[Some-State]</span><span class="pseudo">:HB</span>
+<span class="tag">Locality</span> <span class="tag">Name</span> (<span class="tag">eg</span>, <span class="tag">city</span>) <span class="attr_selector">[]</span><span class="pseudo">:Wuhan</span>
+<span class="tag">Organization</span> <span class="tag">Name</span> (<span class="tag">eg</span>, <span class="tag">company</span>) <span class="attr_selector">[Internet Widgits Pty Ltd]</span><span class="pseudo">:PEONY</span>
+<span class="tag">Organizational</span> <span class="tag">Unit</span> <span class="tag">Name</span> (<span class="tag">eg</span>, <span class="tag">section</span>) <span class="attr_selector">[]</span><span class="pseudo">:DATA</span>
+<span class="tag">Common</span> <span class="tag">Name</span> (<span class="tag">e</span><span class="class">.g</span>. <span class="tag">server</span> <span class="tag">FQDN</span> <span class="tag">or</span> <span class="tag">YOUR</span> <span class="tag">name</span>) <span class="attr_selector">[]</span><span class="pseudo">:registry</span><span class="class">.mudan</span><span class="class">.com</span>
+<span class="tag">Email</span> <span class="tag">Address</span> <span class="attr_selector">[]</span><span class="pseudo">:peony_wh</span><span class="at_rule">@<span class="keyword">163.com</span></span>
+</pre></td></tr></table></figure>
+
+<p>重新启动</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+</pre></td><td class="code"><pre>$ docker stop registry
+$ docker rm registry
+$ docker run -d -p 5000:5000 --restart=always --name registry \
+  -<span class="ruby">v `pwd`/<span class="symbol">data:</span>/var/lib/registry \
+</span>  -<span class="ruby">v `pwd`/<span class="symbol">certs:</span>/certs \
+</span>  -<span class="ruby">e <span class="constant">REGISTRY_HTTP_TLS_CERTIFICATE</span>=<span class="regexp">/certs/registry</span>.mudan.com.crt \
+</span>  -<span class="ruby">e <span class="constant">REGISTRY_HTTP_TLS_KEY</span>=<span class="regexp">/certs/registry</span>.mudan.com.key \
+</span>  registry:2
+$ sudo vi /etc/hosts
+192.168.9.8 registry.mudan.com registry
+</pre></td></tr></table></figure>
+
+<p>拷贝证书</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+</pre></td><td class="code"><pre>$ sudo mkdir -p /etc/docker/certs<span class="preprocessor">.d</span>/registry<span class="preprocessor">.mudan</span><span class="preprocessor">.com</span>:<span class="number">5000</span>
+$ sudo <span class="keyword">cp</span> certs/registry<span class="preprocessor">.mudan</span><span class="preprocessor">.com</span><span class="preprocessor">.crt</span> /etc/docker/certs<span class="preprocessor">.d</span>/registry<span class="preprocessor">.mudan</span><span class="preprocessor">.com</span>:<span class="number">5000</span>/ca<span class="preprocessor">.crt</span>
+$ sudo service docker restart
+</pre></td></tr></table></figure>
+
+<p>推送镜像</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+</pre></td><td class="code"><pre>docker pull busybox:latest
+docker tag busybox:latest registry<span class="preprocessor">.mudan</span><span class="preprocessor">.com</span>:<span class="number">5000</span>/peony/busybox:latest
+docker <span class="keyword">push</span> registry<span class="preprocessor">.mudan</span><span class="preprocessor">.com</span>:<span class="number">5000</span>/peony/busybox
+</pre></td></tr></table></figure>
+
+<h4 id="3-_其他节点">3. 其他节点</h4>
+<p>DC03 192.168.9.252</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+</pre></td><td class="code"><pre><span class="variable">$ </span>sudo mkdir -p /etc/docker/certs.d/registry.mudan.<span class="symbol">com:</span><span class="number">5000</span>
+<span class="variable">$ </span>sudo scp ubuntu<span class="variable">@192</span>.<span class="number">168.9</span>.<span class="number">8</span><span class="symbol">:/home/ubuntu/registry/certs/registry</span>.mudan.com.crt \
+    /etc/docker/certs.d/registry.mudan.<span class="symbol">com:</span><span class="number">5000</span>/
+<span class="variable">$ </span>docker pull registry.mudan.<span class="symbol">com:</span><span class="number">5000</span>/peony/busybox
+<span class="variable">$ </span>docker images
+</pre></td></tr></table></figure>
+
+<h4 id="4-_账号登陆，待完成">4. 账号登陆，待完成</h4>
+<h4 id="参考资料">参考资料</h4>
+<p><a href="https://github.com/docker/distribution/blob/master/docs/deploying.md" target="_blank" rel="external">https://github.com/docker/distribution/blob/master/docs/deploying.md</a></p>
+<p><a href="https://github.com/docker/distribution/blob/master/docs/configuration.md#storage" target="_blank" rel="external">https://github.com/docker/distribution/blob/master/docs/configuration.md#storage</a></p>
+<p><a href="http://seanlook.com/2014/11/13/deploy-private-docker-registry-with-nginx-ssl/" target="_blank" rel="external">http://seanlook.com/2014/11/13/deploy-private-docker-registry-with-nginx-ssl/</a></p>
+<p><a href="http://tonybai.com/" target="_blank" rel="external">http://tonybai.com/</a></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://buttonwood.bitbucket.org/2016/03/10/2016-03-10-docker-registry/" data-id="t74qfninu1evcrml" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/docker/">docker</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/registry/">registry</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+<!-- DISQUS
+
+-->
+
+
+
+  
+    <article id="post-2016-03-05-docker-mysql-cobar" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2016/03/05/2016-03-05-docker-mysql-cobar/" class="article-date">
+  <time datetime="2016-03-05T07:51:00.000Z" itemprop="datePublished">Mar 5 2016</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/Tools/">Tools</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/03/05/2016-03-05-docker-mysql-cobar/">docker搭建分布式数据库</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>这是一篇用docker搭建分布式数据库的实验文档,详情请移步如下:</p>
+<p><a href="https://github.com/Buttonwood/DOCKER-COBAR/blob/master/README.md" target="_blank" rel="external">docker-mysql-cobar</a></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://buttonwood.bitbucket.org/2016/03/05/2016-03-05-docker-mysql-cobar/" data-id="vp3ahmflbaciltt5" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/cobar/">cobar</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/docker/">docker</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/mysql/">mysql</a></li></ul>
 
     </footer>
   </div>
@@ -392,7 +1102,7 @@ IPADDRESS=<span class="variable">$MYIP</span>
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://buttonwood.bitbucket.org/2016/02/17/2016-02-17-ElasticSearch-Queen-Too-High/" data-id="rp9olu76952v3410" class="article-share-link">Share</a>
+      <a data-url="http://buttonwood.bitbucket.org/2016/02/17/2016-02-17-ElasticSearch-Queen-Too-High/" data-id="z8rywluv6or7k90t" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/ElasticSearch/">ElasticSearch</a></li></ul>
@@ -570,7 +1280,7 @@ userId=1526 AND publishDate&lt;'2016-01-01';
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://buttonwood.bitbucket.org/2016/01/29/2016-01-29-mysql-truncate-partition/" data-id="89io9xex65kp6p09" class="article-share-link">Share</a>
+      <a data-url="http://buttonwood.bitbucket.org/2016/01/29/2016-01-29-mysql-truncate-partition/" data-id="q0ddpoiwic17gno8" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/git/">git</a></li></ul>
@@ -686,7 +1396,7 @@ git <span class="keyword">push</span> -u origin master
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://buttonwood.bitbucket.org/2015/01/16/2015-01-16-gitlab-workflow/" data-id="e7mtk3x3pcfiowcc" class="article-share-link">Share</a>
+      <a data-url="http://buttonwood.bitbucket.org/2015/01/16/2015-01-16-gitlab-workflow/" data-id="vkqnoassfov38h1d" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/git/">git</a></li></ul>
@@ -845,548 +1555,10 @@ print(<span class="keyword">value</span>)
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://buttonwood.bitbucket.org/2015/01/14/Writing-idiomatic-python/" data-id="7ykfgfmqga7m0cr7" class="article-share-link">Share</a>
+      <a data-url="http://buttonwood.bitbucket.org/2015/01/14/Writing-idiomatic-python/" data-id="8g3frtdo9fqxyqe1" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Python/">Python</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Tips/">Tips</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-<!-- DISQUS
-
--->
-
-
-
-  
-    <article id="post-2014-12-31-gitlab" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2014/12/31/2014-12-31-gitlab/" class="article-date">
-  <time datetime="2014-12-31T02:51:00.000Z" itemprop="datePublished">Dec 31 2014</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/Tips/">Tips</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2014/12/31/2014-12-31-gitlab/">使用gitlab搭建代码仓库</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>我来之前，公司一直用windows server搭建的svn托管代码，每次都要手动远程登陆到服务器然后后台授权。我看网上很多类github的平台，于是选了gitlab实验推荐大家迁移到git上来。</p>
-<h3 id="1-_搭建脚本很简单，下载安装包，启动即可。">1. 搭建脚本很简单，下载安装包，启动即可。</h3>
-<figure class="highlight"><table><tr><td class="gutter"><pre>1
-2
-3
-4
-5
-6
-7
-</pre></td><td class="code"><pre>curl -O https://downloads-packages<span class="preprocessor">.s</span>3<span class="preprocessor">.amazonaws</span><span class="preprocessor">.com</span>/centos-<span class="number">6.6</span>/gitlab-<span class="number">7.6</span><span class="number">.1</span>_omnibus<span class="number">.5</span><span class="number">.3</span><span class="number">.0</span><span class="preprocessor">.ci</span><span class="number">.1</span>-<span class="number">1.</span>el6<span class="preprocessor">.x</span>86_64<span class="preprocessor">.rpm</span>
-
-yum install openssh-server postfix cronie
-
-service postfix start && chkconfig postfix on
-
-rpm -i gitlab-<span class="number">7.6</span><span class="number">.1</span>_omnibus<span class="number">.5</span><span class="number">.3</span><span class="number">.0</span><span class="preprocessor">.ci</span><span class="number">.1</span>-<span class="number">1.</span>el6<span class="preprocessor">.x</span>86_64<span class="preprocessor">.rpm</span>
-</pre></td></tr></table></figure>
-
-<p>然后按说明配置一下gitlab.rb，启动服务即可。注意8080端口和ssh端口转发。</p>
-<h3 id="2-_用docker来更新最新版本的gitlab">2. 用docker来更新最新版本的gitlab</h3>
-<p>Updated 2016-03-24 </p>
-<figure class="highlight"><table><tr><td class="gutter"><pre>1
-2
-3
-4
-5
-6
-7
-8
-9
-10
-11
-12
-13
-14
-15
-16
-17
-18
-19
-</pre></td><td class="code"><pre>## 修改防火墙
-iptables -A INPUT -m state --state NEW -p tcp --dport 10022 -j ACCEPT
-iptables -A INPUT -m state --state NEW -p tcp --dport 8080 -j ACCEPT
-service iptables save
-service iptables status
-service iptables restart
-iptables -L
-
-service docker restart
-docker run --detach \
-    -<span class="ruby">-hostname gitlab.example.com \
-</span>    -<span class="ruby">-env <span class="constant">GITLAB_OMNIBUS_CONFIG</span>=<span class="string">"external_url 'http://119.*.*.*/'; gitlab_rails['lfs_enabled'] = true;"</span> \
-</span>    -<span class="ruby">p <span class="number">443</span><span class="symbol">:</span><span class="number">443</span> -p <span class="number">8080</span><span class="symbol">:</span><span class="number">80</span> -p <span class="number">10022</span><span class="symbol">:</span><span class="number">22</span> \
-</span>    -<span class="ruby">-name gitlab \
-</span>    -<span class="ruby">-restart always \
-</span>    -<span class="ruby">-volume /srv/gitlab/<span class="symbol">config:</span>/etc/gitlab \
-</span>    -<span class="ruby">-volume /srv/gitlab/<span class="symbol">logs:</span>/var/log/gitlab \
-</span>    -<span class="ruby">-volume /srv/gitlab/<span class="symbol">data:</span>/var/opt/gitlab \
-</span>    gitlab/gitlab-ce:latest
-</pre></td></tr></table></figure>
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://buttonwood.bitbucket.org/2014/12/31/2014-12-31-gitlab/" data-id="vmlp0m4cuylqgo78" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/git/">git</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-<!-- DISQUS
-
--->
-
-
-
-  
-    <article id="post-2014-12-15-rChart" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2014/12/15/2014-12-15-rChart/" class="article-date">
-  <time datetime="2014-12-15T03:51:00.000Z" itemprop="datePublished">Dec 15 2014</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/Tools/">Tools</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2014/12/15/2014-12-15-rChart/">rChart and morris.js</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h3 id="1-_Using_rChart_and_morris-js_for_time_series_visualization">1. Using <code>rChart</code> and <code>morris.js</code> for time series visualization</h3>
-<p>Here are the codes!</p>
-<pre><code>library(<span class="string">'rCharts'</span>, <span class="string">'ramnathv'</span>)
-df &lt;- <span class="built_in">read</span>.csv(<span class="string">"type.1h.csv"</span>,header=<span class="constant">FALSE</span>,stringsAsFactors=<span class="constant">FALSE</span>)
-colnames(df) &lt;- c(<span class="string">"date"</span>,<span class="string">"1"</span>, <span class="string">"2"</span>,<span class="string">"3"</span>,<span class="string">"4"</span>,<span class="string">"5"</span>,<span class="string">"6"</span>,<span class="string">"7"</span>,<span class="string">"8"</span>,<span class="string">"9"</span>,<span class="string">"10"</span>)
-transform(df, <span class="built_in">date</span> = <span class="keyword">as</span>.<span class="keyword">character</span>(<span class="built_in">date</span>))
-m1 &lt;- mPlot(x = <span class="string">"date"</span>, y = c(<span class="string">"1"</span>, <span class="string">"2"</span>,<span class="string">"3"</span>,<span class="string">"4"</span>,<span class="string">"5"</span>,<span class="string">"6"</span>,<span class="string">"7"</span>,<span class="string">"8"</span>,<span class="string">"9"</span>,<span class="string">"10"</span>), type = <span class="string">"Line"</span>, data = df)
-m1$<span class="built_in">set</span>(pointSize = <span class="number">0</span>, lineWidth = <span class="number">1</span>)
-m1$print(<span class="string">"chart2"</span>)
-m1
-<span class="comment">#base64enc</span>
-<span class="comment"># install.packages("base64enc")</span>
-library(<span class="string">"base64enc"</span>)
-m1$save(<span class="string">'graph1.html'</span>, <span class="string">'inline'</span>, cdn=<span class="constant">TRUE</span>)
-<span class="comment">#m1$save('graph1.html', 'inline', standalone=TRUE)</span>
-</code></pre><h4 id="2-_Graph">2. Graph</h4>
-<p>Here, we can see this is a test graph!</p>
-<p>Here is a test image!<br><img src="http://ww3.sinaimg.cn/mw690/6fbc15dcgw1enahmlkcp1j20n20b941c.jpg" alt=""></p>
-<p>Here is a test page!<br><a href="../../../../fish/graph1.html">graph1.html</a></p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://buttonwood.bitbucket.org/2014/12/15/2014-12-15-rChart/" data-id="egzfy07m0z0x9rff" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/R/">R</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-<!-- DISQUS
-
--->
-
-
-
-  
-    <article id="post-python_pocker_reference" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2014/10/10/python_pocker_reference/" class="article-date">
-  <time datetime="2014-10-10T07:43:00.000Z" itemprop="datePublished">Oct 10 2014</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/Python/">Python</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2014/10/10/python_pocker_reference/">Python Pocket Reference</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <a id="more"></a>
-
-<p>The Zen of Python</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre>1
-2
-3
-4
-5
-6
-7
-8
-9
-10
-11
-</pre></td><td class="code"><pre>Beautiful <span class="keyword">is</span> better than ugly.
-<span class="keyword">Explicit</span> <span class="keyword">is</span> better than implicit.
-Simple <span class="keyword">is</span> better than complex.
-Complex <span class="keyword">is</span> better than complicated.
-Flat <span class="keyword">is</span> better than nested.
-Sparse <span class="keyword">is</span> better than dense.
-Readability counts.
-Special cases aren<span class="comment">'t special enough to break the rules.</span>
-Although practicality beats purity.
-Errors should never pass silently.
-Unless explicitly silenced.
-</pre></td></tr></table></figure>
-
-<p>Packages</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre>1
-2
-3
-4
-5
-6
-</pre></td><td class="code"><pre>package/
-    __init__<span class="preprocessor">.py</span>
-    module1<span class="preprocessor">.py</span>
-    subpackage/
-        __init__<span class="preprocessor">.py</span>
-        module2<span class="preprocessor">.py</span>
-</pre></td></tr></table></figure>
-
-<figure class="highlight"><table><tr><td class="gutter"><pre>1
-2
-3
-</pre></td><td class="code"><pre><span class="keyword">import</span> package.module1
-<span class="keyword">from</span> packages.subpackage <span class="keyword">import</span> module2
-<span class="keyword">from</span> packages.subpackage.module2 <span class="keyword">import</span> name
-</pre></td></tr></table></figure>
-
-
-<h3 id="References">References</h3>
-<p><a href="https://www.python.org/dev/peps/pep-0008/" target="_blank" rel="external">https://www.python.org/dev/peps/pep-0008/</a><br>“Python Objects”, Fredrik Lundh, <a href="http://www.effbot.org/zone/python-objects.htm" target="_blank" rel="external">http://www.effbot.org/zone/python-objects.htm</a><br>“How to think like a Pythonista”, Mark Hammond, <a href="http://python.net/crew/mwh/hacks/objectthink.html" target="_blank" rel="external">http://python.net/crew/mwh/hacks/objectthink.html</a><br>“Python main() functions”, Guido van Rossum, <a href="http://www.artima.com/weblogs/viewpost.jsp?thread=4829" target="_blank" rel="external">http://www.artima.com/weblogs/viewpost.jsp?thread=4829</a><br>“Python Idioms and Efficiency”, <a href="http://jaynes.colorado.edu/PythonIdioms.html" target="_blank" rel="external">http://jaynes.colorado.edu/PythonIdioms.html</a><br>“Python track: python idioms”, <a href="http://www.cs.caltech.edu/courses/cs11/material/python/misc/python_idioms.html" target="_blank" rel="external">http://www.cs.caltech.edu/courses/cs11/material/python/misc/python_idioms.html</a><br>“Be Pythonic”, Shalabh Chaturvedi, <a href="http://shalabh.infogami.com/Be_Pythonic2" target="_blank" rel="external">http://shalabh.infogami.com/Be_Pythonic2</a><br>“Python Is Not Java”, Phillip J. Eby, <a href="http://dirtsimple.org/2004/12/python-is-not-java.html" target="_blank" rel="external">http://dirtsimple.org/2004/12/python-is-not-java.html</a><br>“What is Pythonic?”, Martijn Faassen, <a href="http://faassen.n--tree.net/blog/view/weblog/2005/08/06/0" target="_blank" rel="external">http://faassen.n--tree.net/blog/view/weblog/2005/08/06/0</a><br>“Sorting Mini-HOWTO”, Andrew Dalke, <a href="http://wiki.python.org/moin/HowTo/Sorting" target="_blank" rel="external">http://wiki.python.org/moin/HowTo/Sorting</a><br>“Python Idioms”, <a href="http://www.gungfu.de/facts/wiki/Main/PythonIdioms" target="_blank" rel="external">http://www.gungfu.de/facts/wiki/Main/PythonIdioms</a><br>“Python FAQs”, <a href="http://www.python.org/doc/faq/" target="_blank" rel="external">http://www.python.org/doc/faq/</a></p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://buttonwood.bitbucket.org/2014/10/10/python_pocker_reference/" data-id="u6fbej6k67bbm78c" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Python/">Python</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Tips/">Tips</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-<!-- DISQUS
-
--->
-
-
-
-  
-    <article id="post-2014-08-27-time-monitoring" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2014/08/27/2014-08-27-time-monitoring/" class="article-date">
-  <time datetime="2014-08-27T11:51:00.000Z" itemprop="datePublished">Aug 27 2014</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/Tips/">Tips</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2014/08/27/2014-08-27-time-monitoring/">刷新时间检测</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>小伙伴后台跑的java程序总是莫名其妙卡死，于是帮他写了个脚本定时检查日志文件有没有更新，没有更新的话重启程序。</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre>1
-2
-3
-4
-5
-6
-7
-8
-9
-10
-11
-12
-13
-14
-15
-16
-17
-18
-19
-20
-21
-22
-23
-24
-</pre></td><td class="code"><pre><span class="shebang">#!/bin/bash </span>
-today=`date +%Y-%m-%d`
-logfi=<span class="string">'analysis'</span><span class="variable">$today</span><span class="string">'.log'</span>
-otime=`stat -c %y /home/AnalysisLog/<span class="variable">$logfi</span>|awk <span class="string">'{print $2}'</span>`
-
-<span class="keyword">while</span> ; <span class="keyword">do</span>
-    ctime=`stat -c %y /home/AnalysisLog/<span class="variable">$logfi</span>|awk <span class="string">'{print $2}'</span>`
-    <span class="keyword">if</span> [[ <span class="string">"<span class="variable">$otime</span>"</span> == <span class="string">"<span class="variable">$ctime</span>"</span>  ]]; <span class="keyword">then</span>
-        `ps aux |grep <span class="variable">$cmp</span> |grep  -v <span class="string">"grep"</span> |awk <span class="string">'{print "kill -9\t"$2}'</span> |sh`
-        `nohup /bin/sh /root/run/analysis/newAnalysis.bat &`
-        sleep(<span class="number">30</span>) <span class="comment"># 等待重启 30s</span>
-        today=`date +%Y-%m-%d`
-        logfi=<span class="string">'analysis'</span><span class="variable">$today</span><span class="string">'.log'</span>
-        otime=`stat -c %y /home/AnalysisLog/<span class="variable">$logfi</span>|awk <span class="string">'{print $2}'</span>`
-        sleep(<span class="number">3600</span>) <span class="comment"># 一个小时以后再检查 </span>
-    <span class="keyword">else</span>
-        <span class="built_in">echo</span> <span class="string">"It is keeping updating!"</span>
-    <span class="keyword">fi</span>  
-    <span class="comment"># 时间更新</span>
-    now=`date +%Y-%m-%d`
-    today=<span class="variable">$now</span>
-    logfi=<span class="string">'analysis'</span><span class="variable">$today</span><span class="string">'.log'</span>
-    otime=`stat -c %y /home/AnalysisLog/<span class="variable">$logfi</span>|awk <span class="string">'{print $2}'</span>`
-<span class="keyword">done</span>
-</pre></td></tr></table></figure>
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://buttonwood.bitbucket.org/2014/08/27/2014-08-27-time-monitoring/" data-id="yj8y9cc8j903jihu" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/git/">git</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-<!-- DISQUS
-
--->
-
-
-
-  
-    <article id="post-2014-08-22-centOS-reinstall" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2014/08/22/2014-08-22-centOS-reinstall/" class="article-date">
-  <time datetime="2014-08-22T02:51:00.000Z" itemprop="datePublished">Aug 22 2014</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/Tips/">Tips</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2014/08/22/2014-08-22-centOS-reinstall/">服务器重装centOS设定静态ip</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>电信机房5台托管服务器被攻击，为安全起见，老板令我需要重装系统。可采用光盘刻录或u盘安装方法(过程从略)。</p>
-<h3 id="1-_重装系统">1. 重装系统</h3>
-<figure class="highlight"><table><tr><td class="gutter"><pre>1
-2
-3
-4
-5
-6
-7
-8
-9
-10
-11
-12
-13
-14
-15
-16
-17
-18
-19
-20
-21
-22
-23
-24
-25
-26
-27
-28
-</pre></td><td class="code"><pre>reboot(crtl+allt+delete) 
--<span class="ruby">&gt; 
-</span>F2(system manage) 
--<span class="ruby">&gt; 
-</span>F11(BIOS Menu) 
--<span class="ruby">&gt; 
-</span>BIOS Boot Setting 
--<span class="ruby">&gt;
-</span>Boot Sequence 
--<span class="ruby">&gt; 
-</span># 光盘或U盘
-COD(DVD or U Driver) 
--<span class="ruby">&gt; 
-</span>OK 
--<span class="ruby">&gt; 
-</span>Install from video / U Driver
--<span class="ruby">&gt; 
-</span>No Test 
--<span class="ruby">&gt; 
-</span>Basic 
--<span class="ruby">&gt; 
-</span>Fresh 
--<span class="ruby">&gt; 
-</span>Use All 
--<span class="ruby">&gt; 
-</span>Basic Server 
--<span class="ruby">&gt; 
-</span>reboot
-</pre></td></tr></table></figure>
-
-<h3 id="2-_设置固定IP上网">2. 设置固定IP上网</h3>
-<figure class="highlight"><table><tr><td class="gutter"><pre>1
-2
-3
-4
-5
-6
-7
-8
-9
-10
-11
-12
-13
-14
-15
-16
-17
-18
-19
-20
-21
-22
-23
-24
-25
-26
-27
-28
-29
-</pre></td><td class="code"><pre><span class="comment">#### 内网或外网ip</span>
-IPADDR=<span class="number">192.168</span>.<span class="number">1.201</span>
-
-<span class="comment">#### 2.1 网关配置</span>
-cp /etc/sysconfig/network /etc/sysconfig/network.bak
-<span class="built_in">echo</span> <span class="string">"
-NETWORKING=yes
-NETWORKING_IPV6=yes
-GATEWAY=192.168.1.1
-"</span> &gt;&gt; /etc/sysconfig/network
-
-<span class="comment">#### 2.2 网卡配置 </span>
-cp /etc/sysconfig/network-scripts/ifcfg-em1 /etc/sysconfig/network-scripts/ifcfg-em1.bak
-sed -i <span class="string">'s/BOOTPROTO=dhcp/BOOTPROTO=none/'</span> /etc/sysconfig/network-scripts/ifcfg-em1
-sed -i <span class="string">'s/ONBOOT=no/ONBOOT=yes/'</span> /etc/sysconfig/network-scripts/ifcfg-em1
-
-<span class="built_in">echo</span> <span class="string">"
-BROADCAST=192.168.1.255
-IPADDR=<span class="variable">$IPADDR</span>
-NETWORK=192.168.1.0
-"</span> &gt;&gt;/etc/sysconfig/network-scripts/ifcfg-em1
-
-<span class="comment">#### 2.3 DNS解析</span>
-<span class="built_in">echo</span> <span class="string">"nameserver 202.103.24.68"</span> &gt;/etc/resolv.conf
-
-<span class="comment">#### 2.4 测试</span>
-chkconfig | grep network
-service network restart
-ping www.baidu.com
-</pre></td></tr></table></figure>
-
-<h3 id="3-_参考">3. 参考</h3>
-<p><a href="http://blog.51yip.com/linux/1120.html" target="_blank" rel="external">http://blog.51yip.com/linux/1120.html</a><br><a href="https://github.com/iofdata/DM/issues/8" target="_blank" rel="external">https://github.com/iofdata/DM/issues/8</a></p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://buttonwood.bitbucket.org/2014/08/22/2014-08-22-centOS-reinstall/" data-id="g0ruge55jx8znav1" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/centOS/">centOS</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/network/">network</a></li></ul>
 
     </footer>
   </div>
@@ -1428,7 +1600,7 @@ ping www.baidu.com
   <div class="widget-wrap">
     <h3 class="widget-title">Categories</h3>
     <div class="widget">
-      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Bioinformatics/">Bioinformatics</a><span class="category-list-count">9</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Bioinformatics/ML/">ML</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Compute/">Compute</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Data-Mining/">Data Mining</a><span class="category-list-count">7</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Data-Visualization/">Data Visualization</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/MySQL/">MySQL</a><span class="category-list-count">4</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Python/">Python</a><span class="category-list-count">9</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/R/">R</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Tips/">Tips</a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Tools/">Tools</a><span class="category-list-count">5</span></li></ul>
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Bioinformatics/">Bioinformatics</a><span class="category-list-count">9</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Bioinformatics/ML/">ML</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Compute/">Compute</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Data-Mining/">Data Mining</a><span class="category-list-count">7</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Data-Visualization/">Data Visualization</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/MySQL/">MySQL</a><span class="category-list-count">4</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Python/">Python</a><span class="category-list-count">9</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/R/">R</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Tips/">Tips</a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Tools/">Tools</a><span class="category-list-count">10</span></li></ul>
     </div>
   </div>
 
@@ -1437,7 +1609,7 @@ ping www.baidu.com
   <div class="widget-wrap">
     <h3 class="widget-title">Tags</h3>
     <div class="widget">
-      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Annotation/">Annotation</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Assemble/">Assemble</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Assembly/">Assembly</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Bayesian/">Bayesian</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Blog/">Blog</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/CART/">CART</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Circos/">Circos</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Comparative-genomics/">Comparative genomics</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/DBG/">DBG</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/DV/">DV</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/EM/">EM</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ElasticSearch/">ElasticSearch</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Genome/">Genome</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Git/">Git</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Kmer/">Kmer</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MCMC/">MCMC</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ML/">ML</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MySQL/">MySQL</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Mysql/">Mysql</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/OLC/">OLC</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/OSX/">OSX</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Octopress/">Octopress</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/PacBio/">PacBio</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/PageRank/">PageRank</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Python/">Python</a><span class="tag-list-count">10</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/R/">R</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SVM/">SVM</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Scaffold/">Scaffold</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Synteny/">Synteny</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Thread/">Thread</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Tips/">Tips</a><span class="tag-list-count">10</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Tools/">Tools</a><span class="tag-list-count">10</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Web/">Web</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/books/">books</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/centOS/">centOS</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/classification/">classification</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/clustering/">clustering</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/docker/">docker</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/git/">git</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/k-means/">k-means</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/kNN/">kNN</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/matplotlib/">matplotlib</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/network/">network</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/people/">people</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/sysbench/">sysbench</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/zookeeper/">zookeeper</a><span class="tag-list-count">1</span></li></ul>
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Annotation/">Annotation</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Assemble/">Assemble</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Assembly/">Assembly</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Bayesian/">Bayesian</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Blog/">Blog</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/CART/">CART</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Circos/">Circos</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Comparative-genomics/">Comparative genomics</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/DBG/">DBG</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/DV/">DV</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/EM/">EM</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ElasticSearch/">ElasticSearch</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Genome/">Genome</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Git/">Git</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Kmer/">Kmer</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MCMC/">MCMC</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ML/">ML</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MySQL/">MySQL</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Mysql/">Mysql</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/OLC/">OLC</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/OSX/">OSX</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Octopress/">Octopress</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/PacBio/">PacBio</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/PageRank/">PageRank</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Python/">Python</a><span class="tag-list-count">10</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/R/">R</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SVM/">SVM</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Scaffold/">Scaffold</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Synteny/">Synteny</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Thread/">Thread</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Tips/">Tips</a><span class="tag-list-count">10</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Tools/">Tools</a><span class="tag-list-count">10</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Web/">Web</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/books/">books</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/centOS/">centOS</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/classification/">classification</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/clustering/">clustering</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/cobar/">cobar</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/consul/">consul</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/docker/">docker</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/git/">git</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hadoop/">hadoop</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hbase/">hbase</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/k-means/">k-means</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/kNN/">kNN</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/matplotlib/">matplotlib</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mysql/">mysql</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/network/">network</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/people/">people</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/registry/">registry</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/sysbench/">sysbench</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/zookeeper/">zookeeper</a><span class="tag-list-count">1</span></li></ul>
     </div>
   </div>
 
@@ -1446,7 +1618,7 @@ ping www.baidu.com
   <div class="widget-wrap">
     <h3 class="widget-title">Tag Cloud</h3>
     <div class="widget tagcloud">
-      <a href="/tags/Annotation/" style="font-size: 10.00px;">Annotation</a><a href="/tags/Assemble/" style="font-size: 12.50px;">Assemble</a><a href="/tags/Assembly/" style="font-size: 10.00px;">Assembly</a><a href="/tags/Bayesian/" style="font-size: 10.00px;">Bayesian</a><a href="/tags/Blog/" style="font-size: 10.00px;">Blog</a><a href="/tags/CART/" style="font-size: 10.00px;">CART</a><a href="/tags/Circos/" style="font-size: 10.00px;">Circos</a><a href="/tags/Comparative-genomics/" style="font-size: 10.00px;">Comparative genomics</a><a href="/tags/DBG/" style="font-size: 15.00px;">DBG</a><a href="/tags/DV/" style="font-size: 10.00px;">DV</a><a href="/tags/EM/" style="font-size: 10.00px;">EM</a><a href="/tags/ElasticSearch/" style="font-size: 10.00px;">ElasticSearch</a><a href="/tags/Genome/" style="font-size: 12.50px;">Genome</a><a href="/tags/Git/" style="font-size: 10.00px;">Git</a><a href="/tags/Kmer/" style="font-size: 10.00px;">Kmer</a><a href="/tags/MCMC/" style="font-size: 10.00px;">MCMC</a><a href="/tags/ML/" style="font-size: 12.50px;">ML</a><a href="/tags/MySQL/" style="font-size: 17.50px;">MySQL</a><a href="/tags/Mysql/" style="font-size: 10.00px;">Mysql</a><a href="/tags/OLC/" style="font-size: 15.00px;">OLC</a><a href="/tags/OSX/" style="font-size: 10.00px;">OSX</a><a href="/tags/Octopress/" style="font-size: 10.00px;">Octopress</a><a href="/tags/PacBio/" style="font-size: 10.00px;">PacBio</a><a href="/tags/PageRank/" style="font-size: 10.00px;">PageRank</a><a href="/tags/Python/" style="font-size: 20.00px;">Python</a><a href="/tags/R/" style="font-size: 15.00px;">R</a><a href="/tags/SVM/" style="font-size: 10.00px;">SVM</a><a href="/tags/Scaffold/" style="font-size: 10.00px;">Scaffold</a><a href="/tags/Synteny/" style="font-size: 10.00px;">Synteny</a><a href="/tags/Thread/" style="font-size: 10.00px;">Thread</a><a href="/tags/Tips/" style="font-size: 20.00px;">Tips</a><a href="/tags/Tools/" style="font-size: 20.00px;">Tools</a><a href="/tags/Web/" style="font-size: 10.00px;">Web</a><a href="/tags/books/" style="font-size: 10.00px;">books</a><a href="/tags/centOS/" style="font-size: 10.00px;">centOS</a><a href="/tags/classification/" style="font-size: 10.00px;">classification</a><a href="/tags/clustering/" style="font-size: 10.00px;">clustering</a><a href="/tags/docker/" style="font-size: 10.00px;">docker</a><a href="/tags/git/" style="font-size: 17.50px;">git</a><a href="/tags/k-means/" style="font-size: 10.00px;">k-means</a>
+      <a href="/tags/Annotation/" style="font-size: 10.00px;">Annotation</a><a href="/tags/Assemble/" style="font-size: 12.00px;">Assemble</a><a href="/tags/Assembly/" style="font-size: 10.00px;">Assembly</a><a href="/tags/Bayesian/" style="font-size: 10.00px;">Bayesian</a><a href="/tags/Blog/" style="font-size: 10.00px;">Blog</a><a href="/tags/CART/" style="font-size: 10.00px;">CART</a><a href="/tags/Circos/" style="font-size: 10.00px;">Circos</a><a href="/tags/Comparative-genomics/" style="font-size: 10.00px;">Comparative genomics</a><a href="/tags/DBG/" style="font-size: 14.00px;">DBG</a><a href="/tags/DV/" style="font-size: 10.00px;">DV</a><a href="/tags/EM/" style="font-size: 10.00px;">EM</a><a href="/tags/ElasticSearch/" style="font-size: 10.00px;">ElasticSearch</a><a href="/tags/Genome/" style="font-size: 12.00px;">Genome</a><a href="/tags/Git/" style="font-size: 10.00px;">Git</a><a href="/tags/Kmer/" style="font-size: 10.00px;">Kmer</a><a href="/tags/MCMC/" style="font-size: 10.00px;">MCMC</a><a href="/tags/ML/" style="font-size: 12.00px;">ML</a><a href="/tags/MySQL/" style="font-size: 16.00px;">MySQL</a><a href="/tags/Mysql/" style="font-size: 10.00px;">Mysql</a><a href="/tags/OLC/" style="font-size: 14.00px;">OLC</a><a href="/tags/OSX/" style="font-size: 10.00px;">OSX</a><a href="/tags/Octopress/" style="font-size: 10.00px;">Octopress</a><a href="/tags/PacBio/" style="font-size: 10.00px;">PacBio</a><a href="/tags/PageRank/" style="font-size: 10.00px;">PageRank</a><a href="/tags/Python/" style="font-size: 20.00px;">Python</a><a href="/tags/R/" style="font-size: 14.00px;">R</a><a href="/tags/SVM/" style="font-size: 10.00px;">SVM</a><a href="/tags/Scaffold/" style="font-size: 10.00px;">Scaffold</a><a href="/tags/Synteny/" style="font-size: 10.00px;">Synteny</a><a href="/tags/Thread/" style="font-size: 10.00px;">Thread</a><a href="/tags/Tips/" style="font-size: 20.00px;">Tips</a><a href="/tags/Tools/" style="font-size: 20.00px;">Tools</a><a href="/tags/Web/" style="font-size: 10.00px;">Web</a><a href="/tags/books/" style="font-size: 10.00px;">books</a><a href="/tags/centOS/" style="font-size: 10.00px;">centOS</a><a href="/tags/classification/" style="font-size: 10.00px;">classification</a><a href="/tags/clustering/" style="font-size: 10.00px;">clustering</a><a href="/tags/cobar/" style="font-size: 10.00px;">cobar</a><a href="/tags/consul/" style="font-size: 10.00px;">consul</a><a href="/tags/docker/" style="font-size: 18.00px;">docker</a>
     </div>
   </div>
 
@@ -1455,7 +1627,7 @@ ping www.baidu.com
   <div class="widget-wrap">
     <h3 class="widget-title">Archives</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/03">March 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/02">February 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/01">January 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/01">January 2015</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/12">December 2014</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/10">October 2014</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/08">August 2014</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/07">July 2014</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/06">June 2014</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/05">May 2014</a><span class="archive-list-count">9</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/04">April 2014</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/02">February 2014</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/12">December 2013</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/11">November 2013</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/08">August 2013</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/03">March 2013</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/01">January 2013</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2012/12">December 2012</a><span class="archive-list-count">1</span></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/03">March 2016</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/02">February 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/01">January 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/01">January 2015</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/12">December 2014</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/10">October 2014</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/08">August 2014</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/07">July 2014</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/06">June 2014</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/05">May 2014</a><span class="archive-list-count">9</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/04">April 2014</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/02">February 2014</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/12">December 2013</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/11">November 2013</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/08">August 2013</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/03">March 2013</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/01">January 2013</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2012/12">December 2012</a><span class="archive-list-count">1</span></li></ul>
     </div>
   </div>
 
@@ -1467,23 +1639,23 @@ ping www.baidu.com
       <ul>
         
           <li>
+            <a href="/2016/03/31/2016-03-31-hadoop-ha-docker/">docker搭建高可用hadoop集群</a>
+          </li>
+        
+          <li>
+            <a href="/2016/03/31/2016-03-31-hbase-region-in-transition/">hbase region in transition too long</a>
+          </li>
+        
+          <li>
             <a href="/2016/03/15/2016-03-15-zookeeper-and-docker/">用docker创建zookeeper集群</a>
           </li>
         
           <li>
-            <a href="/2016/02/17/2016-02-17-ElasticSearch-Queen-Too-High/">ElasticSearch search queen size is too high</a>
+            <a href="/2016/03/10/2016-03-10-docker-consul/">docker consul 服务发现</a>
           </li>
         
           <li>
-            <a href="/2016/01/29/2016-01-29-mysql-truncate-partition/">mysql清理分区</a>
-          </li>
-        
-          <li>
-            <a href="/2015/01/16/2015-01-16-gitlab-workflow/">gitlab使用说明</a>
-          </li>
-        
-          <li>
-            <a href="/2015/01/14/Writing-idiomatic-python/">Writing idiomatic python</a>
+            <a href="/2016/03/10/2016-03-10-docker-registry/">docker registry 搭建</a>
           </li>
         
       </ul>
